@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Checker by M Saad Mizri</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- LOGO -->
+        <div id="logoId" onclick="callBothFunctions()" class="logo">School Tools</div>
+
+        <!-- NAVIGATION MENU -->
+        <ul class="nav-links">
+
+            <!-- USING CHECKBOX HACK -->
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+
+                <li><a id="totalMarksBySpace">Total Marks by Space</a></li>
+                <li><a id="totalMarksByTime">Total Marks by Time</a></li>
+
+                <li class="services">
+                    <a id="positionInClass">Position in Class</a>
+                </li>
+                <li><a id="percentageOfTotalMarks">Percentage of Total Marks</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div id="totalMarksBySpaceContent">
+        <!-- Your existing content for total marks by space goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberr" placeholder="Enter Marks - 10 2 0.5">
+        </div>
+        <div id="ans">
+            <div id="inner">
+                <p id="result">Total Marks: 0</p>
+                <p id="length">Total Entries: 0</p>
+            </div>
+        </div>
+        <div style="margin-top: 30px;"></div>
+    </div>
+
+    <div style="background-color: #565869;" id="totalMarksByTimeContent">
+        <div class="container">
+            <div id="box" class="box">
+                <div class="head">
+                    <h3 style="color: #D1D5DB;">By Time</h3>
+                </div>
+                <p id="resultLabel">Result</p>
+                <p id="resultByTime">---</p>
+                <p style="width: 60%; margin-left: -70px;" id="historyLabel">Entries</p>
+                <p style="font-size: 10px;" id="history">---</p>
+                <label for="input">Enter Marks after 2-Sec</label>
+                <input type="number" id="input" placeholder="Enter Marks:- 2 6 8">
+                <div class="slider">
+                    <span style="color: #041124;">Font</span><input type="range" min="12" max="25" value="16" class="font-slider" id="fontSlider">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="positionInClassContent">
+        <!-- Your existing content for position in class goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberInput" placeholder="Enter Marks - 98 95 87 43">
+        </div>
+        <div id="position">
+            <h4 id="sortedList"></h4>
+        </div>
+    </div>
+
+    <div id="percentageOfTotalMarksContent">
+        <!-- Your existing content for percentage of total marks goes here -->
+        <div class="containerr">
+            <h6 style="color: rgb(200, 34, 34); padding: 5px 0 5px 0;" id="totalLabel">
+                Default Total Marks: 240 - Enter Total Marks to
+                Change</h6>
+            <p id="resultt"></p>
+            <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
+            <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+        </div>
+    </div>
+
+    <main style="display: flex; align-items: center; flex-direction: column;" id="mainn">
+        <h3 class="gradient-text">Welcome to School Tools</h3>
+        <p style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); padding: 20px;" id="mainn">Your journey to academic success starts here! Discover your total marks by space, track your progress over time, and see your position in class. Let's achieve greatness together.</p>
+    </main>
+    <footer>
+        <div style="display: flex; justify-content: center;"><p>&copy; 2023 School Tools By - </p>&nbsp;<span style="letter-spacing: 2px; color: #45c6c6;"> M Saad</span></div>
+    </footer>
+<script src="code.js"></script>
+</body>
+
+</html>

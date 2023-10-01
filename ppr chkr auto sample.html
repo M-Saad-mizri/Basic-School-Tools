@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Sum Calculator</title>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input {
+            font-size: 16px;
+            padding: 5px;
+        }
+        p {
+            font-size: 24px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Number Sum Calculator</h1>
+    <input type="number" id="numberInput">
+    <p id="numbersDisplay">Number = 0.00</p>
+    <p id="countDisplay">Count: 0</p>
+
+    <script>
+        const numberInput = document.getElementById("numberInput");
+        const numbersDisplay = document.getElementById("numbersDisplay");
+        const countDisplay = document.getElementById("countDisplay");
+
+        let sum = 0;
+        let count = 0;
+        let enteredNumbers = [];
+        let updateTimeout;
+
+        function updateSumCountNumbersAndResetInput() {
+            const inputValue = parseFloat(numberInput.value);
+            if (!isNaN(inputValue)) {
+                sum += inputValue;
+                enteredNumbers.push(inputValue);
+                count++;
+            }
+            countDisplay.textContent = `Count: ${count}`;
+            numbersDisplay.textContent = `${enteredNumbers.join(' + ')} = ${sum}`;
+            numberInput.value = ""; // Clear the input field
+        }
+
+        numberInput.addEventListener("input", () => {
+            clearTimeout(updateTimeout); // Clear any previous timeouts
+            const inputValue = numberInput.value.trim();
+            if (inputValue !== "") {
+                updateTimeout = setTimeout(() => {
+                    updateSumCountNumbersAndResetInput();
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

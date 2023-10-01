@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Checker by M Saad Mizri</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- LOGO -->
+        <div id="logoId" onclick="callBothFunctions()" class="logo">School Tools</div>
+
+        <!-- NAVIGATION MENU -->
+        <ul class="nav-links">
+
+            <!-- USING CHECKBOX HACK -->
+            <input type="checkbox" id="checkbox_toggle" />
+            <label class="hamburger">&#9776;</label>
+
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+
+                <li><a id="totalMarksBySpace">Total Marks by Space</a></li>
+                <li><a id="totalMarksByTime">Total Marks by Time</a></li>
+
+                <li class="services">
+                    <a id="positionInClass">Position in Class</a>
+                </li>
+                <li><a id="percentageOfTotalMarks">Percentage of Total Marks</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div id="totalMarksBySpaceContent">
+        <!-- Your existing content for total marks by space goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberr" placeholder="Enter Marks - 10 2 0.5">
+        </div>
+        <div id="ans">
+            <div id="inner">
+                <p id="result">Total Marks: 0</p>
+                <p id="length">Total Entries: 0</p>
+            </div>
+        </div>
+        <div style="margin-top: 30px;"></div>
+    </div>
+
+    <div id="totalMarksByTimeContent">
+        <!-- Your existing content for total marks by time goes here -->
+        <input type="number" id="numberInputSec" placeholder="Enter Marks - After 2 Seconds">
+        <div style="display: flex; justify-content: center;">
+            <p style="margin-top: 15px;" id="numbersDisplay1"></p>
+        </div>
+        <div id="ans">
+            <div id="inner">
+                <p id="resultTime">Total Marks: 0</p>
+                <p id="lengthTime">Total Entries: 0</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="positionInClassContent">
+        <!-- Your existing content for position in class goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberInput" placeholder="Enter Marks - 98 95 87 43">
+        </div>
+        <div id="position">
+            <h4 id="sortedList"></h4>
+        </div>
+    </div>
+
+    <div id="percentageOfTotalMarksContent">
+        <!-- Your existing content for percentage of total marks goes here -->
+        <div class="container">
+            <h6 style="color: rgb(200, 34, 34); padding: 5px 0 5px 0;" id="totalLabel">
+                Default Total Marks: 240 - Enter Total Marks to
+                Change</h6>
+            <p id="resultt"></p>
+            <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
+            <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+        </div>
+    </div>
+
+    <main style="display: flex; align-items: center; flex-direction: column;" id="mainn">
+        <h3 class="gradient-text">Welcome to School Tools</h3>
+        <p style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); padding: 20px;" id="mainn">Your journey to academic success
+            starts here! Discover your total marks by space, track your progress over time, and see your position in
+            class. Let's achieve greatness together.</p>
+    </main>
+    <footer>
+        <div style="display: flex; justify-content: center;">
+            <p>&copy; 2023 School Tools By - </p>&nbsp;<span style="letter-spacing: 2px; color: #45c6c6;"> M Saad</span>
+        </div>
+    </footer>
+    <script>
+document.getElementById("totalMarksBySpace").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Marks Calculator';
+    hideAllContent();
+    closeMenu();
+    document.getElementById("totalMarksBySpaceContent").style.display = "block";
+});
+
+document.getElementById("totalMarksByTime").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Marks Calculator';
+    hideAllContent();
+    closeMenu();
+    document.getElementById("totalMarksByTimeContent").style.display = "block";
+});
+
+document.getElementById("positionInClass").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Position Finder';
+    hideAllContent();
+    closeMenu();
+    document.getElementById("positionInClassContent").style.display = "block";
+});
+
+document.getElementById("percentageOfTotalMarks").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Percentage Finder';
+    hideAllContent();
+    closeMenu();
+    document.getElementById("percentageOfTotalMarksContent").style.display = "block";
+});
+
+function hideAllContent() {
+    document.getElementById("totalMarksBySpaceContent").style.display = "none";
+    document.getElementById("totalMarksByTimeContent").style.display = "none";
+    document.getElementById("positionInClassContent").style.display = "none";
+    document.getElementById("percentageOfTotalMarksContent").style.display = "none";
+    document.getElementById("mainn").style.display = "none";
+}
+
+document.getElementById("logoId").addEventListener("click", function () {
+    const checkbox = document.getElementById("checkbox_toggle");
+    checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+});
+
+
+    document.getElementById("logoId").addEventListener("click", function () {
+        const checkbox = document.getElementById("checkbox_toggle");
+        if (checkbox.checked) {
+            checkbox.checked = false; // Uncheck the checkbox to close the menu
+        } else {
+            checkbox.checked = true; // Check the checkbox to open the menu
+        }
+    });
+
+
+        // Focus on the input field when the page loads
+        window.addEventListener('load', () => {
+            const inputField = document.getElementById('numberr');
+            inputField.focus();
+        });
+
+        const inputFieldSum = document.getElementById('numberr');
+        const resultParagraph = document.getElementById('result');
+        const lengthParagraph = document.getElementById('length');
+
+        inputFieldSum.addEventListener('input', () => {
+            // Get the value from the input field and split it into an array of numbers
+            const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
+            const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+
+            // Calculate the sum of the numbers
+            const sum = numbers.reduce((total, num) => total + num, 0);
+
+            // Display the sum and the length of the array
+            resultParagraph.textContent = `Total Marks: ${sum}`;
+            lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
+        });
+
+        const inputFieldSort = document.getElementById('numberInput');
+        const sortedList = document.getElementById('sortedList');
+
+        inputFieldSort.addEventListener('input', () => {
+            // Get the value from the input field and split it into an array of numbers
+            const inputText = inputFieldSort.value.trim(); // Remove leading/trailing whitespace
+            const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+
+            // Sort the array in descending order
+            const sortedArray = [...numbers].sort((a, b) => b - a);
+
+            // Display the sorted array with positions for the first three numbers
+            // and without positions for the rest
+            sortedList.innerHTML = ""; // Clear previous content
+            sortedArray.forEach((number, index) => {
+                // const position = index < 3 ? ["1st", "2nd", "3rd"][index] : "";
+                const listItem = document.createElement('p');
+                listItem.style.marginBottom = '10px'
+                listItem.textContent = `Position | Number`;
+                listItem.textContent = `${index + 1}${"  ⬅  "} ${number}`;
+                // ${position ? " - " + position : ""}
+                if (index + 1 < 10) {
+                    listItem.textContent = `0${index + 1}${"  ⬅  "} ${number}`;
+                }
+                sortedList.appendChild(listItem);
+            });
+        });
+
+        // Add event listener to clear 'numberr' input field on 'c' key press
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'c' || event.key === '*') {
+                inputFieldSum.value = '';
+                resultParagraph.textContent = 'Total Marks: 0';
+                lengthParagraph.textContent = 'Total Entries: 0';
+                event.preventDefault(); // Prevent the 'c' key from being typed into the input field
+            }
+        });
+
+        let inputTimer; // Declare the inputTimer outside of the event handlers
+
+        function updateTotalLabel(totalNumberByUser) {
+            const totalLabel = document.getElementById('totalLabel');
+            totalLabel.innerText = `Total Marks: ${totalNumberByUser}`;
+        }
+
+        document.getElementById("inputNumber").addEventListener("input", function () {
+            clearTimeout(inputTimer);
+            const inputNumber = parseFloat(this.value);
+            const totalNumberByUser = parseInt(document.getElementById('tNumber').value) || 240;
+
+            if (isNaN(inputNumber)) {
+                document.getElementById("resultt").textContent = "";
+                return;
+            }
+
+            updateTotalLabel(totalNumberByUser);
+
+            const result = (inputNumber / totalNumberByUser) * 100;
+            document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
+
+            // Clear the input field after 2 seconds
+            inputTimer = setTimeout(() => {
+                document.getElementById("inputNumber").value = '';
+            }, 2000);
+        });
+
+        // Listen for changes in the total number input
+        document.getElementById("tNumber").addEventListener("input", function () {
+            clearTimeout(inputTimer); // Clear the timer if the total number changes
+            const totalNumberByUser = parseInt(this.value) || 240;
+            const inputNumber = parseFloat(document.getElementById('inputNumber').value);
+
+            if (isNaN(inputNumber)) {
+                document.getElementById("resultt").textContent = "";
+                return;
+            }
+
+            updateTotalLabel(totalNumberByUser);
+
+            const result = (inputNumber / totalNumberByUser) * 100;
+            document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
+        });
+
+        const numberInput = document.getElementById("numberInputSec");
+        const numbersDisplay = document.getElementById("resultTime");
+        const countDisplay = document.getElementById("lengthTime");
+
+        let sum = 0;
+        let count = 0;
+        let enteredNumbers = [];
+        let updateInterval;
+        let remainingTime = 2000;
+
+        function updateTimerDisplay() {
+
+            if (remainingTime <= 0) {
+                clearInterval(updateInterval); // Stop the timer when time reaches 0
+            }
+        }
+
+        function updateSumCountNumbersAndResetInput() {
+            const inputValue = parseFloat(numberInput.value);
+            if (!isNaN(inputValue)) {
+                sum += inputValue;
+                enteredNumbers.push(inputValue);
+                count++;
+                countDisplay.textContent = `Total Entries: ${count}`;
+                numbersDisplay.textContent = `Total Marks: ${sum}`;
+                document.getElementById('numbersDisplay1').textContent = `${enteredNumbers.join(' + ')}`
+
+            }
+            numberInput.value = ""; // Clear the input field
+            clearInterval(updateInterval); // Clear the interval
+            updateTimerDisplay(); // Update the timer display once more after completion
+        }
+
+        numberInput.addEventListener("input", () => {
+            clearInterval(updateInterval); // Clear any previous intervals
+            const inputValue = numberInput.value.trim();
+            if (inputValue !== "") {
+                remainingWidth = 100; // Reset the progress bar width
+                updateTimerDisplay(); // Start the timer display
+                updateInterval = setInterval(updateTimerDisplay, 10); // Update the timer every 10 milliseconds
+                setTimeout(() => {
+                    updateSumCountNumbersAndResetInput();
+                }, 2000);
+            }
+        });
+        function closeMenu() {
+            const checkbox = document.getElementById("checkbox_toggle");
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        }
+        // Initial timer display
+        updateTimerDisplay();
+    </script>
+</body>
+
+</html>

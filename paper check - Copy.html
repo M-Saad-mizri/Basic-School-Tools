@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Sum Calculator</title>
+    <style>
+
+        .container {
+            margin-top: 50px;
+        }
+        input {
+            font-size: 16px;
+            padding: 5px;
+        }
+        p {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator Marks By Time</h1>
+    <input type="number" id="numberInput" placeholder="Enter Marks">
+    <p id="numbersDisplay">Number = 0</p>
+    <p id="countDisplay">Count: 0</p>
+
+    <div class="container">
+        <h1>Percentage Calculator</h1>
+        <h6>Total Number: 240</h6>
+        <p id="result"></p>
+    <input type="number" id="inputNumber" placeholder="Enter Obt. Number">
+        <input type="number" id="tNumber" placeholder="Enter Total Number">
+    </div>
+    <script>
+        const numberInput = document.getElementById("numberInput");
+        const numbersDisplay = document.getElementById("numbersDisplay");
+        const countDisplay = document.getElementById("countDisplay");
+        
+        let sum = 0;
+        let count = 0;
+        let enteredNumbers = [];
+        let updateInterval;
+        let remainingTime = 2000;
+
+        function updateTimerDisplay() {
+
+            if (remainingTime <= 0) {
+                clearInterval(updateInterval); // Stop the timer when time reaches 0
+            }
+        }
+
+        function updateSumCountNumbersAndResetInput() {
+            const inputValue = parseFloat(numberInput.value);
+            if (!isNaN(inputValue)) {
+                sum += inputValue;
+                enteredNumbers.push(inputValue);
+                count++;
+                countDisplay.textContent = `Count: ${count}`;
+                numbersDisplay.textContent = `${enteredNumbers.join(' + ')} = ${sum}`;
+            }
+            numberInput.value = ""; // Clear the input field
+            clearInterval(updateInterval); // Clear the interval
+            updateTimerDisplay(); // Update the timer display once more after completion
+        }
+
+        numberInput.addEventListener("input", () => {
+            clearInterval(updateInterval); // Clear any previous intervals
+            const inputValue = numberInput.value.trim();
+            if (inputValue !== "") {
+                remainingWidth = 100; // Reset the progress bar width
+                updateTimerDisplay(); // Start the timer display
+                updateInterval = setInterval(updateTimerDisplay, 10); // Update the timer every 10 milliseconds
+                setTimeout(() => {
+                    updateSumCountNumbersAndResetInput();
+                }, 2000);
+            }
+        });
+
+        // Initial timer display
+        updateTimerDisplay();
+
+        const totalNumber = 240; // Change this to your desired constant total number.
+    let inputTimer;
+
+    document.getElementById("inputNumber").addEventListener("input", function () {
+        clearTimeout(inputTimer);
+        const inputNumber = parseFloat(this.value);
+
+        if (isNaN(inputNumber)) {
+            document.getElementById("result").textContent = "";
+            return;
+        }
+
+        const result = (inputNumber / totalNumber) * 100;
+        document.getElementById("result").textContent = `${inputNumber} of ${totalNumber} is = ${result.toFixed(2)}%`;
+
+        // Clear the input field after 2 seconds
+        inputTimer = setTimeout(() => {
+            document.getElementById("inputNumber").value = '';
+        }, 2000);
+    });
+    </script>
+</body>
+</html>
