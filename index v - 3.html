@@ -55,11 +55,14 @@
                     <h3 style="color: #D1D5DB;">By Time</h3>
                 </div>
                 <p id="resultLabel">Result</p>
-                <p id="resultByTime">---</p>
+                <p id="resultByTime">0</p>
                 <p style="width: 60%; margin-left: -70px;" id="historyLabel">Entries</p>
-                <p style="font-size: 10px;" id="history">---</p>
+                <p style="font-size: 10px;" id="history">0</p>
                 <label for="input">Enter Marks after 2-Sec</label>
-                <input type="number" id="input" placeholder="Enter Marks:- 2 6 8">
+                <input type="number" id="input" placeholder="Enter Marks">
+                <p style="margin-top: 15px; color: #D1D5DB;">Enter 00 to clear record</p>
+                <div style="display: flex;">
+                    <span style="margin-top: 18px; color: #D1D5DB;">Type Sec &NonBreakingSpace;</span><input id="userLimitTime" type="number"></div>
                 <div class="slider">
                     <span style="color: #041124;">Font</span><input type="range" min="12" max="25" value="16" class="font-slider" id="fontSlider">
                 </div>

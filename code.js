@@ -58,7 +58,8 @@ const lengthParagraph = document.getElementById('length');
 inputFieldSum.addEventListener('input', () => {
     // Get the value from the input field and split it into an array of numbers
     const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
-    const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+    // const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+    const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
 
     // Calculate the sum of the numbers
     const sum = numbers.reduce((total, num) => total + num, 0);
@@ -154,17 +155,26 @@ document.getElementById("tNumber").addEventListener("input", function () {
 const numberInput = document.getElementById("input"); //old id -> numberInputSec
 const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
 const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
+const userLimit = document.getElementById('userLimitTime').value
+
+// ... Your existing code
+
+// ... Your existing code
 
 let sum = 0;
 let count = 0;
 let enteredNumbers = [];
 let updateInterval;
 let remainingTime = 2000;
+var limit = 2000; // Default value
+
+document.getElementById('userLimitTime').addEventListener('input', () => {
+    limit = parseInt(document.getElementById('userLimitTime').value) || 2000;
+});
 
 function updateTimerDisplay() {
-
     if (remainingTime <= 0) {
-        clearInterval(updateInterval); // Stop the timer when time reaches 0
+        clearInterval(updateInterval);
     }
 }
 
@@ -176,26 +186,46 @@ function updateSumCountNumbersAndResetInput() {
         count++;
         countDisplay.textContent = `Entries: ${count}`;
         numbersDisplay.textContent = `${sum}`;
-        document.getElementById('history').textContent = `${enteredNumbers.join(' ')}` // old id -> numbersDisplay1
-
+        document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
+    } else {
+        console.error("Invalid input. Please enter a valid number.");
     }
-    numberInput.value = ""; // Clear the input field
-    clearInterval(updateInterval); // Clear the interval
-    updateTimerDisplay(); // Update the timer display once more after completion
+    numberInput.value = "";
+    clearInterval(updateInterval);
+    updateTimerDisplay();
 }
 
 numberInput.addEventListener("input", () => {
-    clearInterval(updateInterval); // Clear any previous intervals
+    clearInterval(updateInterval);
     const inputValue = numberInput.value.trim();
+
+    if (inputValue === "00") {
+        clearResultAndHistory();
+        count--;    
+        return;
+    }
+
     if (inputValue !== "") {
-        remainingWidth = 100; // Reset the progress bar width
-        updateTimerDisplay(); // Start the timer display
-        updateInterval = setInterval(updateTimerDisplay, 10); // Update the timer every 10 milliseconds
+        remainingWidth = 100;
+        updateTimerDisplay();
+        updateInterval = setInterval(updateTimerDisplay, 10);
         setTimeout(() => {
             updateSumCountNumbersAndResetInput();
-        }, 2000);
+        }, limit);
     }
 });
+
+function clearResultAndHistory() {
+    sum = 0;
+    count = 0;
+    document.getElementById('resultByTime').innerText = '---';
+    document.getElementById('history').textContent = '---';
+    enteredNumbers = [];
+    clearInterval(updateInterval);
+    updateTimerDisplay();
+}
+    
+
 function closeMenu() {
 const checkbox = document.getElementById("checkbox_toggle");
 if (checkbox) {

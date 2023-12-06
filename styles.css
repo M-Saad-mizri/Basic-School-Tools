@@ -160,6 +160,7 @@ background-image: linear-gradient(to right, #04f73c, #e1ff00ad);
 background-clip: text;
 color: transparent;
 }
+
 /* Marks by time style start */
 .container {
 position: relative;
@@ -183,7 +184,7 @@ letter-spacing: 1.5px;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    height: 350px;
+    height: 380px;
     width: 250px;
     border: 3px solid grey;
     border-radius: 5px;
@@ -255,6 +256,16 @@ label {
 
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     letter-spacing: 1.5px;
+}
+
+#userLimitTime{
+    border: none;
+    width: 50px;
+    padding: 5px;
+    background-color: transparent;
+    border-radius: 5px;
+    margin-top: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* NAVBAR MENU */
