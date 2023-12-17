@@ -250,4 +250,4 @@ fontSlider.addEventListener("input", () => {
     element3.style.fontSize = fontSize;
     element4.style.fontSize = fontSize;
     element5.style.width = width;
-});
+});z
