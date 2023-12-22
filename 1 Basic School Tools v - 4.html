@@ -789,8 +789,8 @@ const lengthParagraph = document.getElementById('length');
 inputFieldSum.addEventListener('input', () => {
     // Get the value from the input field and split it into an array of numbers
     const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
-    // const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
-    const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
+    const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+   // const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
 
     // Calculate the sum of the numbers
     const sum = numbers.reduce((total, num) => total + num, 0);
