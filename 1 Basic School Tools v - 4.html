@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #totalMarksBySpaceContent,
+#totalMarksByTimeContent,
+#positionInClassContent,
+#percentageOfTotalMarksContent,
+#resultcompileContent {
+    display: none;
+}
+
+* {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    /* padding: 0; */
+}
+
+#rotate1{
+    color: white;
+}
+
+#numberr {
+    font-size: 1.6em;
+    padding: 10px 0px;
+    padding-left: 10px;
+    background-color: rgba(32, 178, 171, 0.266);
+    border: none;
+    width: 100%;
+    text-align: center;
+    /* margin-top: 5px; */
+}
+
+#numberrr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#lbl {
+    padding: 10px;
+    margin: 0;
+}
+
+#numberrr span {
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+#lbldiv,
+#totalLabel {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background-color: #dadada;
+}
+
+#ans {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3em;
+    margin-top: 15px;
+}
+
+#length,
+#lengthTime {
+    margin-top: 20px;
+    color: blueviolet;
+    letter-spacing: 2px;
+}
+
+#result,
+#resultTime {
+    color: brown;
+    letter-spacing: 3.11px;
+}
+
+#resultt {
+    color: brown;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px 10px 0px;
+    font-size: 1.3em;
+}
+
+#inner {
+    border-left: 10px solid rgb(234, 223, 24);
+    border-right: 10px solid rgb(234, 223, 24);
+    border-radius: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#numberInput,
+#numberInputSec,
+#inputNumber,
+#tNumber {
+    font-size: 1.2em;
+    padding: 10px 0px;
+    padding-left: 5px;
+    background-color: rgba(32, 178, 171, 0.266);
+    border: none;
+    width: 100%;
+    text-align: center;
+    /* margin-top: 5px; */
+}
+
+#position {
+    padding: 35px;
+    display: flex;
+    justify-content: center;
+}
+
+#position h4 {
+    padding: 5px 25px 0px 25px;
+    border-left: 10px solid rgb(225, 178, 237);
+    border-right: 10px solid rgb(225, 178, 237);
+    border-radius: 20px;
+    width: fit-content;
+}
+
+#or {
+    background-color: rgb(200, 255, 0);
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    color: rgb(64, 192, 234);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+/* NAVBAR STYLING STARTS */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: teal;
+    color: #fff;
+}
+
+.nav-links a {
+    color: #fff;
+    font-size: 12px;
+    height: 5px
+}
+
+/* LOGO */
+.logo {
+    font-weight: 700;
+font-size: 25px;
+cursor: pointer;
+background-image: linear-gradient(to right, #04f73c, #e1ff00ad);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+}
+
+/* Marks by time style start */
+.container {
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 700px; /* Set the container to full viewport height */
+font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+letter-spacing: 1.5px;
+}
+
+.box input::placeholder {
+    color: #d1d5db5b;
+}
+
+.box {
+    margin-top: 50px;
+    margin-bottom: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 380px;
+    width: 250px;
+    border: 3px solid grey;
+    border-radius: 5px;
+    background-color: rgba(128, 128, 128, 0.293);
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+.head {
+    max-height: 50px;
+    padding: 10px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 3px solid grey;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+#input {
+    width: 85.9%;
+    margin-top: 10px;
+    padding: 10px;
+    height: 20px;
+    color: #D1D5DB;
+    border: none;
+    background-color: rgba(128, 128, 128, 0.149);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+label {
+    width: 80%;
+    font-size: 15px;
+    color: #D1D5DB;
+    margin-top: 15px;
+    margin-left: -22px;
+    margin-bottom: -8px;
+    font-size: 12px;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+.box #resultByTime,
+#history {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
+    margin-top: 10px;
+    padding: 10px;
+    width: 85.9%;
+    color: #D1D5DB;
+    margin-bottom: 10px;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+#resultLabel,
+#historyLabel {
+    margin-left: -170px;
+    color: #D1D5DB;
+    margin-bottom: -12px;
+    margin-top: 10px;
+    font-size: 12px;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 1.5px;
+}
+
+#userLimitTime{
+    border: none;
+    width: 50px;
+    padding: 5px;
+    background-color: transparent;
+    border-radius: 5px;
+    margin-top: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* NAVBAR MENU */
+.menu {
+    display: flex;
+    gap: 1em;
+    font-size: 18px;
+}
+
+.menu li:hover {
+    background-color: #4c9e9e;
+    border-radius: 5px;
+    transition: 0.10s ease;
+}
+
+.menu li {
+    padding: 5px 14px;
+}
+
+
+/* RESPONSIVE NAVBAR MENU STARTS */
+
+/* CHECKBOX HACK */
+
+input[type=checkbox] {
+    display: none;
+}
+
+/* HAMBURGER MENU */
+.hamburger {
+    display: none;
+    font-size: 24px;
+    user-select: none;
+}
+
+/* APPLYING MEDIA QUERIES */
+@media only screen and (max-width: 600px) {
+
+    #rotate1{
+    color: rgb(240, 55, 55);
+    margin-left: 10px;
+    margin-bottom: 40px;
+}
+
+    .button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid red;
+    font-size: smaller;
+  }
+
+    #addtext{
+    margin-left: 10px;
+    width: 170px;
+    /* border: 1px solid red; */
+    padding-left: 10px;
+  }
+
+
+    
+.nav-links {
+    color: #fff;
+    font-size: 12px;
+    margin-top: -15px;
+    padding: 0;
+}
+    .menu {
+        display: none;
+        position: absolute;
+        background-color: teal;
+        right: 0;
+        left: 0;
+        text-align: center;
+        padding: 16px 0;
+        z-index: 2;
+    }
+
+    a {
+        font-size: 1.2em;
+    }
+
+    .menu li:hover {
+        display: inline-block;
+        background-color: #4c9e9e;
+        transition: 0.3s ease;
+    }
+
+    .menu li+li {
+        margin-top: 12px;
+    }
+
+    input[type=checkbox]:checked~.menu {
+        display: block;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    table th#mathColumn,
+    table td:nth-child(3),
+    table th#scienceColumn,
+    table td:nth-child(4),
+    table th#urduAColumn,
+    table td:nth-child(5),
+    table th#urduBColumn,
+    table td:nth-child(6),
+    table th#islamiatColumn,
+    table td:nth-child(7),
+    table th#pStudiesColumn,
+    table td:nth-child(8),
+    table th#engaColumn,
+    table td:nth-child(9),
+    table th#engbColumn,
+    table td:nth-child(10) {
+      display: none;
+    }
+
+    .resultForm {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 380px;
+        width: 100%;
+        margin-left: 0.5px;
+      }
+
+      #resultTable{
+        font-size: 10px;
+      }
+
+      #rotate{
+        color: #000000;
+        font-size: 100px;
+        margin-left: 5px;
+        margin-top: 10px;
+        font-size: 13px;
+border: 1px solid red;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        margin-bottom: 20px;
+      }
+
+}
+
+header {
+background-color: #007BFF;
+color: #fff;
+text-align: center;
+padding: 20px;
+}
+
+main {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+}
+
+footer {
+background-color: #333;
+color: #fff;
+text-align: center;
+padding: 10px 0;
+position: fixed;
+bottom: 0;
+width: 100%; /* Optional, to make the footer span the full width of the screen */
+}
+
+.gradient-text {
+display: inline-block;
+padding: 10px;
+background: 
+linear-gradient(to right, #ff6b6b, #007BFF),
+#fff;    
+color: transparent;
+margin-bottom: 20px;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+-webkit-background-clip: text, border-box;
+background-clip: text, border-box;
+mask-image: linear-gradient(to right, #ff6b6b, #007BFF); 
+}      
+
+.slider {
+display: flex;
+justify-content: center; /* Center the slider horizontally */
+align-items: center;
+width: 100%; /* Take up the full width of the container */
+position: fixed;
+bottom: 0; /* Fixed at the bottom of the container */
+background-color: #fff; /* Add a background color to the slider for visibility */
+padding: 10px; /* Add some padding for spacing */
+z-index: 1; /* Ensure it's above other content */
+}
+
+/* Additional CSS for styling */
+.element {
+background-color: #565869;
+font-size: 16px;
+margin: 20px;
+}
+
+/* style for result compiler */
+#resultForm {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-left: 20px;
+    width: 80%;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+  }
+
+  .inputResult {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 2px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr.highlight {
+    background-color: lightblue;
+  }
+  #rotate{
+    display: none;
+    color: white;
+  }
+
+  #formContainer{
+    display: flex;
+  }
+
+  #formContainer span{
+    margin-top: 9px;
+    font-weight: 700;
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+
+  #addtext1{
+    display: flex; justify-content: center; justify-self: center; width: 40px; font-size: 30px; padding: 0;
+  }
+
+  #resultTable {
+visibility: hidden;
+}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <!-- LOGO -->
+        <div id="logoId" onclick="callBothFunctions()" class="logo">School Tools</div>
+
+        <!-- NAVIGATION MENU -->
+        <ul class="nav-links">
+
+            <!-- USING CHECKBOX HACK -->
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+
+                <li><a id="totalMarksBySpace">Total Marks by Space</a></li>
+                <li><a id="totalMarksByTime">Total Marks by Time</a></li>
+
+                <li class="services">
+                    <a id="positionInClass">Position in Class</a>
+                </li>
+                <li><a id="percentageOfTotalMarks">Percentage of Total Marks</a></li>
+                <li><a id="resultcompile">Result Compiler</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div id="totalMarksBySpaceContent">
+        <!-- Your existing content for total marks by space goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberr" placeholder="Enter Marks - 10 2 0.5">
+        </div>
+        <div id="ans">
+            <div id="inner">
+                <p id="result">Total Marks: 0</p>
+                <p id="length">Total Entries: 0</p>
+            </div>
+        </div>
+        <div style="margin-top: 30px;"></div>
+    </div>
+
+    <div style="background-color: #565869;" id="totalMarksByTimeContent">
+        <div class="container">
+            <div id="box" class="box">
+                <div class="head">
+                    <h3 style="color: #D1D5DB;">By Time</h3>
+                </div>
+                <p id="resultLabel">Result</p>
+                <p id="resultByTime">0</p>
+                <p style="width: 60%; margin-left: -70px;" id="historyLabel">Entries</p>
+                <p style="font-size: 10px;" id="history">0</p>
+                <label for="input">Enter Marks after 2-Sec</label>
+                <input type="number" id="input" placeholder="Enter Marks">
+                <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">Enter 00 to clear record</p>
+                <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">for 1 sec input 1000</p>
+                <div style="display: flex;">
+                    <span style="margin-top: 10px; color: #D1D5DB;">Type Sec &NonBreakingSpace;</span><input style="margin-top: 5px;" id="userLimitTime" placeholder="2000" type="number"></div>
+                <div class="slider">
+                    <span style="color: #041124;">Font</span><input type="range" min="12" max="25" value="16" class="font-slider" id="fontSlider">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="positionInClassContent">
+        <!-- Your existing content for position in class goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberInput" placeholder="Enter Marks - 98 95 87 43">
+        </div>
+        <div id="position">
+            <h4 id="sortedList"></h4>
+        </div>
+    </div>
+
+    <div id="percentageOfTotalMarksContent">
+        <!-- Your existing content for percentage of total marks goes here -->
+        <div class="containerr">
+            <h6 style="color: rgb(200, 34, 34); padding: 5px 0 5px 0;" id="totalLabel">
+                Default Total Marks: 240 - Enter Total Marks to
+                Change</h6>
+            <p id="resultt"></p>
+            <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
+            <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+        </div>
+    </div>
+
+    <div id="resultcompileContent">
+        <div id="formContainer" style="margin-top: 50px;">
+            <span id="addtext">Add Student Record</span><button id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
+              <form id="resultForm" style="display: none;">
+        
+              <input class="inputResult" type="text" id="name" name="name" placeholder="Name" required /><br />
+        
+              <input class="inputResult" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
+        
+              <input class="inputResult" type="number" id="math" name="Math" placeholder="Math Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="Science" name="Science" placeholder="Science Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="Urdua" name="Urdua" placeholder="Urdu A Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="Urdub" name="urdub" placeholder="Urdu B Marks" required /><br />
+        
+              <input class="inputResult" type="number" id="Islamiat" name="Islamiat" placeholder="Islamiat Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="pStudies" name="pStudies" placeholder="Pak studies Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="Enga" name="Enga" placeholder="English A Marks" required /><br />
+            
+              <input class="inputResult" type="number" id="Engb" name="Engb" placeholder="English B Marks" required /><br />    
+        
+              <!-- Repeat similar input fields for other subjects -->
+        
+              <button class="button" type="button" onclick="addStudent()">Add Student</button>
+              <button class="button" type="button" onclick="clearForm()">Clear Form</button>
+              <button style="background-color: rgb(240, 94, 94);" class="button" type="button" onclick="toggleForm()">Close Form</button>
+            </form>
+          </div>
+      
+          <!-- Display student data table -->
+          <table id="resultTable">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Student Name</th>
+                <th id="mathColumn">Math</th>
+            <th id="scienceColumn">Science</th>
+            <th id="urduAColumn">Urdu A</th>
+            <th id="urduBColumn">Urdu B</th>
+            <th id="islamiatColumn">Islamiat</th>
+            <th id="pStudiesColumn">Pak studies</th>
+            <th id="engaColumn">English A</th>
+            <th id="engbColumn">English B</th>
+                <th>T Obt. Marks</th>
+                <th>Per%</th>
+                <th>Grade</th>
+                <th>Delete</th>
+                <!-- Add headers for other subjects -->
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Student data will be dynamically added here -->
+            </tbody>
+          </table>
+          <p id="rotate1">Rotate the phone to see detailed Marks</p>
+        </div>
+
+    <main style="display: flex; align-items: center; flex-direction: column;" id="mainn">
+        <h3 class="gradient-text">Welcome to School Tools</h3>
+        <p style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); padding: 20px;" id="mainn">Your journey to academic success starts here! Discover your total marks by space, track your progress over time, and see your position in class. Let's achieve greatness together.</p>
+    </main>
+    <footer>
+        <div style="display: flex; justify-content: center;"><p>&copy; 2023 School Tools By - </p>&nbsp;<span style="letter-spacing: 2px; color: #45c6c6;"> M Saad</span></div>
+<script>
+    document.getElementById("totalMarksBySpace").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Marks Calculator'
+    hideAllContent();
+    closeMenu();
+    document.getElementById("totalMarksBySpaceContent").style.display = "block";
+});
+
+document.getElementById("totalMarksByTime").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Marks Calculator'
+    hideAllContent();
+    closeMenu();
+    document.getElementById("totalMarksByTimeContent").style.display = "block";
+});
+
+document.getElementById("positionInClass").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Position Finder'
+    hideAllContent();
+    closeMenu();
+    document.getElementById("positionInClassContent").style.display = "block";
+});
+
+document.getElementById("percentageOfTotalMarks").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Percentage Finder'
+    hideAllContent();
+    closeMenu();
+    document.getElementById("percentageOfTotalMarksContent").style.display = "block";
+});
+
+document.getElementById("resultcompile").addEventListener("click", function () {
+    document.getElementById('logoId').textContent = 'Result Compiler'
+    hideAllContent();
+    closeMenu();
+    document.getElementById("resultcompileContent").style.display = "block";
+});
+
+function hideAllContent() {
+    document.getElementById("totalMarksBySpaceContent").style.display = "none";
+    document.getElementById("totalMarksByTimeContent").style.display = "none";
+    document.getElementById("positionInClassContent").style.display = "none";
+    document.getElementById("percentageOfTotalMarksContent").style.display = "none";
+    document.getElementById("resultcompileContent").style.display = "none";
+    document.getElementById("mainn").style.display = "none";
+}
+
+function showMain(){
+document.getElementById("mainn").style.display = "flex";
+document.getElementById('logoId').textContent = 'School Tools'
+}
+
+function callBothFunctions() {
+hideAllContent();
+showMain();
+}
+
+
+// Focus on the input field when the page loads
+window.addEventListener('load', () => {
+    const inputField = document.getElementById('numberr');
+    inputField.focus();
+});
+
+const inputFieldSum = document.getElementById('numberr');
+const resultParagraph = document.getElementById('result');
+const lengthParagraph = document.getElementById('length');
+
+inputFieldSum.addEventListener('input', () => {
+    // Get the value from the input field and split it into an array of numbers
+    const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
+    // const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+    const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
+
+    // Calculate the sum of the numbers
+    const sum = numbers.reduce((total, num) => total + num, 0);
+
+    // Display the sum and the length of the array
+    resultParagraph.textContent = `Total Marks: ${sum}`;
+    lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
+});
+
+const inputFieldSort = document.getElementById('numberInput');
+const sortedList = document.getElementById('sortedList');
+
+inputFieldSort.addEventListener('input', () => {
+    // Get the value from the input field and split it into an array of numbers
+    const inputText = inputFieldSort.value.trim(); // Remove leading/trailing whitespace
+    const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+
+    // Sort the array in descending order
+    const sortedArray = [...numbers].sort((a, b) => b - a);
+
+    // Display the sorted array with positions for the first three numbers
+    // and without positions for the rest
+    sortedList.innerHTML = ""; // Clear previous content
+    sortedArray.forEach((number, index) => {
+        // const position = index < 3 ? ["1st", "2nd", "3rd"][index] : "";
+        const listItem = document.createElement('p');
+        listItem.style.marginBottom = '10px'
+        listItem.textContent = `Position | Number`;
+        listItem.textContent = `${index + 1}${"  ⬅  "} ${number}`;
+        // ${position ? " - " + position : ""}
+        if (index + 1 < 10) {
+            listItem.textContent = `0${index + 1}${"  ⬅  "} ${number}`;
+        }
+        sortedList.appendChild(listItem);
+    });
+});
+
+// Add event listener to clear 'numberr' input field on 'c' key press
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'c' || event.key === '*') {
+        inputFieldSum.value = '';
+        resultParagraph.textContent = 'Total Marks: 0';
+        lengthParagraph.textContent = 'Total Entries: 0';
+        event.preventDefault(); // Prevent the 'c' key from being typed into the input field
+    }
+});
+
+let inputTimer; // Declare the inputTimer outside of the event handlers
+
+function updateTotalLabel(totalNumberByUser) {
+    const totalLabel = document.getElementById('totalLabel');
+    totalLabel.innerText = `Total Marks: ${totalNumberByUser}`;
+}
+
+document.getElementById("inputNumber").addEventListener("input", function () {
+    clearTimeout(inputTimer);
+    const inputNumber = parseFloat(this.value);
+    const totalNumberByUser = parseInt(document.getElementById('tNumber').value) || 240;
+
+    if (isNaN(inputNumber)) {
+        document.getElementById("resultt").textContent = "";
+        return;
+    }
+
+    updateTotalLabel(totalNumberByUser);
+
+    const result = (inputNumber / totalNumberByUser) * 100;
+    document.getElementById("resultt").textContent = `${inputNumber} From ${totalNumberByUser} = ${result.toFixed(2)}%`;
+
+    // Clear the input field after 2 seconds
+    inputTimer = setTimeout(() => {
+        document.getElementById("inputNumber").value = '';
+    }, 2000);
+});
+
+// Listen for changes in the total number input
+document.getElementById("tNumber").addEventListener("input", function () {
+    clearTimeout(inputTimer); // Clear the timer if the total number changes
+    const totalNumberByUser = parseInt(this.value) || 240;
+    const inputNumber = parseFloat(document.getElementById('inputNumber').value);
+
+    if (isNaN(inputNumber)) {
+        document.getElementById("resultt").textContent = "";
+        return;
+    }
+
+    updateTotalLabel(totalNumberByUser);
+
+    const result = (inputNumber / totalNumberByUser) * 100;
+    document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
+});
+
+const numberInput = document.getElementById("input"); //old id -> numberInputSec
+const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
+const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
+const userLimit = document.getElementById('userLimitTime').value
+
+// ... Your existing code
+
+// ... Your existing code
+
+let sum = 0;
+let count = 0;
+let enteredNumbers = [];
+let updateInterval;
+let remainingTime = 2000;
+var limit = 2000; // Default value
+
+document.getElementById('userLimitTime').addEventListener('input', () => {
+    limit = parseInt(document.getElementById('userLimitTime').value) || 2000;
+});
+
+function updateTimerDisplay() {
+    if (remainingTime <= 0) {
+        clearInterval(updateInterval);
+    }
+}
+
+function updateSumCountNumbersAndResetInput() {
+    const inputValue = parseFloat(numberInput.value);
+    if (!isNaN(inputValue)) {
+        sum += inputValue;
+        enteredNumbers.push(inputValue);
+        count++;
+        countDisplay.textContent = `Entries: ${count}`;
+        numbersDisplay.textContent = `${sum}`;
+        document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
+    } else {
+        console.error("Invalid input. Please enter a valid number.");
+    }
+    numberInput.value = "";
+    clearInterval(updateInterval);
+    updateTimerDisplay();
+}
+
+numberInput.addEventListener("input", () => {
+    clearInterval(updateInterval);
+    const inputValue = numberInput.value.trim();
+
+    if (inputValue === "00") {
+        clearResultAndHistory();
+        count--;    
+        return;
+    }
+
+    if (inputValue !== "") {
+        remainingWidth = 100;
+        updateTimerDisplay();
+        updateInterval = setInterval(updateTimerDisplay, 10);
+        setTimeout(() => {
+            updateSumCountNumbersAndResetInput();
+        }, limit);
+    }
+});
+
+function clearResultAndHistory() {
+    sum = 0;
+    count = 0;
+    document.getElementById('resultByTime').innerText = '---';
+    document.getElementById('history').textContent = '---';
+    enteredNumbers = [];
+    clearInterval(updateInterval);
+    updateTimerDisplay();
+}
+    
+
+function closeMenu() {
+const checkbox = document.getElementById("checkbox_toggle");
+if (checkbox) {
+checkbox.checked = false;
+}
+}
+// Initial timer display
+updateTimerDisplay();
+
+const fontSlider = document.getElementById("fontSlider");
+const element1 = document.getElementById("historyLabel");
+const element2 = document.getElementById("resultByTime");
+const element3 = document.getElementById("input");
+const element4 = document.getElementById("history");
+const element5 = document.getElementById("box");
+var widthh = 3; 
+fontSlider.addEventListener("input", () => {
+    const fontSize = fontSlider.value + "px";
+    const width = (widthh + fontSlider.value) + "px";
+    element1.style.fontSize = fontSize;
+    element2.style.fontSize = fontSize;
+    element3.style.fontSize = fontSize;
+    element4.style.fontSize = fontSize;
+    element5.style.width = width;
+});
+
+// code for result compiler
+
+function toggleForm() {
+    var form = document.getElementById("resultForm");
+    if (form.style.display === "none") {
+      form.style.display = "block";
+      document.getElementById('addtext').style.display = 'none';
+      document.getElementById('addtext1').style.display = 'none';
+    } else {
+      form.style.display = "none";
+      document.getElementById('addtext').style.display = 'block';
+      document.getElementById('addtext1').style.display = 'block';
+    }
+  }
+  var newRow;
+  function addStudent() {
+// Retrieve values from the form
+var totalMarks = document.getElementById("totalMarks").value || 800;
+var name = document.getElementById("name").value.toUpperCase();
+var math = document.getElementById("math").value;
+var Science = document.getElementById("Science").value;
+var Urdua = document.getElementById("Urdua").value;
+var Urdub = document.getElementById("Urdub").value;
+var Islamiat = document.getElementById("Islamiat").value;
+var pStudies = document.getElementById("pStudies").value;
+var Enga = document.getElementById("Enga").value;
+var Engb = document.getElementById("Engb").value;
+if (name == '') {
+    alert('Student Name missing')
+    return;
+}
+document.getElementById("rotate1").style.display = "flex"
+document.getElementById("resultTable").style.visibility = "visible";
+
+// Create a new row in the table
+var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+var newRow = table.insertRow(table.rows.length);
+
+// Insert cells with data
+var cell0 = newRow.insertCell(0);
+var cell1 = newRow.insertCell(1);
+var cell2 = newRow.insertCell(2);
+var cell3 = newRow.insertCell(3);
+var cell4 = newRow.insertCell(4);
+var cell5 = newRow.insertCell(5);
+var cell6 = newRow.insertCell(6);
+var cell7 = newRow.insertCell(7);
+var cell8 = newRow.insertCell(8);
+var cell9 = newRow.insertCell(9);
+var cell10 = newRow.insertCell(10);
+var cell11 = newRow.insertCell(11);
+var cell12 = newRow.insertCell(12); // New cell for grading
+
+// Populate cells with data
+cell1.innerHTML = name;
+cell2.innerHTML = math;
+cell3.innerHTML = Science;
+cell4.innerHTML = Urdua;
+cell5.innerHTML = Urdub;
+cell6.innerHTML = Islamiat;
+cell7.innerHTML = pStudies;
+cell8.innerHTML = Enga;
+cell9.innerHTML = Engb;
+
+// Add delete button to the new row
+var deleteButton = document.createElement("p");
+deleteButton.innerHTML = "&times;";
+deleteButton.style.color = "red";
+deleteButton.style.marginTop = "5px";
+deleteButton.style.marginLeft = "15px";
+deleteButton.style.fontSize = "20px";
+deleteButton.style.width = "20px";
+deleteButton.style.height = "20px";
+deleteButton.style.paddingLeft = "5px";
+deleteButton.style.fontWeight = "700";
+
+deleteButton.onclick = function() {
+    deleteRowByButton(this);
+};
+
+// Append cells with data first
+newRow.appendChild(cell0);
+newRow.appendChild(cell1);
+newRow.appendChild(cell2);
+newRow.appendChild(cell3);
+newRow.appendChild(cell4);
+newRow.appendChild(cell5);
+newRow.appendChild(cell6);
+newRow.appendChild(cell7);
+newRow.appendChild(cell8);
+newRow.appendChild(cell9);
+newRow.appendChild(cell10);
+newRow.appendChild(cell11);
+newRow.appendChild(cell12);
+
+// Then append the delete button
+newRow.appendChild(deleteButton);
+
+// Sum all cells in a row and display the result in the last cell
+var totalMarksInRow = 0;
+for (var i = 2; i <= 9; i++) {
+    totalMarksInRow += parseInt(newRow.cells[i].innerHTML) || 0;
+}
+cell10.innerHTML = totalMarksInRow;
+
+// Calculate Percentage and display in the last cell
+var percentage = Math.floor((totalMarksInRow / totalMarks) * 100);
+cell11.innerHTML = percentage + "%";
+
+// Assign the corresponding grade based on percentage
+var grade = calculateGrade(percentage);
+cell12.innerHTML = grade;
+
+// Highlight the last added row
+highlightLastAddedRow(newRow);
+
+// Update position (serial number)
+updatePosition();
+
+// Clear the form
+clearForm();
+sortStudents();
+}
+
+
+  function calculateGrade(percentage) {
+if (percentage >= 96 && percentage <= 100) {
+return "A+";
+} else if (percentage >= 86 && percentage <= 95) {
+return "A";
+} else if (percentage >= 76 && percentage <= 85) {
+return "B+";
+} else if (percentage >= 66 && percentage <= 75) {
+return "B";
+} else if (percentage >= 56 && percentage <= 65) {
+return "C+";
+} else if (percentage >= 46 && percentage <= 55) {
+return "C";
+} else if (percentage >= 36 && percentage <= 45) {
+return "F";
+} else if (percentage >= 1 && percentage <= 35) {
+return "Fail";
+} else {
+return "N I R";
+}
+}   
+  function highlightLastAddedRow(row) {
+    // Remove the 'highlight' class from all rows
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = table.getElementsByTagName("tr");
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].classList.remove("highlight");
+    }
+
+    // Add the 'highlight' class to the last added row
+    row.classList.add("highlight");
+  }
+
+  function updatePosition() {
+    // Update the position (serial number) for each row
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].getElementsByTagName("td")[0].innerHTML = i + 1;
+    }
+  }
+
+  function clearForm() {
+    // Clear input values in the form
+    document.getElementById("name").value = "";
+    document.getElementById("math").value = "";
+    document.getElementById("Science").value = "";
+    document.getElementById("Urdua").value = "";
+    document.getElementById("Urdub").value = "";
+    document.getElementById("pStudies").value = "";
+    document.getElementById("Enga").value = "";
+    document.getElementById("Engb").value = "";
+    document.getElementById("Islamiat").value = "";
+  }
+
+  function sortStudents() {
+    // Sort students based on total marks
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = Array.from(table.getElementsByTagName("tr"));
+
+    rows.sort(function (a, b) {
+      var aValue = parseInt(a.cells[10].innerHTML) || 0; // Total obtained marks
+      var bValue = parseInt(b.cells[10].innerHTML) || 0; // Total obtained marks
+      return bValue - aValue;
+    });
+
+    // Clear the current table
+    table.innerHTML = "";
+
+    // Append the sorted rows to the table
+    rows.forEach(function (row) {
+      table.appendChild(row);
+    });
+
+    // Update positions after sorting
+    updatePosition();
+  }
+
+  function deleteRowByButton(button) {
+    var row = button.closest("tr"); // Use closest to find the closest ancestor tr element
+    console.log("Row to delete: ", row);
+    
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+
+    // Check if the row is found
+    if (row) {
+        // Get the position (serial number) from the first cell of the row
+        var position = parseInt(row.cells[0].innerHTML) || 0;
+
+        // Check if the position is within the valid range
+        if (position >= 1 && position <= table.rows.length) {
+            table.deleteRow(position - 1); // Adjust the position to be 0-based index
+            console.log("Row deleted successfully!");
+            updatePosition(); // Update positions after deletion
+
+            // Check if all rows are deleted, and hide the table if needed
+            if (table.rows.length === 0) {
+                document.getElementById("resultTable").style.visibility = "hidden";
+                document.getElementById("rotate1").style.visibility = "hidden";
+            }
+        } else {
+            console.log("Invalid position. Row not deleted.");
+        }
+    } else {
+        console.log("Row not found. Row not deleted.");
+    }
+}
+</script>
+</body>
+</html>
