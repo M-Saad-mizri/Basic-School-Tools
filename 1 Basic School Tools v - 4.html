@@ -77,7 +77,25 @@
 #lengthTime {
     margin-top: 20px;
     color: blueviolet;
-    letter-spacing: 2px;
+    letter-spacing: 2.1px;
+}
+
+#average {
+    margin-top: 20px;
+    color: rgb(226, 156, 43);
+    letter-spacing: 8.5px;
+}
+
+#sortedMax{
+    margin-top: 20px;
+    color: rgb(226, 156, 43);
+    letter-spacing: 4px;
+}
+
+#sortedMin {
+    margin-top: 20px;
+    color: rgb(226, 156, 43);
+    letter-spacing: 4.5px;
 }
 
 #result,
@@ -603,6 +621,9 @@ visibility: hidden;
             <div id="inner">
                 <p id="result">Total Marks: 0</p>
                 <p id="length">Total Entries: 0</p>
+                <p id="average">Average: 0</p>
+                <p id="sortedMax">Added Max: 0</p>
+                <p id="sortedMin">Added Min: 0</p>
             </div>
         </div>
         <div style="margin-top: 30px;"></div>
@@ -785,19 +806,29 @@ window.addEventListener('load', () => {
 const inputFieldSum = document.getElementById('numberr');
 const resultParagraph = document.getElementById('result');
 const lengthParagraph = document.getElementById('length');
+const average = document.getElementById('average');
+const sortedMax = document.getElementById('sortedMax');
+const sortedMin = document.getElementById('sortedMin');
 
 inputFieldSum.addEventListener('input', () => {
     // Get the value from the input field and split it into an array of numbers
     const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
     const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
    // const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
+   const sortedarr = numbers.sort(function(a, b) {
+  return a - b;
+});
 
-    // Calculate the sum of the numbers
-    const sum = numbers.reduce((total, num) => total + num, 0);
+// Calculate the sum of the numbers
+const sum = numbers.reduce((total, num) => total + num, 0);
 
-    // Display the sum and the length of the array
-    resultParagraph.textContent = `Total Marks: ${sum}`;
-    lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
+// Display the sum and the length of the array
+resultParagraph.textContent = `Total Marks: ${sum}`;
+lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
+average.textContent = `Average ≈ ${ Math.floor(sum / numbers.length) }`;
+sortedMax.textContent = `Added Max: ${sortedarr[`${sortedarr.length - 1}`]}`;
+sortedMin.textContent = `Added Min: ${sortedarr[0]}`;
+average.style.letterSpacing = '6.5px';
 });
 
 const inputFieldSort = document.getElementById('numberInput');
@@ -811,7 +842,7 @@ inputFieldSort.addEventListener('input', () => {
     // Sort the array in descending order
     const sortedArray = [...numbers].sort((a, b) => b - a);
 
-    // Display the sorted array with positions for the first three numbers
+    // Display the sortedMax array with positions for the first three numbers
     // and without positions for the rest
     sortedList.innerHTML = ""; // Clear previous content
     sortedArray.forEach((number, index) => {
@@ -1178,7 +1209,7 @@ return "N I R";
     // Clear the current table
     table.innerHTML = "";
 
-    // Append the sorted rows to the table
+    // Append the sortedMax rows to the table
     rows.forEach(function (row) {
       table.appendChild(row);
     });
