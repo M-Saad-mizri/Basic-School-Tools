@@ -1232,7 +1232,6 @@ return "N I R";
         // Check if the position is within the valid range
         if (position >= 1 && position <= table.rows.length) {
             table.deleteRow(position - 1); // Adjust the position to be 0-based index
-            console.log("Row deleted successfully!");
             updatePosition(); // Update positions after deletion
 
             // Check if all rows are deleted, and hide the table if needed
