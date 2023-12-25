@@ -528,7 +528,15 @@ margin: 20px;
     width: calc(100% - 16px);
     padding: 8px;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #25232376;
+    border-radius: 4px;
+}
+
+.inputResultTotalMarks {
+    width: calc(100% - 16px);
+    border: 0.0002px solid #ddd;
+    padding: 8px;
+    margin-bottom: 10px;
     border-radius: 4px;
   }
 
@@ -668,20 +676,21 @@ visibility: hidden;
             <h6 style="color: rgb(200, 34, 34); padding: 5px 0 5px 0;" id="totalLabel">
                 Default Total Marks: 240 - Enter Total Marks to
                 Change</h6>
-            <p id="resultt"></p>
-            <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
-            <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+                <p id="resultt"></p>
+                <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
+                <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+            </div>
         </div>
-    </div>
+        
+        <div id="resultcompileContent">
+            <div id="formContainer" style="margin-top: 50px;">
+                <span id="addtext">Add Student Record</span><button id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
+                <form id="resultForm" style="display: none;">
+                    <button style="background-color: rgb(240, 94, 94); margin-bottom: 15px; margin-top: -5px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+        
+                <input class="inputResultTotalMarks" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
 
-    <div id="resultcompileContent">
-        <div id="formContainer" style="margin-top: 50px;">
-            <span id="addtext">Add Student Record</span><button id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
-              <form id="resultForm" style="display: none;">
-        
               <input class="inputResult" type="text" id="name" name="name" placeholder="Name" required /><br />
-        
-              <input class="inputResult" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
         
               <input class="inputResult" type="number" id="math" name="Math" placeholder="Math Marks" required /><br />
             
@@ -703,7 +712,6 @@ visibility: hidden;
         
               <button class="button" type="button" onclick="addStudent()">Add Student</button>
               <button class="button" type="button" onclick="clearForm()">Clear Form</button>
-              <button style="background-color: rgb(240, 94, 94);" class="button" type="button" onclick="toggleForm()">Close Form</button>
             </form>
           </div>
       
