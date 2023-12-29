@@ -24,7 +24,9 @@
     color: white;
 }
 
-#numberr {
+#numberr,
+#numberrTime,
+#numberrTimeUserDelay {
     font-size: 1.6em;
     padding: 10px 0px;
     padding-left: 10px;
@@ -191,113 +193,6 @@ background-image: linear-gradient(to right, #04f73c, #e1ff00ad);
 -webkit-background-clip: text;
 background-clip: text;
 color: transparent;
-}
-
-/* Marks by time style start */
-.container {
-position: relative;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-height: 700px; /* Set the container to full viewport height */
-font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-letter-spacing: 1.5px;
-}
-
-.box input::placeholder {
-    color: #d1d5db5b;
-}
-
-.box {
-    margin-top: 50px;
-    margin-bottom: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    height: 380px;
-    width: 250px;
-    border: 3px solid grey;
-    border-radius: 5px;
-    background-color: rgba(128, 128, 128, 0.293);
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-.head {
-    max-height: 50px;
-    padding: 10px;
-    width: 90%;
-    display: flex;
-    justify-content: center;
-    border-bottom: 3px solid grey;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-#input {
-    width: 85.9%;
-    margin-top: 10px;
-    padding: 10px;
-    height: 20px;
-    color: #D1D5DB;
-    border: none;
-    background-color: rgba(128, 128, 128, 0.149);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-label {
-    width: 80%;
-    font-size: 15px;
-    color: #D1D5DB;
-    margin-top: 15px;
-    margin-left: -22px;
-    margin-bottom: -8px;
-    font-size: 12px;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-.box #resultByTime,
-#history {
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
-    margin-top: 10px;
-    padding: 10px;
-    width: 85.9%;
-    color: #D1D5DB;
-    margin-bottom: 10px;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-#resultLabel,
-#historyLabel {
-    margin-left: -170px;
-    color: #D1D5DB;
-    margin-bottom: -12px;
-    margin-top: 10px;
-    font-size: 12px;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    letter-spacing: 1.5px;
-}
-
-#userLimitTime{
-    border: none;
-    width: 50px;
-    padding: 5px;
-    background-color: transparent;
-    border-radius: 5px;
-    margin-top: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.381), 0px 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* NAVBAR MENU */
@@ -637,26 +532,15 @@ visibility: hidden;
         <div style="margin-top: 30px;"></div>
     </div>
 
-    <div style="background-color: #565869;" id="totalMarksByTimeContent">
+    <div id="totalMarksByTimeContent">
         <div class="container">
             <div id="box" class="box">
-                <div class="head">
-                    <h3 style="color: #D1D5DB;">By Time</h3>
-                </div>
-                <p id="resultLabel">Result</p>
-                <p id="resultByTime">0</p>
-                <p style="width: 60%; margin-left: -70px;" id="historyLabel">Entries</p>
-                <p style="font-size: 10px;" id="history">0</p>
-                <label for="input">Enter Marks after 2-Sec</label>
-                <input type="number" id="input" placeholder="Enter Marks">
+                <input type="number" id="numberrTime" placeholder="Enter Marks">
+                <input style="margin-top: 2px;" id="numberrTimeUserDelay" placeholder="Delay Time: 2" type="number">
                 <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">Enter 00 to clear record</p>
-                <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">for 1 sec input 1000</p>
-                <div style="display: flex;">
-                    <span style="margin-top: 10px; color: #D1D5DB;">Type Sec &NonBreakingSpace;</span><input style="margin-top: 5px;" id="userLimitTime" placeholder="2000" type="number"></div>
-                <div class="slider">
-                    <span style="color: #041124;">Font</span><input type="range" min="12" max="25" value="16" class="font-slider" id="fontSlider">
-                </div>
-            </div>
+                <p id="resultByTime">0</p>
+                <p style="width: 60%;" id="historyLabel">Entries</p>
+                <p style="display: none;" id="history">0</p>
         </div>
     </div>
 
@@ -922,10 +806,10 @@ document.getElementById("tNumber").addEventListener("input", function () {
     document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
 });
 
-const numberInput = document.getElementById("input"); //old id -> numberInputSec
+const numberInput = document.getElementById("numberrTime"); //old id -> numberInputSec
 const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
 const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
-const userLimit = document.getElementById('userLimitTime').value
+const userLimit = document.getElementById('numberrTimeUserDelay').value
 
 // ... Your existing code
 
@@ -938,8 +822,8 @@ let updateInterval;
 let remainingTime = 2000;
 var limit = 2000; // Default value
 
-document.getElementById('userLimitTime').addEventListener('input', () => {
-    limit = parseInt(document.getElementById('userLimitTime').value) || 2000;
+document.getElementById('numberrTimeUserDelay').addEventListener('input', () => {
+    limit = parseInt(document.getElementById('numberrTimeUserDelay').value) || 2000;
 });
 
 function updateTimerDisplay() {
@@ -956,7 +840,8 @@ function updateSumCountNumbersAndResetInput() {
         count++;
         countDisplay.textContent = `Entries: ${count}`;
         numbersDisplay.textContent = `${sum}`;
-        document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
+        // document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
+        numberInput.placeholder = `${enteredNumbers.join(' ')}`;
     } else {
         console.error("Invalid input. Please enter a valid number.");
     }
@@ -1004,23 +889,6 @@ checkbox.checked = false;
 }
 // Initial timer display
 updateTimerDisplay();
-
-const fontSlider = document.getElementById("fontSlider");
-const element1 = document.getElementById("historyLabel");
-const element2 = document.getElementById("resultByTime");
-const element3 = document.getElementById("input");
-const element4 = document.getElementById("history");
-const element5 = document.getElementById("box");
-var widthh = 3; 
-fontSlider.addEventListener("input", () => {
-    const fontSize = fontSlider.value + "px";
-    const width = (widthh + fontSlider.value) + "px";
-    element1.style.fontSize = fontSize;
-    element2.style.fontSize = fontSize;
-    element3.style.fontSize = fontSize;
-    element4.style.fontSize = fontSize;
-    element5.style.width = width;
-});
 
 // code for result compiler
 

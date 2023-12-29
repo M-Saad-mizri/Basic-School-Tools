@@ -234,20 +234,3 @@ checkbox.checked = false;
 }
 // Initial timer display
 updateTimerDisplay();
-
-const fontSlider = document.getElementById("fontSlider");
-const element1 = document.getElementById("historyLabel");
-const element2 = document.getElementById("resultByTime");
-const element3 = document.getElementById("input");
-const element4 = document.getElementById("history");
-const element5 = document.getElementById("box");
-var widthh = 3; 
-fontSlider.addEventListener("input", () => {
-    const fontSize = fontSlider.value + "px";
-    const width = (widthh + fontSlider.value) + "px";
-    element1.style.fontSize = fontSize;
-    element2.style.fontSize = fontSize;
-    element3.style.fontSize = fontSize;
-    element4.style.fontSize = fontSize;
-    element5.style.width = width;
-});z
