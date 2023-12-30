@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage</title>
+</head>
+<body>
+    <div class="containerr">
+        <h6 style="color: rgb(200, 34, 34); padding: 5px 0 5px 0;" id="totalLabel">
+            Default Total Marks: 240 - Enter Total Marks to
+            Change</h6>
+            <p id="resultt"></p>
+            <input style="margin-bottom: 3px;" type="number" id="tNumber" placeholder="Enter Total Marks to Change">
+            <input type="number" id="inputNumber" placeholder="Enter Obt. Marks">
+        </div>
+
+ <script>
+    let inputTimer; // Declare the inputTimer outside of the event handlers
+
+function updateTotalLabel(totalNumberByUser) {
+    const totalLabel = document.getElementById('totalLabel');
+    totalLabel.innerText = `Total Marks: ${totalNumberByUser}`;
+}
+
+document.getElementById("inputNumber").addEventListener("input", function () {
+    clearTimeout(inputTimer);
+    const inputNumber = parseFloat(this.value);
+    const totalNumberByUser = parseInt(document.getElementById('tNumber').value) || 240;
+
+    if (isNaN(inputNumber)) {
+        document.getElementById("resultt").textContent = "";
+        return;
+    }
+
+    updateTotalLabel(totalNumberByUser);
+
+    const result = (inputNumber / totalNumberByUser) * 100;
+    document.getElementById("resultt").textContent = `${inputNumber} From ${totalNumberByUser} = ${result.toFixed(2)}%`;
+
+    // Clear the input field after 2 seconds
+    inputTimer = setTimeout(() => {
+        document.getElementById("inputNumber").value = '';
+    }, 2000);
+});
+
+// Listen for changes in the total number input
+document.getElementById("tNumber").addEventListener("input", function () {
+    clearTimeout(inputTimer); // Clear the timer if the total number changes
+    const totalNumberByUser = parseInt(this.value) || 240;
+    const inputNumber = parseFloat(document.getElementById('inputNumber').value);
+
+    if (isNaN(inputNumber)) {
+        document.getElementById("resultt").textContent = "";
+        return;
+    }
+
+    updateTotalLabel(totalNumberByUser);
+
+    const result = (inputNumber / totalNumberByUser) * 100;
+    document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
+});
+ </script>       
+</body>
+</html>

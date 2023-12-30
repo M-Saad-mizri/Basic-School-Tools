@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Compiler</title>
+</head>
+
+
+    <div id="formContainer" style="margin-top: 50px;">
+        <span id="addtext">Add Student Record</span><button id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
+        <form id="resultForm" style="display: none;">
+            <button style="border: 1px solid rgb(240, 94, 94); background-color: transparent; color: black; margin-bottom: 15px; margin-top: -5px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+
+        <input class="inputResultTotalMarks" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
+
+      <input class="inputResult" type="text" id="name" name="name" placeholder="Name" required /><br />
+
+      <input class="inputResult" type="number" id="math" name="Math" placeholder="Math Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="Science" name="Science" placeholder="Science Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="Urdua" name="Urdua" placeholder="Urdu A Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="Urdub" name="urdub" placeholder="Urdu B Marks" required /><br />
+
+      <input class="inputResult" type="number" id="Islamiat" name="Islamiat" placeholder="Islamiat Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="pStudies" name="pStudies" placeholder="Pak studies Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="Enga" name="Enga" placeholder="English A Marks" required /><br />
+    
+      <input class="inputResult" type="number" id="Engb" name="Engb" placeholder="English B Marks" required /><br />    
+
+      <!-- Repeat similar input fields for other subjects -->
+
+      <button class="button" type="button" onclick="addStudent()">Add Student</button>
+      <button class="button" type="button" onclick="clearForm()">Clear Form</button>
+    </form>
+
+  <!-- Display student data table -->
+  <table id="resultTable">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Student Name</th>
+        <th id="mathColumn">Math</th>
+    <th id="scienceColumn">Science</th>
+    <th id="urduAColumn">Urdu A</th>
+    <th id="urduBColumn">Urdu B</th>
+    <th id="islamiatColumn">Islamiat</th>
+    <th id="pStudiesColumn">Pak studies</th>
+    <th id="engaColumn">English A</th>
+    <th id="engbColumn">English B</th>
+        <th>T Obt. Marks</th>
+        <th>Per%</th>
+        <th>Grade</th>
+        <th>Delete</th>
+        <!-- Add headers for other subjects -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Student data will be dynamically added here -->
+    </tbody>
+  </table>
+  <p id="rotate1">Rotate the phone to see detailed Marks</p>
+</div>
+
+<script>
+    function closeMenu() {
+const checkbox = document.getElementById("checkbox_toggle");
+if (checkbox) {
+checkbox.checked = false;
+}
+}
+// Initial timer display
+updateTimerDisplay();
+
+// code for result compiler
+
+function toggleForm() {
+    var form = document.getElementById("resultForm");
+    if (form.style.display === "none") {
+      form.style.display = "block";
+      document.getElementById('addtext').style.display = 'none';
+      document.getElementById('addtext1').style.display = 'none';
+    } else {
+      form.style.display = "none";
+      document.getElementById('addtext').style.display = 'block';
+      document.getElementById('addtext1').style.display = 'block';
+    }
+  }
+  var newRow;
+  function addStudent() {
+// Retrieve values from the form
+var totalMarks = document.getElementById("totalMarks").value || 800;
+var name = document.getElementById("name").value.toUpperCase();
+var math = document.getElementById("math").value;
+var Science = document.getElementById("Science").value;
+var Urdua = document.getElementById("Urdua").value;
+var Urdub = document.getElementById("Urdub").value;
+var Islamiat = document.getElementById("Islamiat").value;
+var pStudies = document.getElementById("pStudies").value;
+var Enga = document.getElementById("Enga").value;
+var Engb = document.getElementById("Engb").value;
+if (name == '') {
+    alert('Student Name missing')
+    return;
+}
+document.getElementById("rotate1").style.display = "flex"
+document.getElementById("resultTable").style.visibility = "visible";
+
+// Create a new row in the table
+var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+var newRow = table.insertRow(table.rows.length);
+
+// Insert cells with data
+var cell0 = newRow.insertCell(0);
+var cell1 = newRow.insertCell(1);
+var cell2 = newRow.insertCell(2);
+var cell3 = newRow.insertCell(3);
+var cell4 = newRow.insertCell(4);
+var cell5 = newRow.insertCell(5);
+var cell6 = newRow.insertCell(6);
+var cell7 = newRow.insertCell(7);
+var cell8 = newRow.insertCell(8);
+var cell9 = newRow.insertCell(9);
+var cell10 = newRow.insertCell(10);
+var cell11 = newRow.insertCell(11);
+var cell12 = newRow.insertCell(12); // New cell for grading
+
+// Populate cells with data
+cell1.innerHTML = name;
+cell2.innerHTML = math;
+cell3.innerHTML = Science;
+cell4.innerHTML = Urdua;
+cell5.innerHTML = Urdub;
+cell6.innerHTML = Islamiat;
+cell7.innerHTML = pStudies;
+cell8.innerHTML = Enga;
+cell9.innerHTML = Engb;
+
+// Add delete button to the new row
+var deleteButton = document.createElement("p");
+deleteButton.innerHTML = "&times;";
+deleteButton.style.color = "red";
+deleteButton.style.marginTop = "5px";
+deleteButton.style.marginLeft = "15px";
+deleteButton.style.fontSize = "20px";
+deleteButton.style.width = "20px";
+deleteButton.style.height = "20px";
+deleteButton.style.paddingLeft = "5px";
+deleteButton.style.fontWeight = "700";
+
+deleteButton.onclick = function() {
+    deleteRowByButton(this);
+};
+
+// Append cells with data first
+newRow.appendChild(cell0);
+newRow.appendChild(cell1);
+newRow.appendChild(cell2);
+newRow.appendChild(cell3);
+newRow.appendChild(cell4);
+newRow.appendChild(cell5);
+newRow.appendChild(cell6);
+newRow.appendChild(cell7);
+newRow.appendChild(cell8);
+newRow.appendChild(cell9);
+newRow.appendChild(cell10);
+newRow.appendChild(cell11);
+newRow.appendChild(cell12);
+
+// Then append the delete button
+newRow.appendChild(deleteButton);
+
+// Sum all cells in a row and display the result in the last cell
+var totalMarksInRow = 0;
+for (var i = 2; i <= 9; i++) {
+    totalMarksInRow += parseInt(newRow.cells[i].innerHTML) || 0;
+}
+cell10.innerHTML = totalMarksInRow;
+
+// Calculate Percentage and display in the last cell
+var percentage = Math.floor((totalMarksInRow / totalMarks) * 100);
+cell11.innerHTML = percentage + "%";
+
+// Assign the corresponding grade based on percentage
+var grade = calculateGrade(percentage);
+cell12.innerHTML = grade;
+
+// Highlight the last added row
+highlightLastAddedRow(newRow);
+
+// Update position (serial number)
+updatePosition();
+
+// Clear the form
+clearForm();
+sortStudents();
+}
+
+
+  function calculateGrade(percentage) {
+if (percentage >= 96 && percentage <= 100) {
+return "A+";
+} else if (percentage >= 86 && percentage <= 95) {
+return "A";
+} else if (percentage >= 76 && percentage <= 85) {
+return "B+";
+} else if (percentage >= 66 && percentage <= 75) {
+return "B";
+} else if (percentage >= 56 && percentage <= 65) {
+return "C+";
+} else if (percentage >= 46 && percentage <= 55) {
+return "C";
+} else if (percentage >= 36 && percentage <= 45) {
+return "F";
+} else if (percentage >= 1 && percentage <= 35) {
+return "Fail";
+} else {
+return "N I R";
+}
+}   
+  function highlightLastAddedRow(row) {
+    // Remove the 'highlight' class from all rows
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = table.getElementsByTagName("tr");
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].classList.remove("highlight");
+    }
+
+    // Add the 'highlight' class to the last added row
+    row.classList.add("highlight");
+  }
+
+  function updatePosition() {
+    // Update the position (serial number) for each row
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].getElementsByTagName("td")[0].innerHTML = i + 1;
+    }
+  }
+
+  function clearForm() {
+    // Clear input values in the form
+    document.getElementById("name").value = "";
+    document.getElementById("math").value = "";
+    document.getElementById("Science").value = "";
+    document.getElementById("Urdua").value = "";
+    document.getElementById("Urdub").value = "";
+    document.getElementById("pStudies").value = "";
+    document.getElementById("Enga").value = "";
+    document.getElementById("Engb").value = "";
+    document.getElementById("Islamiat").value = "";
+  }
+
+  function sortStudents() {
+    // Sort students based on total marks
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+    var rows = Array.from(table.getElementsByTagName("tr"));
+
+    rows.sort(function (a, b) {
+      var aValue = parseInt(a.cells[10].innerHTML) || 0; // Total obtained marks
+      var bValue = parseInt(b.cells[10].innerHTML) || 0; // Total obtained marks
+      return bValue - aValue;
+    });
+
+    // Clear the current table
+    table.innerHTML = "";
+
+    // Append the sortedMax rows to the table
+    rows.forEach(function (row) {
+      table.appendChild(row);
+    });
+
+    // Update positions after sorting
+    updatePosition();
+  }
+
+  function deleteRowByButton(button) {
+    var row = button.closest("tr"); // Use closest to find the closest ancestor tr element
+    console.log("Row to delete: ", row);
+    
+    var table = document.getElementById("resultTable").getElementsByTagName("tbody")[0];
+
+    // Check if the row is found
+    if (row) {
+        // Get the position (serial number) from the first cell of the row
+        var position = parseInt(row.cells[0].innerHTML) || 0;
+
+        // Check if the position is within the valid range
+        if (position >= 1 && position <= table.rows.length) {
+            table.deleteRow(position - 1); // Adjust the position to be 0-based index
+            updatePosition(); // Update positions after deletion
+
+            // Check if all rows are deleted, and hide the table if needed
+            if (table.rows.length === 0) {
+                document.getElementById("resultTable").style.visibility = "hidden";
+                document.getElementById("rotate1").style.visibility = "hidden";
+            }
+        } else {
+            console.log("Invalid position. Row not deleted.");
+        }
+    } else {
+        console.log("Row not found. Row not deleted.");
+    }
+}
+</script>
+<body>
+    
+</body>
+</html>

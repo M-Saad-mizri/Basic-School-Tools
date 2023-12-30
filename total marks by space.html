@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Marks</title>
+</head>
+<body>
+    <div id="totalMarksBySpaceContent">
+        <!-- Your existing content for total marks by space goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberr" placeholder="Enter Marks - 10 2 0.5">
+        </div>
+        <div id="ans">
+            <div id="inner">
+                <p id="result">Total Marks: 0</p>
+                <p id="length">Total Entries: 0</p>
+                <p id="average">Average: 0</p>
+                <p id="sortedMax">Added Max: 0</p>
+                <p id="sortedMin">Added Min: 0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+const inputFieldSum = document.getElementById('numberr');
+const resultParagraph = document.getElementById('result');
+const lengthParagraph = document.getElementById('length');
+const average = document.getElementById('average');
+const sortedMax = document.getElementById('sortedMax');
+const sortedMin = document.getElementById('sortedMin');
+
+inputFieldSum.addEventListener('input', () => {
+    // Get the value from the input field and split it into an array of numbers
+    const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
+    const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+   // const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
+   const sortedarr = numbers.sort(function(a, b) {
+  return a - b;
+});
+
+// Calculate the sum of the numbers
+const sum = numbers.reduce((total, num) => total + num, 0);
+
+// Display the sum and the length of the array
+resultParagraph.textContent = `Total Marks: ${sum}`;
+lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
+average.textContent = `Average ≈ ${ Math.floor(sum / numbers.length) }`;
+sortedMax.textContent = `Added Max: ${sortedarr[`${sortedarr.length - 1}`]}`;
+sortedMin.textContent = `Added Min: ${sortedarr[0]}`;
+average.style.letterSpacing = '6.5px';
+});
+
+
+// Add event listener to clear 'numberr' input field on 'c' key press
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'c' || event.key === '*') {
+        inputFieldSum.value = '';
+        resultParagraph.textContent = 'Total Marks: 0';
+        lengthParagraph.textContent = 'Total Entries: 0';
+        event.preventDefault(); // Prevent the 'c' key from being typed into the input field
+    }
+});
+
+    </script>
+</body>
+</html>

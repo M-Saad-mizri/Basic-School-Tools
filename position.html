@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position in class</title>
+</head>
+<body>
+    <div id="positionInClassContent">
+        <!-- Your existing content for position in class goes here -->
+        <div id="numberrr">
+            <input type="text" id="numberInput" placeholder="Enter Marks - 98 95 87 43">
+        </div>
+        <div id="position">
+            <h4 id="sortedList"></h4>
+        </div>
+    </div>
+    <script>
+        const inputFieldSort = document.getElementById('numberInput');
+const sortedList = document.getElementById('sortedList');
+
+inputFieldSort.addEventListener('input', () => {
+    // Get the value from the input field and split it into an array of numbers
+    const inputText = inputFieldSort.value.trim(); // Remove leading/trailing whitespace
+    const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
+
+    // Sort the array in descending order
+    const sortedArray = [...numbers].sort((a, b) => b - a);
+
+    // Display the sortedMax array with positions for the first three numbers
+    // and without positions for the rest
+    sortedList.innerHTML = ""; // Clear previous content
+    sortedArray.forEach((number, index) => {
+        // const position = index < 3 ? ["1st", "2nd", "3rd"][index] : "";
+        const listItem = document.createElement('p');
+        listItem.style.marginBottom = '10px'
+        listItem.textContent = `Position | Number`;
+        listItem.textContent = `${index + 1}${"  ⬅  "} ${number}`;
+        // ${position ? " - " + position : ""}
+        if (index + 1 < 10) {
+            listItem.textContent = `0${index + 1}${"  ⬅  "} ${number}`;
+        }
+        sortedList.appendChild(listItem);
+    });
+});
+    </script>
+</body>
+</html>
