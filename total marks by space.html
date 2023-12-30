@@ -15,13 +15,13 @@
     </style>
 </head>
 <body>
-    <div id="totalMarksBySpaceContent">
-        <!-- Your existing content for total marks by space goes here -->
-        <div id="numberrr">
-            <input type="text" id="numberr" placeholder="Enter Marks - 10 2 0.5">
+    <div style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;" id="totalMarksBySpaceContent">
+        <h1 style="margin-bottom: 20px;">Add Number By Space</h1>
+        <div style="margin-bottom: 10px;" id="numberrr">
+            <input type="text" class="form-control" id="numberr" placeholder="Enter Marks - 10 2 0.5">
         </div>
         <div id="ans">
-            <div id="inner">
+            <div style="margin-left: -20px;" id="inner">
                 <p id="result">Total Marks: 0</p>
                 <p id="length">Total Entries: 0</p>
                 <p id="average">Average: 0</p>
@@ -29,6 +29,19 @@
                 <p id="sortedMin">Added Min: 0</p>
             </div>
         </div>
+    </div>
+
+    <hr>
+
+    <div style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;" class="container">
+        <div id="box" class="box">
+            <h1 style="margin-bottom: 20px;">Add Number By Time</h1>
+            <input type="number" class="form-control" id="numberrTime" placeholder="Enter Marks"> <br>
+            <input style="margin-top: 2px;" class="form-control" id="numberrTimeUserDelay" placeholder="Delay Time: 2" type="number">
+            <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">Enter 00 to clear record</p>
+            <p id="resultByTime">0</p>
+            <p style="width: 60%;" id="historyLabel">Entries</p>
+            <p style="display: none;" id="history">0</p>
     </div>
 
     <script>
@@ -57,7 +70,6 @@ lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
 average.textContent = `Average ≈ ${ Math.floor(sum / numbers.length) }`;
 sortedMax.textContent = `Added Max: ${sortedarr[`${sortedarr.length - 1}`]}`;
 sortedMin.textContent = `Added Min: ${sortedarr[0]}`;
-average.style.letterSpacing = '6.5px';
 });
 
 
@@ -70,6 +82,77 @@ document.addEventListener('keydown', (event) => {
         event.preventDefault(); // Prevent the 'c' key from being typed into the input field
     }
 });
+
+const numberInput = document.getElementById("numberrTime"); //old id -> numberInputSec
+const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
+const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
+const userLimit = document.getElementById('numberrTimeUserDelay').value
+
+
+let sum = 0;
+let count = 0;
+let enteredNumbers = [];
+let updateInterval;
+let remainingTime = 2000;
+var limit = 2000; // Default value
+
+document.getElementById('numberrTimeUserDelay').addEventListener('input', () => {
+    limit = parseInt(document.getElementById('numberrTimeUserDelay').value) || 2000;
+});
+
+function updateTimerDisplay() {
+    if (remainingTime <= 0) {
+        clearInterval(updateInterval);
+    }
+}
+
+function updateSumCountNumbersAndResetInput() {
+    const inputValue = parseFloat(numberInput.value);
+    if (!isNaN(inputValue)) {
+        sum += inputValue;
+        enteredNumbers.push(inputValue);
+        count++;
+        countDisplay.textContent = `Entries: ${count}`;
+        numbersDisplay.textContent = `${sum}`;
+        // document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
+        numberInput.placeholder = `${enteredNumbers.join(' ')}`;
+    } else {
+        console.error("Invalid input. Please enter a valid number.");
+    }
+    numberInput.value = "";
+    clearInterval(updateInterval);
+    updateTimerDisplay();
+}
+
+numberInput.addEventListener("input", () => {
+    clearInterval(updateInterval);
+    const inputValue = numberInput.value.trim();
+
+    if (inputValue === "00") {
+        clearResultAndHistory();
+        count--;    
+        return;
+    }
+
+    if (inputValue !== "") {
+        remainingWidth = 100;
+        updateTimerDisplay();
+        updateInterval = setInterval(updateTimerDisplay, 10);
+        setTimeout(() => {
+            updateSumCountNumbersAndResetInput();
+        }, limit);
+    }
+});
+
+function clearResultAndHistory() {
+    sum = 0;
+    count = 0;
+    document.getElementById('resultByTime').innerText = '---';
+    document.getElementById('history').textContent = '---';
+    enteredNumbers = [];
+    clearInterval(updateInterval);
+    updateTimerDisplay();
+}
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

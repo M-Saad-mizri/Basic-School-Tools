@@ -15,12 +15,12 @@
 </head>
 
 
-    <div id="formContainer" style="margin-top: 50px;">
+    <div id="formContainer" style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;">
         <span id="addtext">Add Student Record</span><button class="btn btn-primary" id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
         <form id="resultForm" style="display: none;">
-            <button style="border: 1px solid rgb(240, 94, 94); background-color: transparent; color: black; margin-bottom: 15px; margin-top: -5px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+            <button style="border: 1px solid rgb(240, 94, 94); background-color: transparent; color: wheat; margin-bottom: 15px; margin-top: -5px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
 
-        <input class="inputResultTotalMarks form-control mb-3" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
+        <input class="inputResultTotalMarks form-control" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
 
       <input class="inputResult form-control" type="text" id="name" name="name" placeholder="Name" required /><br />
 
@@ -42,8 +42,8 @@
 
       <!-- Repeat similar input fields for other subjects -->
 
-      <button class="button" type="button" onclick="addStudent()">Add Student</button>
-      <button class="button" type="button" onclick="clearForm()">Clear Form</button>
+      <button class="button btn btn-primary type="button" onclick="addStudent()">Add Student</button>
+      <button class="button btn btn-success" type="button" onclick="clearForm()">Clear Form</button>
     </form>
 
   <!-- Display student data table -->
