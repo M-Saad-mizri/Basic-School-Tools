@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
     <title>Percentage</title>
+
+    <style>
+        body{
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1000%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='%230e2a47'%3e%3c/rect%3e%3cpath d='M568.4794104409368 228.53496103536912L657.4597543874017 172.93387118087253 512.8783205864403 139.55461708890422z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M212.91115525577777 413.8180414774291L367.98159717711087 427.3849471935009 381.5485028931827 272.3145052721678 226.47806097184957 258.747599556096z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M351.1576901922465 79.33087257385537L409.62610675108476 77.28911047665666 377.32925532586756-9.392633313001383z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M103.067%2c251.144C151.098%2c250.72%2c203.917%2c244.468%2c228.726%2c203.338C254.116%2c161.244%2c238.062%2c109.598%2c214.451%2c66.481C189.594%2c21.089%2c154.781%2c-24.147%2c103.067%2c-26.133C48.739%2c-28.22%2c2.341%2c9.862%2c-24.191%2c57.316C-50.045%2c103.558%2c-55.567%2c161.302%2c-26.49%2c205.589C0.438%2c246.603%2c54.005%2c251.577%2c103.067%2c251.144' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M858.245%2c429.707C909.149%2c431.141%2c950.736%2c394.033%2c976.478%2c350.094C1002.556%2c305.581%2c1012.918%2c252.042%2c989.157%2c206.25C963.561%2c156.922%2c913.724%2c119.003%2c858.245%2c122.239C806.553%2c125.254%2c773.921%2c173.516%2c751.359%2c220.122C732.114%2c259.875%2c730.948%2c304.398%2c751.013%2c343.743C773.32%2c387.484%2c809.163%2c428.324%2c858.245%2c429.707' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M259.273%2c171.866C292.764%2c170.879%2c327.583%2c162.037%2c344.743%2c133.259C362.249%2c103.9%2c356.65%2c67.161%2c339.248%2c37.74C322.191%2c8.901%2c292.732%2c-9.462%2c259.273%2c-11.245C222.146%2c-13.224%2c182.89%2c-3.084%2c163.029%2c28.347C141.992%2c61.64%2c142.676%2c105.859%2c164.61%2c138.567C184.578%2c168.343%2c223.438%2c172.922%2c259.273%2c171.866' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1000'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
+            color: wheat;
+        }
+    </style>
 </head>
 <body>
     <div class="containerr">
@@ -61,5 +70,8 @@ document.getElementById("tNumber").addEventListener("input", function () {
     document.getElementById("resultt").textContent = `${inputNumber} / ${totalNumberByUser} = ${result.toFixed(2)}%`;
 });
  </script>       
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
 </html>
