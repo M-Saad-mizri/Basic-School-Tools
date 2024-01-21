@@ -11,34 +11,221 @@
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1000%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='%230e2a47'%3e%3c/rect%3e%3cpath d='M568.4794104409368 228.53496103536912L657.4597543874017 172.93387118087253 512.8783205864403 139.55461708890422z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M212.91115525577777 413.8180414774291L367.98159717711087 427.3849471935009 381.5485028931827 272.3145052721678 226.47806097184957 258.747599556096z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M351.1576901922465 79.33087257385537L409.62610675108476 77.28911047665666 377.32925532586756-9.392633313001383z' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M103.067%2c251.144C151.098%2c250.72%2c203.917%2c244.468%2c228.726%2c203.338C254.116%2c161.244%2c238.062%2c109.598%2c214.451%2c66.481C189.594%2c21.089%2c154.781%2c-24.147%2c103.067%2c-26.133C48.739%2c-28.22%2c2.341%2c9.862%2c-24.191%2c57.316C-50.045%2c103.558%2c-55.567%2c161.302%2c-26.49%2c205.589C0.438%2c246.603%2c54.005%2c251.577%2c103.067%2c251.144' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M858.245%2c429.707C909.149%2c431.141%2c950.736%2c394.033%2c976.478%2c350.094C1002.556%2c305.581%2c1012.918%2c252.042%2c989.157%2c206.25C963.561%2c156.922%2c913.724%2c119.003%2c858.245%2c122.239C806.553%2c125.254%2c773.921%2c173.516%2c751.359%2c220.122C732.114%2c259.875%2c730.948%2c304.398%2c751.013%2c343.743C773.32%2c387.484%2c809.163%2c428.324%2c858.245%2c429.707' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M259.273%2c171.866C292.764%2c170.879%2c327.583%2c162.037%2c344.743%2c133.259C362.249%2c103.9%2c356.65%2c67.161%2c339.248%2c37.74C322.191%2c8.901%2c292.732%2c-9.462%2c259.273%2c-11.245C222.146%2c-13.224%2c182.89%2c-3.084%2c163.029%2c28.347C141.992%2c61.64%2c142.676%2c105.859%2c164.61%2c138.567C184.578%2c168.343%2c223.438%2c172.922%2c259.273%2c171.866' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1000'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");
           color: wheat;
         }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      margin-left: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    input {
+      width: calc(100% - 16px);
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      color: black;
+      background-color: #ddd;
+    }
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr.highlight {
+      background-color: lightblue;
+    }
+    h3{
+      text-align: center;
+      border-bottom: 0.5px solid rgb(103, 102, 104);
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      margin-left: -20px;
+      width: 111%;
+      background-color: #4caf50;
+      color: white;
+      padding-top: 5px;
+      width: auto;
+    }
+    #rotate1{
+      display: none;
+      color: white;
+    }
+
+    #formContainer{
+      display: flex;
+    }
+
+    #formContainer span{
+      margin-top: 9px;
+      font-weight: 700;
+      margin-left: 20px;
+      margin-right: 10px;
+    }
+
+    #addtext1{
+      width: fit-content;
+      padding: 10px; 
+      font-size: 22px;
+      border-radius: 10px;
+    }
+
+    #formClose{
+      width: 50px; font-size: 40px;
+      padding: 0;
+      background-color: transparent;
+      color: rgb(246, 69, 69);
+      margin-top: -35px;
+      margin-left: 320px;
+    }
+
+    #resultTable {
+visibility: hidden;
+}
+.form-control{
+  margin-top: -25px;
+} #addtext1 span{
+  font-size: 20px; 
+  color: black; 
+  padding-left: 10px; 
+  padding-right: 10px; 
+  padding-top: 5px; 
+  padding-bottom: 5px; 
+  border-radius: 10px; 
+  background-color: azure;
+}
+
+
+    @media only screen and (max-width: 600px) {
+  /* Styles for mobile view */
+ table th#mathColumn,
+  table td:nth-child(3),
+  table th#scienceColumn,
+  table td:nth-child(4),
+  table th#urduAColumn,
+  table td:nth-child(5),
+  table th#urduBColumn,
+  table td:nth-child(6),
+  table th#islamiatColumn,
+  table td:nth-child(7),
+  table th#pStudiesColumn,
+  table td:nth-child(8),
+  table th#engaColumn,
+  table td:nth-child(9),
+  table th#engbColumn,
+  table td:nth-child(10) {
+    display: none;
+  }
+
+  form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 380px;
+      width: 100%;
+      margin-left: 0.5px;
+    }
+
+    #resultTable{
+      font-size: 10px;
+    }
+
+    #rotate{
+      color: #e64141;
+      margin-left: 5px;
+      margin-top: 10px;
+      display: none;
+      font-size: 13px;
+      border-bottom: 1px dotted #4caf50;
+      border-top: 1px dotted #4caf50;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      margin-bottom: 20px;
+    }
+
+    #formClose{
+      width: 50px; font-size: 35px;
+      padding: 0;
+      background-color: transparent;
+      color: rgb(246, 69, 69);
+      margin-top: -35px;
+      margin-left: 270px;
+    }
+
+}
   </style>
 </head>
 
 
     <div id="formContainer" style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;">
-        <span id="addtext">Add Student Record</span><button class="btn btn-primary" id="addtext1" class="button" type="button" onclick="toggleForm()">+</button>
+
+          <button class="btn btn-primary" id="addtext1"  type="button" onclick="toggleForm()">Get Start <span>+</span></button>
         <form id="resultForm" style="display: none;">
-            <button style="border: 1px solid rgb(240, 94, 94); background-color: transparent; color: wheat; margin-bottom: 15px; margin-top: -5px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+            <button style="background-color: transparent; color: black; margin-bottom: 25px; margin-top: -10px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
 
-        <input class="inputResultTotalMarks form-control" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" required /><br />
+        <input class="TotalMarks form-control" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" /><br />
 
-      <input class="inputResult form-control" type="text" id="name" name="name" placeholder="Name" required /><br />
+      <input class="form-control" type="text" id="name" name="name" placeholder="Name" required /><br />
 
-      <input class="inputResult form-control" type="number" id="math" name="Math" placeholder="Math Marks" required /><br />
+      <input class="form-control" type="number" id="math" name="Math" placeholder="Math Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="Science" name="Science" placeholder="Science Marks" required /><br />
+      <input class="form-control" type="number" id="Science" name="Science" placeholder="Science Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="Urdua" name="Urdua" placeholder="Urdu A Marks" required /><br />
+      <input class="form-control" type="number" id="Urdua" name="Urdua" placeholder="Urdu A Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="Urdub" name="urdub" placeholder="Urdu B Marks" required /><br />
+      <input class="form-control" type="number" id="Urdub" name="urdub" placeholder="Urdu B Marks" required /><br />
 
-      <input class="inputResult form-control" type="number" id="Islamiat" name="Islamiat" placeholder="Islamiat Marks" required /><br />
+      <input class="form-control" type="number" id="Islamiat" name="Islamiat" placeholder="Islamiat Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="pStudies" name="pStudies" placeholder="Pak studies Marks" required /><br />
+      <input class="form-control" type="number" id="pStudies" name="pStudies" placeholder="Pak studies Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="Enga" name="Enga" placeholder="English A Marks" required /><br />
+      <input class="form-control" type="number" id="Enga" name="Enga" placeholder="English A Marks" required /><br />
     
-      <input class="inputResult form-control" type="number" id="Engb" name="Engb" placeholder="English B Marks" required /><br />    
+      <input class="form-control" type="number" id="Engb" name="Engb" placeholder="English B Marks" required /><br />    
 
       <!-- Repeat similar input fields for other subjects -->
 
@@ -90,11 +277,9 @@ function toggleForm() {
     var form = document.getElementById("resultForm");
     if (form.style.display === "none") {
       form.style.display = "block";
-      document.getElementById('addtext').style.display = 'none';
       document.getElementById('addtext1').style.display = 'none';
     } else {
       form.style.display = "none";
-      document.getElementById('addtext').style.display = 'block';
       document.getElementById('addtext1').style.display = 'block';
     }
   }
