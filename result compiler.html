@@ -64,7 +64,7 @@
       margin-top: 20px;
       margin-bottom: 20px;
       color: black;
-      background-color: #ddd;
+      background-color: #dddddd3f;
     }
     th,
     td {
@@ -138,6 +138,10 @@ visibility: hidden;
   background-color: azure;
 }
 
+#StudentAdded{
+  border: 1px solid red;
+  margin-bottom: -30px;
+}
 
     @media only screen and (max-width: 600px) {
   /* Styles for mobile view */
@@ -205,7 +209,10 @@ visibility: hidden;
 
           <button class="btn btn-primary" id="addtext1"  type="button" onclick="toggleForm()">Get Start <span>+</span></button>
         <form id="resultForm" style="display: none;">
-            <button style="background-color: transparent; color: black; margin-bottom: 25px; margin-top: -10px;margin-left: 90%; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+          <div style="height: 35px; display: flex; width: 350px; margin-bottom: 40px;">
+            <span id="StudentAddedsucessfully" style="text-align: center; border-radius: 5px; padding: 3px 0 3px 0; width: 250px; color: white; font-size: 12px;"></span>
+            <button style="background-color: transparent; color: black; margin-left: 30px; margin-bottom: 25px; width: 25px; text-transform: bold;" class="button" type="button" onclick="toggleForm()">X</button>
+          </div>
 
         <input class="TotalMarks form-control" type="number" placeholder="Default Total Marks: 800" id="totalMarks" name="totalMarks" /><br />
 
@@ -237,9 +244,9 @@ visibility: hidden;
   <table id="resultTable">
     <thead>
       <tr>
-        <th>Rank</th>
-        <th>Student Name</th>
-        <th id="mathColumn">Math</th>
+    <th>Rank</th>
+    <th>Student Name</th>
+    <th id="mathColumn">Math</th>
     <th id="scienceColumn">Science</th>
     <th id="urduAColumn">Urdu A</th>
     <th id="urduBColumn">Urdu B</th>
@@ -247,12 +254,12 @@ visibility: hidden;
     <th id="pStudiesColumn">Pak studies</th>
     <th id="engaColumn">English A</th>
     <th id="engbColumn">English B</th>
-        <th>T Obt. Marks</th>
-        <th>Per%</th>
-        <th>Grade</th>
-        <th>Delete</th>
+    <th>T Obt. Marks</th>
+    <th>Per%</th>
+    <th>Grade</th>
+    <th>Delete</th>
         <!-- Add headers for other subjects -->
-      </tr>
+    </tr>
     </thead>
     <tbody>
       <!-- Student data will be dynamically added here -->
@@ -285,7 +292,7 @@ function toggleForm() {
   }
   var newRow;
   function addStudent() {
-// Retrieve values from the form
+    // Retrieve values from the form
 var totalMarks = document.getElementById("totalMarks").value || 800;
 var name = document.getElementById("name").value.toUpperCase();
 var math = document.getElementById("math").value;
@@ -296,6 +303,18 @@ var Islamiat = document.getElementById("Islamiat").value;
 var pStudies = document.getElementById("pStudies").value;
 var Enga = document.getElementById("Enga").value;
 var Engb = document.getElementById("Engb").value;
+    // Set the color to black
+document.getElementById("StudentAddedsucessfully").style.color = "yellow";
+document.getElementById("StudentAddedsucessfully").innerText = `${name}  Added`;
+document.getElementById("StudentAddedsucessfully").style.background = "black";
+
+// After 5 seconds, change the color back to its original state (assuming the original color was not black)
+setTimeout(function () {
+  document.getElementById("StudentAddedsucessfully").style.color = "white"; // Set it back to the original color
+  document.getElementById("StudentAddedsucessfully").style.background = "none";
+}, 5000); // 5000 milliseconds (5 seconds)
+
+
 if (name == '') {
     alert('Student Name missing')
     return;
