@@ -20,28 +20,27 @@
         <div style="margin-bottom: 10px;" id="numberrr">
             <input type="text" class="form-control" id="numberr" placeholder="Enter Marks - 10 2 0.5">
         </div>
-        <div id="ans">
-            <div style="margin-left: -20px;" id="inner">
+            <div style="margin-left: -20px;">
                 <p id="result">Total Marks: 0</p>
                 <p id="length">Total Entries: 0</p>
                 <p id="average">Average: 0</p>
                 <p id="sortedMax">Added Max: 0</p>
                 <p id="sortedMin">Added Min: 0</p>
             </div>
-        </div>
     </div>
 
     <hr>
 
     <div style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;" class="container">
-        <div id="box" class="box">
+        <div>
             <h1 style="margin-bottom: 20px;">Add Number By Time</h1>
             <input type="number" class="form-control" id="numberrTime" placeholder="Enter Marks"> <br>
-            <input style="margin-top: 2px;" class="form-control" id="numberrTimeUserDelay" placeholder="Delay Time: 2" type="number">
-            <p style="margin-top: 15px; color: #D1D5DB; font-size: smaller;">Enter 00 to clear record</p>
-            <p id="resultByTime">0</p>
-            <p style="width: 60%;" id="historyLabel">Entries</p>
-            <p style="display: none;" id="history">0</p>
+            <p style="margin-top: -24px; color: #D1D5DB; font-size: smaller;">Enter 00 to clear record</p>
+            <input style="margin-top: 2px;" class="form-control" id="numberrTimeUserDelay" placeholder="Default delay: 2 Sec" type="number">
+        <div style="margin-left: 140px; margin-top: 20px;">
+            <p id="resultByTime">Total: 0</p>
+            <p style="width: 60%;" id="historyLabel">Entries: 0</p>
+        </div>
     </div>
 
     <script>
@@ -86,7 +85,6 @@ document.addEventListener('keydown', (event) => {
 const numberInput = document.getElementById("numberrTime"); //old id -> numberInputSec
 const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
 const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
-const userLimit = document.getElementById('numberrTimeUserDelay').value
 
 
 let sum = 0;
@@ -97,7 +95,7 @@ let remainingTime = 2000;
 var limit = 2000; // Default value
 
 document.getElementById('numberrTimeUserDelay').addEventListener('input', () => {
-    limit = parseInt(document.getElementById('numberrTimeUserDelay').value) || 2000;
+    limit = parseInt(document.getElementById('numberrTimeUserDelay').value * 1000) || 2000;
 });
 
 function updateTimerDisplay() {
@@ -113,7 +111,7 @@ function updateSumCountNumbersAndResetInput() {
         enteredNumbers.push(inputValue);
         count++;
         countDisplay.textContent = `Entries: ${count}`;
-        numbersDisplay.textContent = `${sum}`;
+        numbersDisplay.textContent = `Total: ${sum}`;
         // document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
         numberInput.placeholder = `${enteredNumbers.join(' ')}`;
     } else {
@@ -147,8 +145,6 @@ numberInput.addEventListener("input", () => {
 function clearResultAndHistory() {
     sum = 0;
     count = 0;
-    document.getElementById('resultByTime').innerText = '---';
-    document.getElementById('history').textContent = '---';
     enteredNumbers = [];
     clearInterval(updateInterval);
     updateTimerDisplay();

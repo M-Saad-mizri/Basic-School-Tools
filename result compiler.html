@@ -143,6 +143,17 @@ visibility: hidden;
   margin-bottom: -30px;
 }
 
+/* Styles for screens with a width between 605px and 933px */
+@media only screen and (min-width: 605px) and (max-width: 933px) {
+  /* Your styles go here */
+  *{
+    font-size: 8px;
+  }
+
+  /* Add more styles as needed */
+}
+
+
     @media only screen and (max-width: 600px) {
   /* Styles for mobile view */
  table th#mathColumn,
@@ -163,6 +174,10 @@ visibility: hidden;
   table td:nth-child(10) {
     display: none;
   }
+  #rotate1{
+      display: flex;
+      color: white;
+    }
 
   form {
       background-color: #fff;
@@ -319,7 +334,7 @@ if (name == '') {
     alert('Student Name missing')
     return;
 }
-document.getElementById("rotate1").style.display = "flex"
+// document.getElementById("rotate1").style.display = "flex"
 document.getElementById("resultTable").style.visibility = "visible";
 
 // Create a new row in the table
