@@ -154,6 +154,7 @@ visibility: hidden;
 }
 
 
+
     @media only screen and (max-width: 600px) {
   /* Styles for mobile view */
  table th#mathColumn,
@@ -283,11 +284,17 @@ visibility: hidden;
   </table>
   <p id="rotate1">Rotate the phone to see detailed Marks</p>
 </div>
-
-<button onclick="exportToExcel()">Save to Excel</button>
+<div style="display: flex;">
+  <p style="margin-left: 33px; margin-top: 25px; font-weight: 700; color: white;" >Save Your File</p>
+<img style="width: 80px; cursor: pointer;"  src="exceldownload.png" alt="Download in excel" srcset="" onclick="exportToExcel()"></img>
+<img style="width: 53px; height: 55px; cursor: pointer; margin-top: 13px;"  src="pdfdownload.png" alt="Download in PDF" srcset="" onclick="exportToPdf()"></img>
+</div>
 
 
 <script>
+ function exportToPdf(){
+    alert("PDF function will come soon... stay tuned")
+  }
     function closeMenu() {
 const checkbox = document.getElementById("checkbox_toggle");
 if (checkbox) {
@@ -539,24 +546,61 @@ return "N I R";
 function exportToExcel() {
   var table = document.getElementById("resultTable");
 
-  // Check if the table is empty
-  if (table.rows.length === 1) {
+  // Clone the table to preserve the original
+  var clonedTable = table.cloneNode(true);
+
+  // Remove the delete button cells from the cloned table
+  var rows = clonedTable.rows;
+  for (var i = 0; i < rows.length; i++) {
+    var cells = rows[i].getElementsByTagName('p');
+    for (var j = cells.length - 1; j >= 0; j--) {
+      cells[j].parentNode.removeChild(cells[j]);
+    }
+  }
+
+  // Check if the table is empty (excluding the delete button column)
+  if (clonedTable.rows.length === 1) {
     alert("Add students first before exporting.");
     return;
   }
 
-  var ws = XLSX.utils.table_to_sheet(table);
+  // Create a new workbook
   var wb = XLSX.utils.book_new();
+
+  // Add student results sheet
+  var ws = XLSX.utils.table_to_sheet(clonedTable);
   XLSX.utils.book_append_sheet(wb, ws, "StudentResults");
+
+  // Calculate pass and fail students
+  var passStudents = 0;
+  var failStudents = 0;
+  for (var k = 1; k < clonedTable.rows.length; k++) {
+    var percentage = parseInt(clonedTable.rows[k].cells[11].innerHTML);
+    if (!isNaN(percentage) && percentage >= 36) {
+      passStudents++;
+    } else {
+      failStudents++;
+    }
+  }
+var totalstudents = passStudents + failStudents;
+  // Add pass and fail students count to the student results sheet
+  XLSX.utils.sheet_add_aoa(ws, [["Pass Students", passStudents]], { origin: -1 });
+  XLSX.utils.sheet_add_aoa(ws, [["Fail Students", failStudents]], { origin: -1 });
+  XLSX.utils.sheet_add_aoa(ws, [["Total Students", totalstudents]], { origin: -1 });
+
+  // Add Teacher's Signature line
+  var lastRowIndex = clonedTable.rows.length - 1;
+  var signatureRow = lastRowIndex + 4;
+  XLSX.utils.sheet_add_aoa(ws, [["Teacher's Signature: _______________________"]], { origin: signatureRow + 1, skipHeader: true });
 
   // Add current date to the file name
   var currentDate = new Date();
   var dateString = currentDate.toISOString().slice(0, 10); // Get YYYY-MM-DD format
   var fileName = "StudentResults_" + dateString + ".xlsx";
 
+  // Write the workbook to a file
   XLSX.writeFile(wb, fileName);
 }
-
 
 
 </script>
