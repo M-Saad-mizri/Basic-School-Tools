@@ -101,7 +101,7 @@
                         const inputValue = inputFieldSum.value;
 
                         // Check if the last two characters are '00'
-                        if (inputValue.slice(-2) === '00') {
+                        if (inputValue.slice(-3) === ' 00') {
                             inputFieldSum.value = ''; // Clear the input field
                             resultParagraph.textContent = 'Total Marks: 0';
                             lengthParagraph.textContent = 'Total Entries: 0';
