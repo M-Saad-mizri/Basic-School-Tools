@@ -6,28 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
     <title>Total Marks</title>
-
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
         body {
-            background-color: #000000;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23222222' points='800 100 0 200 0 800 1600 800 1600 200'/%3E%3Cpolygon fill='%23444444' points='800 200 0 400 0 800 1600 800 1600 400'/%3E%3Cpolygon fill='%23666666' points='800 300 0 600 0 800 1600 800 1600 600'/%3E%3Cpolygon fill='%23888888' points='1600 800 800 400 0 800'/%3E%3Cpolygon fill='%23aaaaaa' points='1280 800 800 500 320 800'/%3E%3Cpolygon fill='%23cccccc' points='533.3 800 1066.7 800 800 600'/%3E%3Cpolygon fill='%23EEE' points='684.1 800 914.3 800 800 700'/%3E%3C/g%3E%3C/svg%3E");
-            background-attachment: fixed;
-            background-size: cover;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: #2b2a2a;
             color: wheat;
+        }
+
+        h1 {
+            color: #f8f9fa;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+            max-width: 400px;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 600px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card p {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .info-text {
+            font-size: 0.9em;
+            color: #cccccc;
         }
     </style>
 </head>
 
 <body>
-    <div style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;"
-        id="totalMarksBySpaceContent">
-        <h1 style="margin-bottom: 20px;">Add Number By Space</h1>
-        <div style="margin-bottom: 10px;" id="numberrr">
+    <div class="content-container" id="totalMarksBySpaceContent">
+        <h1>Add Number By Space</h1>
+        <div id="numberrr">
+            <span class="info-text">Type c or * or 00 to reset</span>
             <input type="text" class="form-control" id="numberr" placeholder="Enter Marks - 10 2 0.5">
         </div>
-        <div style="margin-left: -20px;">
+        <div class="card">
             <p id="result">Total Marks: 0</p>
             <p id="length">Total Entries: 0</p>
             <p id="average">Average: 0</p>
@@ -38,16 +79,15 @@
 
     <hr>
 
-    <div style="display: flex; flex-direction: column; margin-top: 10px;  align-items: center;" class="container">
+    <div class="content-container container">
         <div>
-            <h1 style="margin-bottom: 20px; color: #1b1b1c;">Add Number By Time</h1>
-            <input type="number" class="form-control" id="numberrTime" placeholder="Enter Marks"> <br>
-            <p style="margin-top: -24px; color: #111112; font-size: smaller;">Enter 00 to restart</p>
-            <input style="margin-top: 2px;" class="form-control" id="numberrTimeUserDelay"
-                placeholder="Default delay: 2 Seconds" type="number">
-            <div style="margin-left: 140px; margin-top: 20px;">
-                <p style="color: rgb(8, 8, 8); font-weight: 700;" id="resultByTime">Total: No data</p>
-                <p style="color: rgb(8, 8, 8); font-weight: 700; width: 60%;" id="historyLabel">Entries: No data</p>
+            <h1 class="text-light">Add Number By Time</h1>
+            <input type="number" class="form-control" id="numberrTime" placeholder="Enter Marks">
+            <p class="info-text">Enter 00 to restart</p>
+            <input class="form-control" id="numberrTimeUserDelay" placeholder="Default delay: 2 Seconds" type="number">
+            <div class="card">
+                <p id="resultByTime">Total: No data</p>
+                <p id="historyLabel">Entries: No data</p>
             </div>
         </div>
 
@@ -60,18 +100,14 @@
             const sortedMin = document.getElementById('sortedMin');
 
             inputFieldSum.addEventListener('input', () => {
-                // Get the value from the input field and split it into an array of numbers
-                const inputText = inputFieldSum.value.trim(); // Remove leading/trailing whitespace
+                const inputText = inputFieldSum.value.trim();
                 const numbers = inputText === "" ? [] : inputText.split(' ').map(Number);
-                // const numbers = inputText === "" ? [] : inputText.split('+').map(Number);
                 const sortedarr = numbers.sort(function (a, b) {
                     return a - b;
                 });
 
-                // Calculate the sum of the numbers
                 const sum = numbers.reduce((total, num) => total + num, 0);
 
-                // Display the sum and the length of the array
                 resultParagraph.textContent = `Total Marks: ${sum}`;
                 lengthParagraph.textContent = `Total Entries: ${numbers.length}`;
                 average.textContent = `Average ≈ ${Math.floor(sum / numbers.length)}`;
@@ -79,8 +115,6 @@
                 sortedMin.textContent = `Added Min: ${sortedarr[0]}`;
             });
 
-
-            // Add event listener to clear 'numberr' input field on 'c' key press
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'c' || event.key === '*') {
                     inputFieldSum.value = '';
@@ -89,20 +123,17 @@
                     average.textContent = `Average ≈ 0`;
                     sortedMax.textContent = `Added Max: 0`;
                     sortedMin.textContent = `Added Min: 0`;
-                    event.preventDefault(); // Prevent the 'c' key from being typed into the input field
+                    event.preventDefault();
                 }
             });
 
             document.addEventListener('DOMContentLoaded', () => {
-
                 if (inputFieldSum && resultParagraph && lengthParagraph) {
-                    // Add event listener to the input field
                     inputFieldSum.addEventListener('input', () => {
                         const inputValue = inputFieldSum.value;
 
-                        // Check if the last two characters are '00'
                         if (inputValue.slice(-3) === ' 00') {
-                            inputFieldSum.value = ''; // Clear the input field
+                            inputFieldSum.value = '';
                             resultParagraph.textContent = 'Total Marks: 0';
                             lengthParagraph.textContent = 'Total Entries: 0';
                             average.textContent = `Average ≈ 0`;
@@ -115,18 +146,16 @@
                 }
             });
 
-
-            const numberInput = document.getElementById("numberrTime"); //old id -> numberInputSec
-            const numbersDisplay = document.getElementById("resultByTime");     //old id -> resultTime
-            const countDisplay = document.getElementById("historyLabel"); //old id -> lengthTime
-
+            const numberInput = document.getElementById("numberrTime");
+            const numbersDisplay = document.getElementById("resultByTime");
+            const countDisplay = document.getElementById("historyLabel");
 
             let sum = 0;
             let count = 0;
             let enteredNumbers = [];
             let updateInterval;
             let remainingTime = 2000;
-            var limit = 2000; // Default value
+            var limit = 2000;
 
             document.getElementById('numberrTimeUserDelay').addEventListener('input', () => {
                 limit = parseInt(document.getElementById('numberrTimeUserDelay').value * 1000) || 2000;
@@ -146,7 +175,6 @@
                     count++;
                     countDisplay.textContent = `Entries: ${count}`;
                     numbersDisplay.textContent = `Total: ${sum}`;
-                    // document.getElementById('history').textContent = `${enteredNumbers.join(' ')}`;
                     numberInput.placeholder = `${enteredNumbers.join(' ')}`;
                 } else {
                     console.error("Invalid input. Please enter a valid number.");
@@ -183,7 +211,6 @@
                 clearInterval(updateInterval);
                 updateTimerDisplay();
             }
-
         </script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
             integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -192,6 +219,7 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </body>
 
 </html>
