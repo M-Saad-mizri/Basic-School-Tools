@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Result Calculator</title>
+    <style>
+      /* Base styles */
+      body {
+        text-transform: capitalize;
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow-x: auto;
+        display: block; /* Allows horizontal scrolling */
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ddd;
+        white-space: nowrap; /* Prevents wrapping */
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        width: 80px;
+        padding: 5px;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+
+      button {
+        margin: 10px 5px;
+        padding: 10px 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      #calculate-btn {
+        background-color: #008cba;
+      }
+
+      #delete-btn {
+        background-color: #f44336;
+      }
+
+      #total-marks {
+        width: 100px;
+        padding: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        th,
+        td {
+          padding: 6px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+          width: 60px;
+        }
+
+        button {
+          font-size: 0.8rem;
+          padding: 8px 12px;
+        }
+
+        #total-marks {
+          width: 80px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.5rem;
+          text-align: center;
+        }
+
+        table {
+          font-size: 0.9rem; /* Smaller font for smaller screens */
+        }
+
+        button {
+          width: 100%;
+          padding: 10px 0;
+          font-size: 0.8rem;
+          margin: 5px 0;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+          width: 50px;
+          font-size: 0.8rem;
+        }
+
+        #total-marks {
+          width: 96.5%;
+          margin: 5px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">Result Calculator</h1>
+
+    <button id="add-column-btn">Add Subject Column</button>
+    <button id="add-row-btn">Add Student Row</button>
+    <button id="calculate-btn">Calculate Result</button>
+    <button onclick="deleteData()" id="delete-btn">Delete Data</button>
+    <input id="total-marks" type="number" placeholder="Total Marks" required />
+
+    <table id="result-table">
+      <thead>
+        <tr></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button id="download-pdf-btn">Download PDF</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <script>
+      // Get elements
+      const resultTable = document
+        .getElementById("result-table")
+        .getElementsByTagName("tbody")[0];
+      const addRowButton = document.getElementById("add-row-btn");
+      const addColumnButton = document.getElementById("add-column-btn");
+      const calculateButton = document.getElementById("calculate-btn");
+
+      let subjects = ["Math", "English", "Urdu"]; // Default subjects
+
+      // Add row (student)
+      addRowButton.addEventListener("click", () => {
+        const row = resultTable.insertRow();
+        const serialCell = row.insertCell(0);
+        const nameCell = row.insertCell(1);
+
+        serialCell.innerHTML = resultTable.rows.length; // Serial number
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Enter Name";
+        nameCell.appendChild(nameInput);
+
+        subjects.forEach((subject, index) => {
+          const cell = row.insertCell(index + 2);
+          const marksInput = document.createElement("input");
+          marksInput.type = "number";
+          marksInput.placeholder = subject;
+          cell.appendChild(marksInput);
+        });
+
+        row.insertCell(subjects.length + 2); // Empty cell for Total Marks
+        row.insertCell(subjects.length + 3); // Empty cell for Percentage
+        row.insertCell(subjects.length + 4); // Empty cell for Grade
+      });
+
+      // Add column (subject)
+      addColumnButton.addEventListener("click", () => {
+        const subjectName = prompt("Enter subject name:");
+        if (subjectName) {
+          // Add the new subject to the subjects array
+          const newSubjectIndex = subjects.length; // New subject's index position
+          subjects.push(subjectName);
+
+          // Update header row by inserting at the correct index
+          const header = resultTable.closest("table").querySelector("thead tr");
+          const newHeaderCell = document.createElement("th");
+          newHeaderCell.innerText = subjectName;
+          header.insertBefore(
+            newHeaderCell,
+            header.children[newSubjectIndex + 2]
+          ); // Insert at the correct index
+
+          // Add a new subject column for each student row at the correct position
+          const rows = resultTable.rows;
+          Array.from(rows).forEach((row) => {
+            const cell = row.insertCell(newSubjectIndex + 2);
+            const marksInput = document.createElement("input");
+            marksInput.type = "number";
+            marksInput.placeholder = subjectName;
+            cell.appendChild(marksInput);
+          });
+
+          // Save updated subjects to local storage
+          saveData();
+        }
+      });
+      // Calculate result
+      calculateButton.addEventListener("click", () => {
+        const totalMarksforresult =
+          document.getElementById("total-marks").value;
+        const rows = resultTable.rows;
+        Array.from(rows).forEach((row) => {
+          const cells = row.cells;
+          if (cells.length > 7) {
+            // Skip header row
+            let totalMarks = 0;
+            for (let i = 2; i < subjects.length + 2; i++) {
+              const marks = cells[i].getElementsByTagName("input")[0].value;
+              if (marks !== "") {
+                totalMarks += parseFloat(marks);
+              }
+            }
+            const percentage = (totalMarks / totalMarksforresult) * 100;
+            const grade = getGrade(percentage);
+
+            cells[subjects.length + 2].innerText = totalMarks;
+            cells[subjects.length + 3].innerText = percentage.toFixed(2) + "%";
+            cells[subjects.length + 4].innerText = grade;
+          }
+        });
+        sortTableByTotalMarks(); // Sort by total marks after calculation
+        saveData();
+      });
+
+      // Sort table by total marks
+      function sortTableByTotalMarks() {
+        const rows = Array.from(resultTable.rows);
+        rows.sort((rowA, rowB) => {
+          const totalA = parseFloat(rowA.cells[subjects.length + 2].innerText);
+          const totalB = parseFloat(rowB.cells[subjects.length + 2].innerText);
+          return totalB - totalA; // Sort descending
+        });
+        rows.forEach((row) => resultTable.appendChild(row)); // Reorder table rows
+      }
+
+      // Get grade based on percentage
+      function getGrade(percentage) {
+        if (percentage >= 90) return "A+";
+        if (percentage >= 80) return "A";
+        if (percentage >= 70) return "B";
+        if (percentage >= 60) return "C";
+        if (percentage >= 50) return "D";
+        return "F";
+      }
+
+      // Delete all data with a confirmation
+      function deleteData() {
+        const confirmDelete = confirm(
+          "Are you sure you want to delete all data? This action cannot be undone."
+        );
+
+        if (confirmDelete) {
+          // Clear the table body
+          resultTable.innerHTML = "";
+
+          // Reset subjects array to default subjects if you want to reset the subjects as well
+          subjects = ["Subject 1", "Subject 2", "Subject 3"]; // Default subjects
+
+          // Clear data from localStorage
+          localStorage.removeItem("results");
+
+          // Generate the table header again after clearing
+          generateTableHeader();
+        }
+      }
+
+      // Render table from stored data
+      function renderTable(students) {
+        // Clear current table content (only the tbody part)
+        const tableBody = resultTable;
+        tableBody.innerHTML = "";
+
+        // Render student data
+        students.forEach((student, index) => {
+          const row = resultTable.insertRow();
+          row.insertCell(0).innerText = index + 1; // Serial
+          const nameCell = row.insertCell(1);
+          nameCell.innerHTML = `<input type="text" value="${student.name}" />`;
+
+          student.marks.forEach((mark, subjectIndex) => {
+            const marksCell = row.insertCell(subjectIndex + 2);
+            marksCell.innerHTML = `<input type="number" value="${mark}" />`;
+          });
+
+          row.insertCell(subjects.length + 2).innerText = student.totalMarks;
+          row.insertCell(subjects.length + 3).innerText =
+            student.percentage + "%";
+          row.insertCell(subjects.length + 4).innerText = student.grade;
+        });
+      }
+
+      // Ensure header row is generated only once and includes all subjects from local storage
+      function generateTableHeader() {
+        const headerRow = resultTable
+          .closest("table")
+          .querySelector("thead tr");
+
+        // Clear any existing header cells before regenerating
+        headerRow.innerHTML = "";
+
+        // Create the fixed header columns
+        headerRow.insertCell(0).innerText = "Serial";
+        headerRow.insertCell(1).innerText = "Student Name";
+
+        // Create subject headers based on the current subjects array
+        subjects.forEach((subject) => {
+          const cell = document.createElement("th");
+          cell.innerText = subject;
+          headerRow.appendChild(cell);
+        });
+
+        // Add the remaining fixed columns
+        headerRow.insertCell().innerText = "Total Marks";
+        headerRow.insertCell().innerText = "Percentage";
+        headerRow.insertCell().innerText = "Grade";
+      }
+
+      // Load data from localStorage
+      window.onload = () => {
+        const storedData = JSON.parse(localStorage.getItem("results"));
+        if (storedData) {
+          // Load subjects and students from local storage
+          subjects = storedData.subjects || ["Math", "English", "Urdu"];
+          generateTableHeader(); // Ensure header is generated with all subjects
+          renderTable(storedData.students); // Render student data from storage
+        } else {
+          // Generate header with default subjects if no stored data
+          generateTableHeader();
+        }
+      };
+
+      // Save data to localStorage
+      function saveData() {
+        const students = Array.from(resultTable.rows)
+          .map((row) => {
+            const cells = row.cells;
+            if (cells.length > 7) {
+              // Skip header row
+              const name = cells[1].getElementsByTagName("input")[0].value;
+              const marks = [];
+              for (let i = 2; i < subjects.length + 2; i++) {
+                marks.push(cells[i].getElementsByTagName("input")[0].value);
+              }
+              const totalMarks = parseFloat(
+                cells[subjects.length + 2].innerText
+              );
+              const percentage = parseFloat(
+                cells[subjects.length + 3].innerText
+              );
+              const grade = cells[subjects.length + 4].innerText;
+              return { name, marks, totalMarks, percentage, grade };
+            }
+          })
+          .filter(Boolean); // Filter out undefined rows
+
+        const data = { students, subjects };
+        localStorage.setItem("results", JSON.stringify(data));
+      }
+
+      const downloadPdfButton = document.getElementById("download-pdf-btn");
+
+      // Function to generate PDF
+      downloadPdfButton.addEventListener("click", () => {
+        // Calculate total students, pass students, and fail students
+        const rows = Array.from(resultTable.rows);
+        const totalStudents = rows.length;
+        let passStudents = 0;
+        let failStudents = 0;
+
+        rows.forEach((row) => {
+          const gradeCell = row.cells[subjects.length + 4];
+          if (gradeCell && gradeCell.innerText !== "") {
+            const grade = gradeCell.innerText;
+            if (grade !== "F") {
+              passStudents++;
+            } else {
+              failStudents++;
+            }
+          }
+        });
+
+        // Generate PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        // Title
+        pdf.setFontSize(16);
+        pdf.text("Result Report", 90, 20);
+
+        // Statistics
+        pdf.setFontSize(8);
+        pdf.text(`Total Students: ${totalStudents}`, 14, 30);
+        pdf.text(`Pass Students: ${passStudents}`, 14, 40);
+        pdf.text(`Fail Students: ${failStudents}`, 14, 50);
+
+        // Add table headers to PDF
+        let y = 60; // Initial Y position for table
+        pdf.text("Serial", 14, y);
+        pdf.text("Student Name", 34, y);
+        subjects.forEach((subject, index) => {
+          pdf.text(subject, 54 + index * 20, y);
+        });
+        pdf.text("Total Marks", 54 + subjects.length * 20, y);
+        pdf.text("Percentage", 74 + subjects.length * 20, y);
+        pdf.text("Grade", 94 + subjects.length * 20, y);
+
+        // Add table rows to PDF
+        rows.forEach((row, rowIndex) => {
+          y += 10;
+          pdf.text(String(rowIndex + 1), 14, y); // Serial
+          pdf.text(row.cells[1].getElementsByTagName("input")[0].value, 34, y); // Student Name
+          subjects.forEach((subject, index) => {
+            const marks =
+              row.cells[index + 2].getElementsByTagName("input")[0].value;
+            pdf.text(marks, 54 + index * 20, y);
+          });
+          pdf.text(
+            row.cells[subjects.length + 2].innerText,
+            54 + subjects.length * 20,
+            y
+          ); // Total Marks
+          pdf.text(
+            row.cells[subjects.length + 3].innerText,
+            74 + subjects.length * 20,
+            y
+          ); // Percentage
+          pdf.text(
+            row.cells[subjects.length + 4].innerText,
+            94 + subjects.length * 20,
+            y
+          ); // Grade
+        });
+
+        // Add teacher's signature line
+        pdf.text("Teacher's Signature: ________", 14, y + 20);
+
+        // Save the PDF
+        pdf.save("Result_Report.pdf");
+      });
+    </script>
+  </body>
+</html>
