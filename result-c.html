@@ -311,8 +311,8 @@
         headerRow.innerHTML = "";
 
         // Create the fixed header columns
-        headerRow.insertCell(0).innerText = "Serial";
-        headerRow.insertCell(1).innerText = "Student Name";
+        headerRow.insertCell(0).innerText = "S. No";
+        headerRow.insertCell(1).innerText = "Name";
 
         // Create subject headers based on the current subjects array
         subjects.forEach((subject) => {
@@ -400,45 +400,72 @@
         pdf.text("Result Report", 90, 20);
 
         // Statistics
-        pdf.setFontSize(8);
+        pdf.setFontSize(10);
         pdf.text(`Total Students: ${totalStudents}`, 14, 30);
         pdf.text(`Pass Students: ${passStudents}`, 14, 40);
         pdf.text(`Fail Students: ${failStudents}`, 14, 50);
 
+        // Dynamically calculate cell spacing based on subject count
+        const pageWidth = pdf.internal.pageSize.width;
+        const baseX = 14; // Starting x-position
+        const availableWidth = pageWidth - 2 * baseX;
+        const columnSpacing = Math.min(
+          availableWidth / (subjects.length + 4),
+          30
+        ); // Limit max spacing for readability
+
+        // Adjust font size if subjects exceed a certain count
+        const fontSize = subjects.length > 6 ? 8 : 10;
+        pdf.setFontSize(fontSize);
+
+        // Initial Y position for the table headers
+        let y = 60;
+
         // Add table headers to PDF
-        let y = 60; // Initial Y position for table
-        pdf.text("Serial", 14, y);
-        pdf.text("Student Name", 34, y);
+        pdf.text("Serial", baseX, y);
+        pdf.text("Name", baseX + columnSpacing, y);
         subjects.forEach((subject, index) => {
-          pdf.text(subject, 54 + index * 20, y);
+          pdf.text(subject, baseX + (index + 2) * columnSpacing, y);
         });
-        pdf.text("Total Marks", 54 + subjects.length * 20, y);
-        pdf.text("Percentage", 74 + subjects.length * 20, y);
-        pdf.text("Grade", 94 + subjects.length * 20, y);
+        pdf.text(
+          "Total Marks",
+          baseX + (subjects.length + 2) * columnSpacing,
+          y
+        );
+        pdf.text(
+          "Percentage",
+          baseX + (subjects.length + 3) * columnSpacing,
+          y
+        );
+        pdf.text("Grade", baseX + (subjects.length + 4) * columnSpacing, y);
 
         // Add table rows to PDF
         rows.forEach((row, rowIndex) => {
           y += 10;
-          pdf.text(String(rowIndex + 1), 14, y); // Serial
-          pdf.text(row.cells[1].getElementsByTagName("input")[0].value, 34, y); // Student Name
+          pdf.text(String(rowIndex + 1), baseX, y); // Serial
+          pdf.text(
+            row.cells[1].getElementsByTagName("input")[0].value,
+            baseX + columnSpacing,
+            y
+          ); // Student Name
           subjects.forEach((subject, index) => {
             const marks =
               row.cells[index + 2].getElementsByTagName("input")[0].value;
-            pdf.text(marks, 54 + index * 20, y);
+            pdf.text(marks, baseX + (index + 2) * columnSpacing, y);
           });
           pdf.text(
             row.cells[subjects.length + 2].innerText,
-            54 + subjects.length * 20,
+            baseX + (subjects.length + 2) * columnSpacing,
             y
           ); // Total Marks
           pdf.text(
             row.cells[subjects.length + 3].innerText,
-            74 + subjects.length * 20,
+            baseX + (subjects.length + 3) * columnSpacing,
             y
           ); // Percentage
           pdf.text(
             row.cells[subjects.length + 4].innerText,
-            94 + subjects.length * 20,
+            baseX + (subjects.length + 4) * columnSpacing,
             y
           ); // Grade
         });
