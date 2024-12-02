@@ -18,7 +18,8 @@
         width: 100%;
         border-collapse: collapse;
         overflow-x: auto;
-        display: block; /* Allows horizontal scrolling */
+        display: block;
+        /* Allows horizontal scrolling */
       }
 
       th,
@@ -26,7 +27,8 @@
         padding: 8px;
         text-align: center;
         border: 1px solid #ddd;
-        white-space: nowrap; /* Prevents wrapping */
+        white-space: nowrap;
+        /* Prevents wrapping */
       }
 
       input[type="number"],
@@ -95,7 +97,8 @@
         }
 
         table {
-          font-size: 0.9rem; /* Smaller font for smaller screens */
+          font-size: 0.9rem;
+          /* Smaller font for smaller screens */
         }
 
         button {
@@ -118,6 +121,7 @@
       }
     </style>
   </head>
+
   <body>
     <h1 style="text-align: center">Result Calculator</h1>
 
@@ -137,8 +141,346 @@
     <button id="download-pdf-btn">Download PDF</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
     <script>
+      // Get elements
+      const resultTable = document
+        .getElementById("result-table")
+        .getElementsByTagName("tbody")[0];
+      const addRowButton = document.getElementById("add-row-btn");
+      const addColumnButton = document.getElementById("add-column-btn");
+      const calculateButton = document.getElementById("calculate-btn");
+
+      let subjects = ["Math", "English", "Urdu"]; // Default subjects
+
+      // Add row (student)
+      addRowButton.addEventListener("click", () => {
+        const row = resultTable.insertRow();
+        const serialCell = row.insertCell(0);
+        const nameCell = row.insertCell(1);
+        const fatherNameCell = row.insertCell(2);
+
+        serialCell.innerHTML = resultTable.rows.length; // Serial number
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Enter Name";
+        nameCell.appendChild(nameInput);
+
+        const fatherNameInput = document.createElement("input");
+        fatherNameInput.type = "text";
+        fatherNameInput.placeholder = "Enter Father's Name";
+        fatherNameCell.appendChild(fatherNameInput);
+
+        subjects.forEach((subject, index) => {
+          const cell = row.insertCell(index + 3);
+          const marksInput = document.createElement("input");
+          marksInput.type = "number";
+          marksInput.placeholder = subject;
+          cell.appendChild(marksInput);
+        });
+
+        row.insertCell(subjects.length + 3); // Empty cell for Total Marks
+        row.insertCell(subjects.length + 4); // Empty cell for Percentage
+        row.insertCell(subjects.length + 5); // Empty cell for Grade
+      });
+
+      // Add column (subject)
+      addColumnButton.addEventListener("click", () => {
+        const subjectName = prompt("Enter subject name:");
+        if (subjectName) {
+          // Add the new subject to the subjects array
+          const newSubjectIndex = subjects.length; // New subject's index position
+          subjects.push(subjectName);
+
+          // Update header row by inserting at the correct index
+          const header = resultTable.closest("table").querySelector("thead tr");
+          const newHeaderCell = document.createElement("th");
+          newHeaderCell.innerText = subjectName;
+          header.insertBefore(
+            newHeaderCell,
+            header.children[newSubjectIndex + 3]
+          ); // Insert at the correct index
+
+          // Add a new subject column for each student row at the correct position
+          const rows = resultTable.rows;
+          Array.from(rows).forEach((row) => {
+            const cell = row.insertCell(newSubjectIndex + 3);
+            const marksInput = document.createElement("input");
+            marksInput.type = "number";
+            marksInput.placeholder = subjectName;
+            cell.appendChild(marksInput);
+          });
+
+          // Save updated subjects to local storage
+          saveData();
+        }
+      });
+
+      // Calculate result
+      calculateButton.addEventListener("click", () => {
+        const totalMarksforresult =
+          document.getElementById("total-marks").value;
+        const rows = resultTable.rows;
+        Array.from(rows).forEach((row) => {
+          const cells = row.cells;
+          if (cells.length > 8) {
+            // Skip header row
+            let totalMarks = 0;
+            for (let i = 3; i < subjects.length + 3; i++) {
+              const marks = cells[i].getElementsByTagName("input")[0].value;
+              if (marks !== "") {
+                totalMarks += parseFloat(marks);
+              }
+            }
+            const percentage = (totalMarks / totalMarksforresult) * 100;
+            const grade = getGrade(percentage);
+
+            cells[subjects.length + 3].innerText = totalMarks;
+            cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
+            cells[subjects.length + 5].innerText = grade;
+          }
+        });
+        sortTableByTotalMarks(); // Sort by total marks after calculation
+        saveData();
+      });
+
+      // Sort table by total marks
+      function sortTableByTotalMarks() {
+        const rows = Array.from(resultTable.rows);
+        rows.sort((rowA, rowB) => {
+          const totalA = parseFloat(rowA.cells[subjects.length + 3].innerText);
+          const totalB = parseFloat(rowB.cells[subjects.length + 3].innerText);
+          return totalB - totalA; // Sort descending
+        });
+        rows.forEach((row) => resultTable.appendChild(row)); // Reorder table rows
+      }
+
+      // Get grade based on percentage
+      function getGrade(percentage) {
+        if (percentage >= 90) return "A+";
+        if (percentage >= 80) return "A";
+        if (percentage >= 70) return "B";
+        if (percentage >= 60) return "C";
+        if (percentage >= 50) return "D";
+        return "F";
+      }
+
+      // Render table from stored data
+      function renderTable(students) {
+        resultTable.innerHTML = ""; // Clear current table content
+        students.forEach((student, index) => {
+          const row = resultTable.insertRow();
+          row.insertCell(0).innerText = index + 1; // Serial
+          const nameCell = row.insertCell(1);
+          nameCell.innerHTML = `<input type="text" value="${student.name}" />`;
+
+          const fatherNameCell = row.insertCell(2);
+          fatherNameCell.innerHTML = `<input type="text" value="${student.fatherName}" />`;
+
+          student.marks.forEach((mark, subjectIndex) => {
+            const marksCell = row.insertCell(subjectIndex + 3);
+            marksCell.innerHTML = `<input type="number" value="${mark}" />`;
+          });
+
+          row.insertCell(subjects.length + 3).innerText = student.totalMarks;
+          row.insertCell(subjects.length + 4).innerText =
+            student.percentage + "%";
+          row.insertCell(subjects.length + 5).innerText = student.grade;
+        });
+      }
+
+      // Save data to localStorage
+      function saveData() {
+        const students = Array.from(resultTable.rows)
+          .map((row) => {
+            const cells = row.cells;
+            if (cells.length > 8) {
+              // Skip header row
+              const name = cells[1].getElementsByTagName("input")[0].value;
+              const fatherName =
+                cells[2].getElementsByTagName("input")[0].value;
+              const marks = [];
+              for (let i = 3; i < subjects.length + 3; i++) {
+                marks.push(cells[i].getElementsByTagName("input")[0].value);
+              }
+              const totalMarks = parseFloat(
+                cells[subjects.length + 3].innerText
+              );
+              const percentage = parseFloat(
+                cells[subjects.length + 4].innerText
+              );
+              const grade = cells[subjects.length + 5].innerText;
+              return { name, fatherName, marks, totalMarks, percentage, grade };
+            }
+          })
+          .filter(Boolean); // Filter out undefined rows
+
+        const data = { students, subjects };
+        localStorage.setItem("results", JSON.stringify(data));
+      }
+
+      // Generate table header
+      function generateTableHeader() {
+        const headerRow = resultTable
+          .closest("table")
+          .querySelector("thead tr");
+        headerRow.innerHTML = ""; // Clear header
+        headerRow.insertCell(0).innerText = "S. No";
+        headerRow.insertCell(1).innerText = "Name";
+        headerRow.insertCell(2).innerText = "Father's Name";
+
+        subjects.forEach((subject) => {
+          const cell = document.createElement("th");
+          cell.innerText = subject;
+          headerRow.appendChild(cell);
+        });
+
+        headerRow.insertCell().innerText = "Total Marks";
+        headerRow.insertCell().innerText = "Percentage";
+        headerRow.insertCell().innerText = "Grade";
+      }
+
+      // Load data on page load
+      window.onload = () => {
+        const storedData = JSON.parse(localStorage.getItem("results"));
+        if (storedData) {
+          subjects = storedData.subjects || ["Math", "English", "Urdu"];
+          generateTableHeader();
+          renderTable(storedData.students);
+        } else {
+          generateTableHeader();
+        }
+      };
+      function deleteData() {
+        const confirmDelete = confirm(
+          "Are you sure you want to delete all data? This action cannot be undone."
+        );
+
+        if (confirmDelete) {
+          // Clear the table body
+          resultTable.innerHTML = "";
+
+          // Reset subjects array to default subjects if you want to reset the subjects as well
+          subjects = ["Subject 1", "Subject 2", "Subject 3"]; // Default subjects
+
+          // Clear data from localStorage
+          localStorage.removeItem("results");
+
+          // Generate the table header again after clearing
+          generateTableHeader();
+        }
+      }
+
+      const downloadPdfButton = document.getElementById("download-pdf-btn");
+
+      // Function to generate PDF
+      downloadPdfButton.addEventListener("click", () => {
+        // Calculate total students, pass students, and fail students
+        const rows = Array.from(resultTable.rows);
+        const totalStudents = rows.length;
+        let passStudents = 0;
+        let failStudents = 0;
+
+        rows.forEach((row) => {
+          const gradeCell = row.cells[subjects.length + 4];
+          if (gradeCell && gradeCell.innerText !== "") {
+            const grade = gradeCell.innerText;
+            if (grade !== "F") {
+              passStudents++;
+            } else {
+              failStudents++;
+            }
+          }
+        });
+
+        // Generate PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        // Title
+        pdf.setFontSize(16);
+        pdf.text("Result Report", 90, 20);
+
+        // Statistics
+        pdf.setFontSize(10);
+        pdf.text(`Total Students: ${totalStudents}`, 14, 30);
+        pdf.text(`Pass Students: ${passStudents}`, 14, 40);
+        pdf.text(`Fail Students: ${failStudents}`, 14, 50);
+
+        // Dynamically calculate cell spacing based on subject count
+        const pageWidth = pdf.internal.pageSize.width;
+        const baseX = 14; // Starting x-position
+        const availableWidth = pageWidth - 2 * baseX;
+        const columnSpacing = Math.min(
+          availableWidth / (subjects.length + 4),
+          30
+        ); // Limit max spacing for readability
+
+        // Adjust font size if subjects exceed a certain count
+        const fontSize = subjects.length > 6 ? 8 : 10;
+        pdf.setFontSize(fontSize);
+
+        // Initial Y position for the table headers
+        let y = 60;
+
+        // Add table headers to PDF
+        pdf.text("Serial", baseX, y);
+        pdf.text("Name", baseX + columnSpacing, y);
+        subjects.forEach((subject, index) => {
+          pdf.text(subject, baseX + (index + 2) * columnSpacing, y);
+        });
+        pdf.text(
+          "Total Marks",
+          baseX + (subjects.length + 2) * columnSpacing,
+          y
+        );
+        pdf.text(
+          "Percentage",
+          baseX + (subjects.length + 3) * columnSpacing,
+          y
+        );
+        pdf.text("Grade", baseX + (subjects.length + 4) * columnSpacing, y);
+
+        // Add table rows to PDF
+        rows.forEach((row, rowIndex) => {
+          y += 10;
+          pdf.text(String(rowIndex + 1), baseX, y); // Serial
+          pdf.text(
+            row.cells[1].getElementsByTagName("input")[0].value,
+            baseX + columnSpacing,
+            y
+          ); // Student Name
+          subjects.forEach((subject, index) => {
+            const marks =
+              row.cells[index + 2].getElementsByTagName("input")[0].value;
+            pdf.text(marks, baseX + (index + 2) * columnSpacing, y);
+          });
+          pdf.text(
+            row.cells[subjects.length + 2].innerText,
+            baseX + (subjects.length + 2) * columnSpacing,
+            y
+          ); // Total Marks
+          pdf.text(
+            row.cells[subjects.length + 3].innerText,
+            baseX + (subjects.length + 3) * columnSpacing,
+            y
+          ); // Percentage
+          pdf.text(
+            row.cells[subjects.length + 4].innerText,
+            baseX + (subjects.length + 4) * columnSpacing,
+            y
+          ); // Grade
+        });
+
+        // Add teacher's signature line
+        pdf.text("Teacher's Signature: ________", 14, y + 20);
+
+        // Save the PDF
+        pdf.save("Result_Report.pdf");
+      });
+    </script>
+
+    <!-- <script>
       // Get elements
       const resultTable = document
         .getElementById("result-table")
@@ -476,6 +818,6 @@
         // Save the PDF
         pdf.save("Result_Report.pdf");
       });
-    </script>
+    </script> -->
   </body>
 </html>
