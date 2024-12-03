@@ -140,7 +140,11 @@
 
     <button id="download-pdf-btn">Download PDF</button>
 
+    <!-- jsPDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <!-- autoTable Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
     <script>
       // Get elements
       const resultTable = document
@@ -370,11 +374,45 @@
           generateTableHeader();
         }
       }
+      // Function to ask for the main heading until the user confirms or skips it
+      function getMainHeading() {
+        let mainHeading = prompt(
+          "Enter the main heading for the PDF:",
+          "Result Report"
+        );
 
+        // If input is empty or null, set default value
+        if (!mainHeading || mainHeading.trim() === "") {
+          mainHeading = "Result Report";
+        }
+
+        let isConfirmed = false;
+
+        // Loop to allow the user to go back and edit the heading
+        while (!isConfirmed) {
+          isConfirmed = confirm(
+            `You entered: "${mainHeading}". Do you want to proceed with this heading?`
+          );
+
+          if (!isConfirmed) {
+            // Allow user to edit the heading
+            mainHeading = prompt(
+              "Edit the main heading for the PDF:",
+              mainHeading
+            );
+            if (!mainHeading || mainHeading.trim() === "") {
+              mainHeading = "Result Report"; // Reset to default if input is empty or null
+            }
+          }
+        }
+
+        return mainHeading;
+      }
       const downloadPdfButton = document.getElementById("download-pdf-btn");
 
       // Function to generate PDF
       downloadPdfButton.addEventListener("click", () => {
+        const mainHeading = getMainHeading();
         // Calculate total students, pass students, and fail students
         const rows = Array.from(resultTable.rows);
         const totalStudents = rows.length;
@@ -382,7 +420,7 @@
         let failStudents = 0;
 
         rows.forEach((row) => {
-          const gradeCell = row.cells[subjects.length + 4];
+          const gradeCell = row.cells[subjects.length + 5]; // Adjusted index for "Grade"
           if (gradeCell && gradeCell.innerText !== "") {
             const grade = gradeCell.innerText;
             if (grade !== "F") {
@@ -393,87 +431,81 @@
           }
         });
 
-        // Generate PDF
+        // Generate PDF in landscape orientation
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+        const pdf = new jsPDF({ orientation: "landscape" }); // Landscape mode
 
         // Title
         pdf.setFontSize(16);
-        pdf.text("Result Report", 90, 20);
+        pdf.text(mainHeading, 140, 15, { align: "center" });
 
         // Statistics
         pdf.setFontSize(10);
-        pdf.text(`Total Students: ${totalStudents}`, 14, 30);
-        pdf.text(`Pass Students: ${passStudents}`, 14, 40);
-        pdf.text(`Fail Students: ${failStudents}`, 14, 50);
+        pdf.text(`Total Students: ${totalStudents}`, 14, 25);
+        pdf.text(`Pass Students: ${passStudents}`, 55, 25);
+        pdf.text(`Fail Students: ${failStudents}`, 95, 25);
 
-        // Dynamically calculate cell spacing based on subject count
-        const pageWidth = pdf.internal.pageSize.width;
-        const baseX = 14; // Starting x-position
-        const availableWidth = pageWidth - 2 * baseX;
-        const columnSpacing = Math.min(
-          availableWidth / (subjects.length + 4),
-          30
-        ); // Limit max spacing for readability
-
-        // Adjust font size if subjects exceed a certain count
-        const fontSize = subjects.length > 6 ? 8 : 10;
-        pdf.setFontSize(fontSize);
-
-        // Initial Y position for the table headers
-        let y = 60;
-
-        // Add table headers to PDF
-        pdf.text("Serial", baseX, y);
-        pdf.text("Name", baseX + columnSpacing, y);
-        subjects.forEach((subject, index) => {
-          pdf.text(subject, baseX + (index + 2) * columnSpacing, y);
-        });
-        pdf.text(
+        // Table Data Preparation
+        const tableHeaders = [
+          "Position",
+          "Name",
+          "Father's Name",
+          ...subjects,
           "Total Marks",
-          baseX + (subjects.length + 2) * columnSpacing,
-          y
-        );
-        pdf.text(
           "Percentage",
-          baseX + (subjects.length + 3) * columnSpacing,
-          y
-        );
-        pdf.text("Grade", baseX + (subjects.length + 4) * columnSpacing, y);
+          "Grade",
+        ];
 
-        // Add table rows to PDF
-        rows.forEach((row, rowIndex) => {
-          y += 10;
-          pdf.text(String(rowIndex + 1), baseX, y); // Serial
-          pdf.text(
-            row.cells[1].getElementsByTagName("input")[0].value,
-            baseX + columnSpacing,
-            y
-          ); // Student Name
-          subjects.forEach((subject, index) => {
-            const marks =
-              row.cells[index + 2].getElementsByTagName("input")[0].value;
-            pdf.text(marks, baseX + (index + 2) * columnSpacing, y);
+        const tableBody = rows.map((row, rowIndex) => {
+          const rowData = [
+            rowIndex + 1, // Position
+            row.cells[1]?.getElementsByTagName("input")[0]?.value || "", // Name
+            row.cells[2]?.getElementsByTagName("input")[0]?.value || "", // Father's Name
+          ];
+
+          // Add marks for each subject
+          subjects.forEach((_, index) => {
+            rowData.push(
+              row.cells[index + 3]?.getElementsByTagName("input")[0]?.value ||
+                ""
+            );
           });
-          pdf.text(
-            row.cells[subjects.length + 2].innerText,
-            baseX + (subjects.length + 2) * columnSpacing,
-            y
-          ); // Total Marks
-          pdf.text(
-            row.cells[subjects.length + 3].innerText,
-            baseX + (subjects.length + 3) * columnSpacing,
-            y
-          ); // Percentage
-          pdf.text(
-            row.cells[subjects.length + 4].innerText,
-            baseX + (subjects.length + 4) * columnSpacing,
-            y
-          ); // Grade
+
+          // Add Total Marks, Percentage, and Grade
+          rowData.push(
+            row.cells[subjects.length + 3]?.innerText || "", // Total Marks
+            row.cells[subjects.length + 4]?.innerText || "", // Percentage
+            row.cells[subjects.length + 5]?.innerText || "" // Grade
+          );
+
+          return rowData;
+        });
+
+        // Add Table to PDF using autoTable
+        pdf.autoTable({
+          startY: 35,
+          head: [tableHeaders],
+          body: tableBody,
+          theme: "grid",
+          styles: {
+            fontSize: 10,
+            halign: "center", // Center-aligns the text
+          },
+          headStyles: {
+            // fillColor: [0, 102, 204],
+            fillColor: [144, 238, 144],
+            textColor: [80, 80, 80],
+            halign: "center", // Center-aligns header text
+          },
+          alternateRowStyles: {
+            fillColor: [240, 240, 240],
+          },
+          margin: { top: 10, left: 14, right: 14 },
         });
 
         // Add teacher's signature line
-        pdf.text("Teacher's Signature: ________", 14, y + 20);
+        const finalY = pdf.lastAutoTable.finalY || 35;
+        pdf.text("Teacher's Signature: ____________________", 14, finalY + 20);
 
         // Save the PDF
         pdf.save("Result_Report.pdf");
