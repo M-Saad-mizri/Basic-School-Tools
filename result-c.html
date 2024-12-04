@@ -199,7 +199,7 @@
     </button>
     <button id="calculate-btn">Result Compile</button>
     <!-- <button onclick="deleteData()" id="delete-btn">Delete Data</button> -->
-    <button id="delete-btn">Delete Data</button>
+    <button onclick="deleteData()" id="delete-btn">Delete Data</button>
     <button onclick="deleteColumn()">Delete Column</button>
     <input id="total-marks" type="number" placeholder="Total Marks" required />
 
@@ -225,10 +225,9 @@
       const addRowButton = document.getElementById("add-row-btn");
       const addColumnButton = document.getElementById("add-column-btn");
       const calculateButton = document.getElementById("calculate-btn");
-      const deleteAllButton = document.getElementById("delete-btn"); // Add a button to delete all data (optional)
-
       let subjects = ["English", "Eng B/R", "Urdu"]; // Default subjects
 
+      // Add row (student)
       // Add row (student)
       addRowButton.addEventListener("click", () => {
         const row = resultTable.insertRow();
@@ -270,6 +269,8 @@
           saveData(); // Save after deletion
         };
         deleteCell.appendChild(deleteButton);
+
+        saveData(); // Save data whenever a row is added
       });
 
       // Add column (subject)
@@ -306,34 +307,67 @@
 
       // Delete column (subject)
       function deleteColumn() {
-        const subjectIndex = prompt(
-          "Enter the index of the subject to delete (0-based index)"
+        // Display all subjects with their indices for easy selection
+        let subjectList = "";
+        subjects.forEach((subject, index) => {
+          subjectList += `${index}: ${subject}\n`;
+        });
+
+        const subjectToDelete = prompt(
+          `Subjects with indices:\n${subjectList}\nEnter the index or name of the subject to delete:`
         );
 
-        if (subjectIndex !== null && !isNaN(subjectIndex)) {
-          const index = parseInt(subjectIndex);
-          console.log(subjects, subjects[subjectIndex]);
+        if (subjectToDelete !== null) {
+          // Check if the input is a valid index
+          const index = parseInt(subjectToDelete);
 
-          if (index >= 0 && index < subjects.length) {
-            subjects.splice(index, 1); // Remove the subject from the subjects array
+          if (!isNaN(index)) {
+            // Valid index input
+            if (index >= 0 && index < subjects.length) {
+              // Remove the subject from the subjects array
+              subjects.splice(index, 1);
 
-            // Update the header row
-            const header = resultTable
-              .closest("table")
-              .querySelector("thead tr");
-            header.deleteCell(index + 3);
-            console.log(header); // Delete the header cell
+              // Update the header row
+              const header = resultTable
+                .closest("table")
+                .querySelector("thead tr");
+              header.deleteCell(index + 3);
 
-            // Remove subject columns from each row
-            const rows = resultTable.rows;
-            Array.from(rows).forEach((row) => {
-              row.deleteCell(index + 3); // Delete the subject cell
-            });
+              // Remove subject columns from each row
+              const rows = resultTable.rows;
+              Array.from(rows).forEach((row) => {
+                row.deleteCell(index + 3); // Delete the subject cell
+              });
 
-            // Save updated subjects to local storage
-            saveData();
+              // Save updated subjects to local storage
+              saveData();
+            } else {
+              alert("Invalid subject index");
+            }
           } else {
-            alert("Invalid subject index");
+            // Check if the input is a valid subject name
+            const subjectIndex = subjects.indexOf(subjectToDelete.trim());
+            if (subjectIndex !== -1) {
+              // Remove the subject from the subjects array
+              subjects.splice(subjectIndex, 1);
+
+              // Update the header row
+              const header = resultTable
+                .closest("table")
+                .querySelector("thead tr");
+              header.deleteCell(subjectIndex + 3);
+
+              // Remove subject columns from each row
+              const rows = resultTable.rows;
+              Array.from(rows).forEach((row) => {
+                row.deleteCell(subjectIndex + 3); // Delete the subject cell
+              });
+
+              // Save updated subjects to local storage
+              saveData();
+            } else {
+              alert("Subject not found");
+            }
           }
         }
       }
@@ -423,7 +457,7 @@
           const nameInput = document.createElement("input");
           nameInput.type = "text";
           nameInput.value = student.name;
-          nameInput.onchange = saveData; // Add onchange event listener
+          nameInput.onchange = saveData; // Use function reference, not immediate invocation
           nameCell.appendChild(nameInput);
 
           // Render Father's Name input
@@ -431,7 +465,7 @@
           const fatherNameInput = document.createElement("input");
           fatherNameInput.type = "text";
           fatherNameInput.value = student.fatherName;
-          fatherNameInput.onchange = saveData; // Add onchange event listener
+          fatherNameInput.onchange = saveData; // Use function reference, not immediate invocation
           fatherNameCell.appendChild(fatherNameInput);
 
           // Render marks inputs dynamically
@@ -440,7 +474,7 @@
             const marksInput = document.createElement("input");
             marksInput.type = "number";
             marksInput.value = mark;
-            marksInput.onchange = saveData; // Add onchange event listener
+            marksInput.onchange = saveData; // Use function reference, not immediate invocation
             marksCell.appendChild(marksInput);
           });
 
@@ -448,11 +482,22 @@
           row.insertCell(subjects.length + 4).innerText =
             student.percentage + "%";
           row.insertCell(subjects.length + 5).innerText = student.grade;
+
+          // Add delete button to the row (same as in addRowButton)
+          const deleteCell = row.insertCell(subjects.length + 6);
+          const deleteButton = document.createElement("button");
+          deleteButton.innerText = "Delete Row";
+          deleteButton.onclick = () => {
+            row.remove();
+            saveData(); // Save after deletion
+          };
+          deleteCell.appendChild(deleteButton);
         });
       }
 
       // Save data to localStorage
       function saveData() {
+        console.log("called");
         const students = Array.from(resultTable.rows)
           .map((row) => {
             const cells = row.cells;
@@ -497,7 +542,7 @@
           headerRow.appendChild(cell);
         });
 
-        headerRow.insertCell().innerText = "Total Marks";
+        headerRow.insertCell().innerText = "T. obt Marks";
         headerRow.insertCell().innerText = "Percentage";
         headerRow.insertCell().innerText = "Grade";
       }
@@ -534,7 +579,6 @@
         }
       }
       // Optional: Delete all data button
-      deleteAllButton.addEventListener("click", deleteData);
 
       function getMainHeading() {
         let mainHeading = prompt(
@@ -613,7 +657,7 @@
           "Name",
           "Father's Name",
           ...subjects,
-          "Total Marks",
+          "T. obt Marks",
           "Percentage",
           "Grade",
         ];
