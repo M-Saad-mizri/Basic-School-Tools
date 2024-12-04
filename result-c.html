@@ -43,10 +43,12 @@
         margin: 10px 5px;
         padding: 10px 15px;
         background-color: #4caf50;
-        color: white;
+        color: rgb(20, 20, 20);
         border: none;
         cursor: pointer;
-        font-size: 0.9rem;
+        /* font-size: 0.9rem; */
+        font-size: 16px;
+        font-weight: 600;
       }
 
       button:hover {
@@ -90,6 +92,50 @@
         }
       }
 
+      .tooltiped-btn {
+        position: relative;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      /* Tooltip container */
+      .tooltip {
+        visibility: hidden;
+        width: 50px;
+        /* background-color: rgba(0, 0, 0, 0.7); */
+        background-color: #6cea70;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 10px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position above the button */
+        left: 70%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      /* Tooltip arrow */
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #6cea70 transparent transparent transparent;
+      }
+
+      /* Show the tooltip when hovering over the button */
+      .tooltiped-btn:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+
       @media (max-width: 480px) {
         h1 {
           font-size: 1.5rem;
@@ -123,12 +169,38 @@
   </head>
 
   <body>
-    <h1 style="text-align: center">Result Calculator</h1>
+    <h1 style="text-align: center">Result Compiler</h1>
 
-    <button id="add-column-btn">Add Subject Column</button>
-    <button id="add-row-btn">Add Student Row</button>
-    <button id="calculate-btn">Calculate Result</button>
-    <button onclick="deleteData()" id="delete-btn">Delete Data</button>
+    <!-- <button id="add-column-btn">Add New Subject</button> -->
+    <button class="tooltiped-btn" id="add-column-btn">
+      Add New Subject
+      <!-- Tooltip with the image icon -->
+      <div class="tooltip">
+        <img
+          width="30"
+          height="30"
+          src="https://img.icons8.com/ios/50/select-column.png"
+          alt="select-column"
+        />
+      </div>
+    </button>
+    <!-- <button id="add-row-btn">Add Student Row</button> -->
+    <button class="tooltiped-btn" id="add-row-btn">
+      Add Student Row
+      <!-- Tooltip for Add Student Row -->
+      <div class="tooltip">
+        <img
+          width="30"
+          height="30"
+          src="https://img.icons8.com/ios/50/select-row.png"
+          alt="select-row"
+        />
+      </div>
+    </button>
+    <button id="calculate-btn">Result Compile</button>
+    <!-- <button onclick="deleteData()" id="delete-btn">Delete Data</button> -->
+    <button id="delete-btn">Delete Data</button>
+    <button onclick="deleteColumn()">Delete Column</button>
     <input id="total-marks" type="number" placeholder="Total Marks" required />
 
     <table id="result-table">
@@ -153,6 +225,7 @@
       const addRowButton = document.getElementById("add-row-btn");
       const addColumnButton = document.getElementById("add-column-btn");
       const calculateButton = document.getElementById("calculate-btn");
+      const deleteAllButton = document.getElementById("delete-btn"); // Add a button to delete all data (optional)
 
       let subjects = ["English", "Eng B/R", "Urdu"]; // Default subjects
 
@@ -183,9 +256,20 @@
           cell.appendChild(marksInput);
         });
 
+        // Add total, percentage, and grade columns
         row.insertCell(subjects.length + 3); // Empty cell for Total Marks
         row.insertCell(subjects.length + 4); // Empty cell for Percentage
         row.insertCell(subjects.length + 5); // Empty cell for Grade
+
+        // Add delete button to the row
+        const deleteCell = row.insertCell(subjects.length + 6);
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Delete Row";
+        deleteButton.onclick = () => {
+          row.remove();
+          saveData(); // Save after deletion
+        };
+        deleteCell.appendChild(deleteButton);
       });
 
       // Add column (subject)
@@ -220,10 +304,65 @@
         }
       });
 
+      // Delete column (subject)
+      function deleteColumn() {
+        const subjectIndex = prompt(
+          "Enter the index of the subject to delete (0-based index)"
+        );
+
+        if (subjectIndex !== null && !isNaN(subjectIndex)) {
+          const index = parseInt(subjectIndex);
+          console.log(subjects, subjects[subjectIndex]);
+
+          if (index >= 0 && index < subjects.length) {
+            subjects.splice(index, 1); // Remove the subject from the subjects array
+
+            // Update the header row
+            const header = resultTable
+              .closest("table")
+              .querySelector("thead tr");
+            header.deleteCell(index + 3);
+            console.log(header); // Delete the header cell
+
+            // Remove subject columns from each row
+            const rows = resultTable.rows;
+            Array.from(rows).forEach((row) => {
+              row.deleteCell(index + 3); // Delete the subject cell
+            });
+
+            // Save updated subjects to local storage
+            saveData();
+          } else {
+            alert("Invalid subject index");
+          }
+        }
+      }
+
       // Calculate result
       calculateButton.addEventListener("click", () => {
-        const totalMarksforresult =
-          document.getElementById("total-marks").value;
+        let totalMarksforresult = document.getElementById("total-marks").value; // Change const to let
+        if (totalMarksforresult === "") {
+          // If totalMarksforresult is empty, prompt the user
+          totalMarksforresult = prompt(
+            "Enter Total Number to calculate % and Grade"
+          );
+
+          // If the user cancels or enters an invalid value (e.g., non-numeric), handle it
+          if (
+            totalMarksforresult === null ||
+            isNaN(totalMarksforresult) ||
+            totalMarksforresult === ""
+          ) {
+            alert(
+              "Invalid input. Please enter a valid number for total marks."
+            );
+            return; // Stop further execution if invalid input
+          }
+        }
+
+        // Proceed with the calculation if the totalMarksforresult is valid
+        totalMarksforresult = parseFloat(totalMarksforresult); // Convert the input value to a number
+
         const rows = resultTable.rows;
         Array.from(rows).forEach((row) => {
           const cells = row.cells;
@@ -233,19 +372,22 @@
             for (let i = 3; i < subjects.length + 3; i++) {
               const marks = cells[i].getElementsByTagName("input")[0].value;
               if (marks !== "") {
-                totalMarks += parseFloat(marks);
+                totalMarks += parseFloat(marks); // Add up the marks
               }
             }
-            const percentage = (totalMarks / totalMarksforresult) * 100;
-            const grade = getGrade(percentage);
 
+            const percentage = (totalMarks / totalMarksforresult) * 100; // Calculate percentage
+            const grade = getGrade(percentage); // Get grade based on percentage
+
+            // Update the table cells with total marks, percentage, and grade
             cells[subjects.length + 3].innerText = totalMarks;
             cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
             cells[subjects.length + 5].innerText = grade;
           }
         });
-        sortTableByTotalMarks(); // Sort by total marks after calculation
-        saveData();
+
+        sortTableByTotalMarks(); // Sort the table after calculation
+        saveData(); // Save the data
       });
 
       // Sort table by total marks
@@ -275,15 +417,31 @@
         students.forEach((student, index) => {
           const row = resultTable.insertRow();
           row.insertCell(0).innerText = index + 1; // Serial
+
+          // Render Name input
           const nameCell = row.insertCell(1);
-          nameCell.innerHTML = `<input type="text" value="${student.name}" />`;
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.value = student.name;
+          nameInput.onchange = saveData; // Add onchange event listener
+          nameCell.appendChild(nameInput);
 
+          // Render Father's Name input
           const fatherNameCell = row.insertCell(2);
-          fatherNameCell.innerHTML = `<input type="text" value="${student.fatherName}" />`;
+          const fatherNameInput = document.createElement("input");
+          fatherNameInput.type = "text";
+          fatherNameInput.value = student.fatherName;
+          fatherNameInput.onchange = saveData; // Add onchange event listener
+          fatherNameCell.appendChild(fatherNameInput);
 
+          // Render marks inputs dynamically
           student.marks.forEach((mark, subjectIndex) => {
             const marksCell = row.insertCell(subjectIndex + 3);
-            marksCell.innerHTML = `<input type="number" value="${mark}" />`;
+            const marksInput = document.createElement("input");
+            marksInput.type = "number";
+            marksInput.value = mark;
+            marksInput.onchange = saveData; // Add onchange event listener
+            marksCell.appendChild(marksInput);
           });
 
           row.insertCell(subjects.length + 3).innerText = student.totalMarks;
@@ -355,6 +513,7 @@
           generateTableHeader();
         }
       };
+
       function deleteData() {
         const confirmDelete = confirm(
           "Are you sure you want to delete all data? This action cannot be undone."
@@ -365,7 +524,7 @@
           resultTable.innerHTML = "";
 
           // Reset subjects array to default subjects if you want to reset the subjects as well
-          subjects = ["Subject 1", "Subject 2", "Subject 3"]; // Default subjects
+          subjects = ["English", "English B/R", "Urdu"]; // Default subjects
 
           // Clear data from localStorage
           localStorage.removeItem("results");
@@ -374,7 +533,9 @@
           generateTableHeader();
         }
       }
-      // Function to ask for the main heading until the user confirms or skips it
+      // Optional: Delete all data button
+      deleteAllButton.addEventListener("click", deleteData);
+
       function getMainHeading() {
         let mainHeading = prompt(
           "Enter the main heading for the PDF:",
@@ -408,6 +569,7 @@
 
         return mainHeading;
       }
+
       const downloadPdfButton = document.getElementById("download-pdf-btn");
 
       // Function to generate PDF
@@ -521,13 +683,14 @@
       const addColumnButton = document.getElementById("add-column-btn");
       const calculateButton = document.getElementById("calculate-btn");
 
-      let subjects = ["Math", "English", "Urdu"]; // Default subjects
+      let subjects = ["English", "Eng B/R", "Urdu"]; // Default subjects
 
       // Add row (student)
       addRowButton.addEventListener("click", () => {
         const row = resultTable.insertRow();
         const serialCell = row.insertCell(0);
         const nameCell = row.insertCell(1);
+        const fatherNameCell = row.insertCell(2);
 
         serialCell.innerHTML = resultTable.rows.length; // Serial number
 
@@ -536,17 +699,22 @@
         nameInput.placeholder = "Enter Name";
         nameCell.appendChild(nameInput);
 
+        const fatherNameInput = document.createElement("input");
+        fatherNameInput.type = "text";
+        fatherNameInput.placeholder = "Enter Father's Name";
+        fatherNameCell.appendChild(fatherNameInput);
+
         subjects.forEach((subject, index) => {
-          const cell = row.insertCell(index + 2);
+          const cell = row.insertCell(index + 3);
           const marksInput = document.createElement("input");
           marksInput.type = "number";
           marksInput.placeholder = subject;
           cell.appendChild(marksInput);
         });
 
-        row.insertCell(subjects.length + 2); // Empty cell for Total Marks
-        row.insertCell(subjects.length + 3); // Empty cell for Percentage
-        row.insertCell(subjects.length + 4); // Empty cell for Grade
+        row.insertCell(subjects.length + 3); // Empty cell for Total Marks
+        row.insertCell(subjects.length + 4); // Empty cell for Percentage
+        row.insertCell(subjects.length + 5); // Empty cell for Grade
       });
 
       // Add column (subject)
@@ -563,13 +731,13 @@
           newHeaderCell.innerText = subjectName;
           header.insertBefore(
             newHeaderCell,
-            header.children[newSubjectIndex + 2]
+            header.children[newSubjectIndex + 3]
           ); // Insert at the correct index
 
           // Add a new subject column for each student row at the correct position
           const rows = resultTable.rows;
           Array.from(rows).forEach((row) => {
-            const cell = row.insertCell(newSubjectIndex + 2);
+            const cell = row.insertCell(newSubjectIndex + 3);
             const marksInput = document.createElement("input");
             marksInput.type = "number";
             marksInput.placeholder = subjectName;
@@ -580,40 +748,65 @@
           saveData();
         }
       });
+
       // Calculate result
       calculateButton.addEventListener("click", () => {
-        const totalMarksforresult =
-          document.getElementById("total-marks").value;
+        let totalMarksforresult = document.getElementById("total-marks").value; // Change const to let
+        if (totalMarksforresult === "") {
+          // If totalMarksforresult is empty, prompt the user
+          totalMarksforresult = prompt(
+            "Enter Total Number to calculate % and Grade"
+          );
+
+          // If the user cancels or enters an invalid value (e.g., non-numeric), handle it
+          if (
+            totalMarksforresult === null ||
+            isNaN(totalMarksforresult) ||
+            totalMarksforresult === ""
+          ) {
+            alert(
+              "Invalid input. Please enter a valid number for total marks."
+            );
+            return; // Stop further execution if invalid input
+          }
+        }
+
+        // Proceed with the calculation if the totalMarksforresult is valid
+        totalMarksforresult = parseFloat(totalMarksforresult); // Convert the input value to a number
+
         const rows = resultTable.rows;
         Array.from(rows).forEach((row) => {
           const cells = row.cells;
-          if (cells.length > 7) {
+          if (cells.length > 8) {
             // Skip header row
             let totalMarks = 0;
-            for (let i = 2; i < subjects.length + 2; i++) {
+            for (let i = 3; i < subjects.length + 3; i++) {
               const marks = cells[i].getElementsByTagName("input")[0].value;
               if (marks !== "") {
-                totalMarks += parseFloat(marks);
+                totalMarks += parseFloat(marks); // Add up the marks
               }
             }
-            const percentage = (totalMarks / totalMarksforresult) * 100;
-            const grade = getGrade(percentage);
 
-            cells[subjects.length + 2].innerText = totalMarks;
-            cells[subjects.length + 3].innerText = percentage.toFixed(2) + "%";
-            cells[subjects.length + 4].innerText = grade;
+            const percentage = (totalMarks / totalMarksforresult) * 100; // Calculate percentage
+            const grade = getGrade(percentage); // Get grade based on percentage
+
+            // Update the table cells with total marks, percentage, and grade
+            cells[subjects.length + 3].innerText = totalMarks;
+            cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
+            cells[subjects.length + 5].innerText = grade;
           }
         });
-        sortTableByTotalMarks(); // Sort by total marks after calculation
-        saveData();
+
+        sortTableByTotalMarks(); // Sort the table after calculation
+        saveData(); // Save the data
       });
 
       // Sort table by total marks
       function sortTableByTotalMarks() {
         const rows = Array.from(resultTable.rows);
         rows.sort((rowA, rowB) => {
-          const totalA = parseFloat(rowA.cells[subjects.length + 2].innerText);
-          const totalB = parseFloat(rowB.cells[subjects.length + 2].innerText);
+          const totalA = parseFloat(rowA.cells[subjects.length + 3].innerText);
+          const totalB = parseFloat(rowB.cells[subjects.length + 3].innerText);
           return totalB - totalA; // Sort descending
         });
         rows.forEach((row) => resultTable.appendChild(row)); // Reorder table rows
@@ -629,7 +822,107 @@
         return "F";
       }
 
-      // Delete all data with a confirmation
+      // Render table from stored data
+      function renderTable(students) {
+        resultTable.innerHTML = ""; // Clear current table content
+        students.forEach((student, index) => {
+          const row = resultTable.insertRow();
+          row.insertCell(0).innerText = index + 1; // Serial
+
+          // Render Name input
+          const nameCell = row.insertCell(1);
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.value = student.name;
+          nameInput.onchange = saveData; // Add onchange event listener
+          nameCell.appendChild(nameInput);
+
+          // Render Father's Name input
+          const fatherNameCell = row.insertCell(2);
+          const fatherNameInput = document.createElement("input");
+          fatherNameInput.type = "text";
+          fatherNameInput.value = student.fatherName;
+          fatherNameInput.onchange = saveData; // Add onchange event listener
+          fatherNameCell.appendChild(fatherNameInput);
+
+          // Render marks inputs dynamically
+          student.marks.forEach((mark, subjectIndex) => {
+            const marksCell = row.insertCell(subjectIndex + 3);
+            const marksInput = document.createElement("input");
+            marksInput.type = "number";
+            marksInput.value = mark;
+            marksInput.onchange = saveData; // Add onchange event listener
+            marksCell.appendChild(marksInput);
+          });
+
+          row.insertCell(subjects.length + 3).innerText = student.totalMarks;
+          row.insertCell(subjects.length + 4).innerText =
+            student.percentage + "%";
+          row.insertCell(subjects.length + 5).innerText = student.grade;
+        });
+      }
+      // Save data to localStorage
+      function saveData() {
+        const students = Array.from(resultTable.rows)
+          .map((row) => {
+            const cells = row.cells;
+            if (cells.length > 8) {
+              // Skip header row
+              const name = cells[1].getElementsByTagName("input")[0].value;
+              const fatherName =
+                cells[2].getElementsByTagName("input")[0].value;
+              const marks = [];
+              for (let i = 3; i < subjects.length + 3; i++) {
+                marks.push(cells[i].getElementsByTagName("input")[0].value);
+              }
+              const totalMarks = parseFloat(
+                cells[subjects.length + 3].innerText
+              );
+              const percentage = parseFloat(
+                cells[subjects.length + 4].innerText
+              );
+              const grade = cells[subjects.length + 5].innerText;
+              return { name, fatherName, marks, totalMarks, percentage, grade };
+            }
+          })
+          .filter(Boolean); // Filter out undefined rows
+
+        const data = { students, subjects };
+        localStorage.setItem("results", JSON.stringify(data));
+      }
+
+      // Generate table header
+      function generateTableHeader() {
+        const headerRow = resultTable
+          .closest("table")
+          .querySelector("thead tr");
+        headerRow.innerHTML = ""; // Clear header
+        headerRow.insertCell(0).innerText = "S. No";
+        headerRow.insertCell(1).innerText = "Name";
+        headerRow.insertCell(2).innerText = "Father's Name";
+
+        subjects.forEach((subject) => {
+          const cell = document.createElement("th");
+          cell.innerText = subject;
+          headerRow.appendChild(cell);
+        });
+
+        headerRow.insertCell().innerText = "Total Marks";
+        headerRow.insertCell().innerText = "Percentage";
+        headerRow.insertCell().innerText = "Grade";
+      }
+
+      // Load data on page load
+      window.onload = () => {
+        const storedData = JSON.parse(localStorage.getItem("results"));
+        if (storedData) {
+          subjects = storedData.subjects || ["Math", "English", "Urdu"];
+          generateTableHeader();
+          renderTable(storedData.students);
+        } else {
+          generateTableHeader();
+        }
+      };
       function deleteData() {
         const confirmDelete = confirm(
           "Are you sure you want to delete all data? This action cannot be undone."
@@ -640,7 +933,7 @@
           resultTable.innerHTML = "";
 
           // Reset subjects array to default subjects if you want to reset the subjects as well
-          subjects = ["Subject 1", "Subject 2", "Subject 3"]; // Default subjects
+          subjects = ["English", "English B/R", "Urdu"]; // Default subjects
 
           // Clear data from localStorage
           localStorage.removeItem("results");
@@ -649,104 +942,46 @@
           generateTableHeader();
         }
       }
+      // Function to ask for the main heading until the user confirms or skips it
+      function getMainHeading() {
+        let mainHeading = prompt(
+          "Enter the main heading for the PDF:",
+          "Result Report"
+        );
 
-      // Render table from stored data
-      function renderTable(students) {
-        // Clear current table content (only the tbody part)
-        const tableBody = resultTable;
-        tableBody.innerHTML = "";
-
-        // Render student data
-        students.forEach((student, index) => {
-          const row = resultTable.insertRow();
-          row.insertCell(0).innerText = index + 1; // Serial
-          const nameCell = row.insertCell(1);
-          nameCell.innerHTML = `<input type="text" value="${student.name}" />`;
-
-          student.marks.forEach((mark, subjectIndex) => {
-            const marksCell = row.insertCell(subjectIndex + 2);
-            marksCell.innerHTML = `<input type="number" value="${mark}" />`;
-          });
-
-          row.insertCell(subjects.length + 2).innerText = student.totalMarks;
-          row.insertCell(subjects.length + 3).innerText =
-            student.percentage + "%";
-          row.insertCell(subjects.length + 4).innerText = student.grade;
-        });
-      }
-
-      // Ensure header row is generated only once and includes all subjects from local storage
-      function generateTableHeader() {
-        const headerRow = resultTable
-          .closest("table")
-          .querySelector("thead tr");
-
-        // Clear any existing header cells before regenerating
-        headerRow.innerHTML = "";
-
-        // Create the fixed header columns
-        headerRow.insertCell(0).innerText = "S. No";
-        headerRow.insertCell(1).innerText = "Name";
-
-        // Create subject headers based on the current subjects array
-        subjects.forEach((subject) => {
-          const cell = document.createElement("th");
-          cell.innerText = subject;
-          headerRow.appendChild(cell);
-        });
-
-        // Add the remaining fixed columns
-        headerRow.insertCell().innerText = "Total Marks";
-        headerRow.insertCell().innerText = "Percentage";
-        headerRow.insertCell().innerText = "Grade";
-      }
-
-      // Load data from localStorage
-      window.onload = () => {
-        const storedData = JSON.parse(localStorage.getItem("results"));
-        if (storedData) {
-          // Load subjects and students from local storage
-          subjects = storedData.subjects || ["Math", "English", "Urdu"];
-          generateTableHeader(); // Ensure header is generated with all subjects
-          renderTable(storedData.students); // Render student data from storage
-        } else {
-          // Generate header with default subjects if no stored data
-          generateTableHeader();
+        // If input is empty or null, set default value
+        if (!mainHeading || mainHeading.trim() === "") {
+          mainHeading = "Result Report";
         }
-      };
 
-      // Save data to localStorage
-      function saveData() {
-        const students = Array.from(resultTable.rows)
-          .map((row) => {
-            const cells = row.cells;
-            if (cells.length > 7) {
-              // Skip header row
-              const name = cells[1].getElementsByTagName("input")[0].value;
-              const marks = [];
-              for (let i = 2; i < subjects.length + 2; i++) {
-                marks.push(cells[i].getElementsByTagName("input")[0].value);
-              }
-              const totalMarks = parseFloat(
-                cells[subjects.length + 2].innerText
-              );
-              const percentage = parseFloat(
-                cells[subjects.length + 3].innerText
-              );
-              const grade = cells[subjects.length + 4].innerText;
-              return { name, marks, totalMarks, percentage, grade };
+        let isConfirmed = false;
+
+        // Loop to allow the user to go back and edit the heading
+        while (!isConfirmed) {
+          isConfirmed = confirm(
+            `You entered: "${mainHeading}". Do you want to proceed with this heading?`
+          );
+
+          if (!isConfirmed) {
+            // Allow user to edit the heading
+            mainHeading = prompt(
+              "Edit the main heading for the PDF:",
+              mainHeading
+            );
+            if (!mainHeading || mainHeading.trim() === "") {
+              mainHeading = "Result Report"; // Reset to default if input is empty or null
             }
-          })
-          .filter(Boolean); // Filter out undefined rows
+          }
+        }
 
-        const data = { students, subjects };
-        localStorage.setItem("results", JSON.stringify(data));
+        return mainHeading;
       }
 
       const downloadPdfButton = document.getElementById("download-pdf-btn");
 
       // Function to generate PDF
       downloadPdfButton.addEventListener("click", () => {
+        const mainHeading = getMainHeading();
         // Calculate total students, pass students, and fail students
         const rows = Array.from(resultTable.rows);
         const totalStudents = rows.length;
@@ -754,7 +989,7 @@
         let failStudents = 0;
 
         rows.forEach((row) => {
-          const gradeCell = row.cells[subjects.length + 4];
+          const gradeCell = row.cells[subjects.length + 5]; // Adjusted index for "Grade"
           if (gradeCell && gradeCell.innerText !== "") {
             const grade = gradeCell.innerText;
             if (grade !== "F") {
@@ -765,87 +1000,81 @@
           }
         });
 
-        // Generate PDF
+        // Generate PDF in landscape orientation
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+        const pdf = new jsPDF({ orientation: "landscape" }); // Landscape mode
 
         // Title
         pdf.setFontSize(16);
-        pdf.text("Result Report", 90, 20);
+        pdf.text(mainHeading, 140, 15, { align: "center" });
 
         // Statistics
         pdf.setFontSize(10);
-        pdf.text(`Total Students: ${totalStudents}`, 14, 30);
-        pdf.text(`Pass Students: ${passStudents}`, 14, 40);
-        pdf.text(`Fail Students: ${failStudents}`, 14, 50);
+        pdf.text(`Total Students: ${totalStudents}`, 14, 25);
+        pdf.text(`Pass Students: ${passStudents}`, 55, 25);
+        pdf.text(`Fail Students: ${failStudents}`, 95, 25);
 
-        // Dynamically calculate cell spacing based on subject count
-        const pageWidth = pdf.internal.pageSize.width;
-        const baseX = 14; // Starting x-position
-        const availableWidth = pageWidth - 2 * baseX;
-        const columnSpacing = Math.min(
-          availableWidth / (subjects.length + 4),
-          30
-        ); // Limit max spacing for readability
-
-        // Adjust font size if subjects exceed a certain count
-        const fontSize = subjects.length > 6 ? 8 : 10;
-        pdf.setFontSize(fontSize);
-
-        // Initial Y position for the table headers
-        let y = 60;
-
-        // Add table headers to PDF
-        pdf.text("Serial", baseX, y);
-        pdf.text("Name", baseX + columnSpacing, y);
-        subjects.forEach((subject, index) => {
-          pdf.text(subject, baseX + (index + 2) * columnSpacing, y);
-        });
-        pdf.text(
+        // Table Data Preparation
+        const tableHeaders = [
+          "Position",
+          "Name",
+          "Father's Name",
+          ...subjects,
           "Total Marks",
-          baseX + (subjects.length + 2) * columnSpacing,
-          y
-        );
-        pdf.text(
           "Percentage",
-          baseX + (subjects.length + 3) * columnSpacing,
-          y
-        );
-        pdf.text("Grade", baseX + (subjects.length + 4) * columnSpacing, y);
+          "Grade",
+        ];
 
-        // Add table rows to PDF
-        rows.forEach((row, rowIndex) => {
-          y += 10;
-          pdf.text(String(rowIndex + 1), baseX, y); // Serial
-          pdf.text(
-            row.cells[1].getElementsByTagName("input")[0].value,
-            baseX + columnSpacing,
-            y
-          ); // Student Name
-          subjects.forEach((subject, index) => {
-            const marks =
-              row.cells[index + 2].getElementsByTagName("input")[0].value;
-            pdf.text(marks, baseX + (index + 2) * columnSpacing, y);
+        const tableBody = rows.map((row, rowIndex) => {
+          const rowData = [
+            rowIndex + 1, // Position
+            row.cells[1]?.getElementsByTagName("input")[0]?.value || "", // Name
+            row.cells[2]?.getElementsByTagName("input")[0]?.value || "", // Father's Name
+          ];
+
+          // Add marks for each subject
+          subjects.forEach((_, index) => {
+            rowData.push(
+              row.cells[index + 3]?.getElementsByTagName("input")[0]?.value ||
+                ""
+            );
           });
-          pdf.text(
-            row.cells[subjects.length + 2].innerText,
-            baseX + (subjects.length + 2) * columnSpacing,
-            y
-          ); // Total Marks
-          pdf.text(
-            row.cells[subjects.length + 3].innerText,
-            baseX + (subjects.length + 3) * columnSpacing,
-            y
-          ); // Percentage
-          pdf.text(
-            row.cells[subjects.length + 4].innerText,
-            baseX + (subjects.length + 4) * columnSpacing,
-            y
-          ); // Grade
+
+          // Add Total Marks, Percentage, and Grade
+          rowData.push(
+            row.cells[subjects.length + 3]?.innerText || "", // Total Marks
+            row.cells[subjects.length + 4]?.innerText || "", // Percentage
+            row.cells[subjects.length + 5]?.innerText || "" // Grade
+          );
+
+          return rowData;
+        });
+
+        // Add Table to PDF using autoTable
+        pdf.autoTable({
+          startY: 35,
+          head: [tableHeaders],
+          body: tableBody,
+          theme: "grid",
+          styles: {
+            fontSize: 10,
+            halign: "center", // Center-aligns the text
+          },
+          headStyles: {
+            // fillColor: [0, 102, 204],
+            fillColor: [144, 238, 144],
+            textColor: [80, 80, 80],
+            halign: "center", // Center-aligns header text
+          },
+          alternateRowStyles: {
+            fillColor: [240, 240, 240],
+          },
+          margin: { top: 10, left: 14, right: 14 },
         });
 
         // Add teacher's signature line
-        pdf.text("Teacher's Signature: ________", 14, y + 20);
+        const finalY = pdf.lastAutoTable.finalY || 35;
+        pdf.text("Teacher's Signature: ____________________", 14, finalY + 20);
 
         // Save the PDF
         pdf.save("Result_Report.pdf");
