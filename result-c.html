@@ -52,22 +52,31 @@
       }
 
       button:hover {
-        background-color: #45a049;
+        background-color: #5fc464;
+        color: #f1f6f1;
       }
 
       #calculate-btn {
         background-color: #008cba;
       }
 
-      #delete-btn {
+      .delete-btn {
         background-color: #f44336;
       }
-
+      .delete-btn:hover {
+        background-color: #f9695f;
+      }
       #total-marks {
         width: 100px;
         padding: 5px;
         margin-top: 10px;
         margin-bottom: 10px;
+      }
+      #download-pdf-btn {
+        display: inline-block;
+      }
+      .delete-btns {
+        display: inline-block;
       }
 
       /* Responsive adjustments */
@@ -89,6 +98,20 @@
 
         #total-marks {
           width: 80px;
+        }
+        #download-pdf-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+        }
+        .delete-btns {
+          display: flex;
+          gap: 20px;
+        }
+        .delete-btns :button {
+          display: flex;
+          gap: 20px;
         }
       }
 
@@ -150,7 +173,7 @@
         button {
           width: 100%;
           padding: 10px 0;
-          font-size: 0.8rem;
+          font-size: 1rem;
           margin: 5px 0;
         }
 
@@ -164,43 +187,59 @@
           width: 96.5%;
           margin: 5px 0;
         }
+        #download-pdf-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+        }
+        .delete-btns {
+          display: flex;
+          gap: 20px;
+        }
+        .delete-btns :button {
+          display: flex;
+          gap: 20px;
+        }
       }
     </style>
   </head>
 
   <body>
     <h1 style="text-align: center">Result Compiler</h1>
+    <div class="delete-btns">
+      <button class="tooltiped-btn" id="add-row-btn">
+        Add New Student
+        <!-- Tooltip for Add Student Row -->
+        <div class="tooltip">
+          <img
+            width="30"
+            height="30"
+            src="https://img.icons8.com/ios/50/select-row.png"
+            alt="select-row"
+          />
+        </div>
+      </button>
 
-    <!-- <button id="add-column-btn">Add New Subject</button> -->
-    <button class="tooltiped-btn" id="add-column-btn">
-      Add New Subject
-      <!-- Tooltip with the image icon -->
-      <div class="tooltip">
-        <img
-          width="30"
-          height="30"
-          src="https://img.icons8.com/ios/50/select-column.png"
-          alt="select-column"
-        />
-      </div>
-    </button>
-    <!-- <button id="add-row-btn">Add Student Row</button> -->
-    <button class="tooltiped-btn" id="add-row-btn">
-      Add Student Row
-      <!-- Tooltip for Add Student Row -->
-      <div class="tooltip">
-        <img
-          width="30"
-          height="30"
-          src="https://img.icons8.com/ios/50/select-row.png"
-          alt="select-row"
-        />
-      </div>
-    </button>
-    <button id="calculate-btn">Result Compile</button>
+      <button class="tooltiped-btn" id="add-column-btn">
+        Add New Subject
+        <!-- Tooltip with the image icon -->
+        <div class="tooltip">
+          <img
+            width="30"
+            height="30"
+            src="https://img.icons8.com/ios/50/select-column.png"
+            alt="select-column"
+          />
+        </div>
+      </button>
+    </div>
+
     <!-- <button onclick="deleteData()" id="delete-btn">Delete Data</button> -->
-    <button onclick="deleteData()" id="delete-btn">Delete Data</button>
-    <button onclick="deleteColumn()">Delete Column</button>
+    <div class="delete-btns">
+      <button onclick="deleteData()" class="delete-btn">Delete Data</button>
+      <button onclick="deleteColumn()" class="delete-btn">Delete Column</button>
+    </div>
     <input id="total-marks" type="number" placeholder="Total Marks" required />
 
     <table id="result-table">
@@ -210,7 +249,16 @@
       <tbody></tbody>
     </table>
 
-    <button id="download-pdf-btn">Download PDF</button>
+    <button id="calculate-btn">Result Compile</button>
+    <button id="download-pdf-btn">
+      Download PDF
+      <img
+        width="15"
+        height="15"
+        src="https://img.icons8.com/dotty/80/export-pdf.png"
+        alt="export-pdf"
+      />
+    </button>
 
     <!-- jsPDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -267,15 +315,15 @@
         deleteIcon.src =
           "data:image/svg+xml;charset=UTF-8," +
           encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-    <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#32bdef"></stop>
-        <stop offset="1" stop-color="#1ea2e4"></stop>
-    </linearGradient>
-    <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
-    <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
-    <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
-</svg>`); // Encode SVG as data URI
+      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+          <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#32bdef"></stop>
+              <stop offset="1" stop-color="#1ea2e4"></stop>
+          </linearGradient>
+          <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
+          <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
+          <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
+      </svg>`); // Encode SVG as data URI
 
         deleteIcon.alt = "Delete Row";
         deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
@@ -509,15 +557,15 @@
           deleteIcon.src =
             "data:image/svg+xml;charset=UTF-8," +
             encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-    <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#32bdef"></stop>
-        <stop offset="1" stop-color="#1ea2e4"></stop>
-    </linearGradient>
-    <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
-    <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
-    <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
-</svg>`); // Encode SVG as data URI
+      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+          <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#32bdef"></stop>
+              <stop offset="1" stop-color="#1ea2e4"></stop>
+          </linearGradient>
+          <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
+          <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
+          <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
+      </svg>`); // Encode SVG as data URI
 
           deleteIcon.alt = "Delete Row";
           deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
@@ -701,6 +749,11 @@
           "Grade",
         ];
 
+        // Make all table headers uppercase
+        const uppercaseTableHeaders = tableHeaders.map((header) =>
+          header.toUpperCase()
+        );
+
         const tableBody = rows.map((row, rowIndex) => {
           const rowData = [
             rowIndex + 1, // Position
@@ -729,7 +782,7 @@
         // Add Table to PDF using autoTable
         pdf.autoTable({
           startY: 35,
-          head: [tableHeaders],
+          head: [uppercaseTableHeaders], // Use uppercase headers
           body: tableBody,
           theme: "grid",
           styles: {
