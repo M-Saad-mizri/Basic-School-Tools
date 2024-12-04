@@ -78,6 +78,57 @@
       .delete-btns {
         display: inline-block;
       }
+      #warningModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      #modalContent {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        /* text-align: center; */
+      }
+
+      .modal-buttons {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .btn {
+        padding: 8px 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 30px;
+      }
+
+      .btn:hover {
+        background-color: #45a049;
+      }
+
+      #dontShowAgain {
+        margin-top: 10px;
+        display: flex;
+        margin-left: 21px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #dontShowAgain input {
+        margin-right: 10px;
+      }
 
       /* Responsive adjustments */
       @media (max-width: 768px) {
@@ -249,7 +300,7 @@
       <tbody></tbody>
     </table>
 
-    <button id="calculate-btn">Result Compile</button>
+    <button id="calculate-btn">Compile</button>
     <button id="download-pdf-btn">
       Download PDF
       <img
@@ -259,6 +310,34 @@
         alt="export-pdf"
       />
     </button>
+
+    <!-- Modal HTML -->
+    <div id="warningModal">
+      <div id="modalContent">
+        <h3 style="text-align: center">Important Reminder</h3>
+        <hr />
+        <ol>
+          <li>
+            Do not forget to press "Compile", otherwise you may lose your data.
+          </li>
+          <br />
+          <li>
+            Your data is device dependent, meaning changing device will lead to
+            data loss.
+          </li>
+        </ol>
+
+        <div id="dontShowAgain">
+          <input type="checkbox" id="dontShowAgainCheckbox" />
+          <label for="dontShowAgainCheckbox">Don't show again</label>
+          <button class="btn" id="closeModalButton">O.K</button>
+        </div>
+
+        <div class="modal-buttons">
+          <!-- <button class="btn" id="closeModalButton">O.K</button> -->
+        </div>
+      </div>
+    </div>
 
     <!-- jsPDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -700,6 +779,30 @@
 
         return mainHeading;
       }
+
+      // Check if "Don't show again" flag is set in localStorage
+      if (localStorage.getItem("dontShowAgain") !== "1") {
+        // Show the modal if the flag is not set
+        document.getElementById("warningModal").style.display = "flex";
+      }
+
+      // Handle the "Don't show again" checkbox
+      document
+        .getElementById("dontShowAgainCheckbox")
+        .addEventListener("change", function () {
+          if (this.checked) {
+            localStorage.setItem("dontShowAgain", "1");
+          } else {
+            localStorage.setItem("dontShowAgain", "0");
+          }
+        });
+
+      // Close the modal when the "Close" button is clicked
+      document
+        .getElementById("closeModalButton")
+        .addEventListener("click", function () {
+          document.getElementById("warningModal").style.display = "none";
+        });
 
       const downloadPdfButton = document.getElementById("download-pdf-btn");
 
