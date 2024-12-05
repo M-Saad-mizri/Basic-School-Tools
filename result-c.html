@@ -372,12 +372,12 @@
 
         const nameInput = document.createElement("input");
         nameInput.type = "text";
-        nameInput.placeholder = "Enter Name";
+        nameInput.placeholder = "Name";
         nameCell.appendChild(nameInput);
 
         const fatherNameInput = document.createElement("input");
         fatherNameInput.type = "text";
-        fatherNameInput.placeholder = "Enter Father's Name";
+        fatherNameInput.placeholder = "Father's Name";
         fatherNameCell.appendChild(fatherNameInput);
 
         subjects.forEach((subject, index) => {
@@ -608,6 +608,7 @@
           const nameCell = row.insertCell(1);
           const nameInput = document.createElement("input");
           nameInput.type = "text";
+          nameInput.placeholder = "Name";
           nameInput.value = student.name;
           nameInput.onchange = saveData; // Use function reference, not immediate invocation
           nameCell.appendChild(nameInput);
@@ -616,6 +617,7 @@
           const fatherNameCell = row.insertCell(2);
           const fatherNameInput = document.createElement("input");
           fatherNameInput.type = "text";
+          fatherNameInput.placeholder = "Father's Name";
           fatherNameInput.value = student.fatherName;
           fatherNameInput.onchange = saveData; // Use function reference, not immediate invocation
           fatherNameCell.appendChild(fatherNameInput);
