@@ -8,12 +8,20 @@
       /* Base styles */
       body {
         text-transform: capitalize;
-        font-family: Arial, sans-serif;
+        font-family: "Segoe UI", Arial, sans-serif;
         margin: 20px;
         padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
         box-sizing: border-box;
       }
 
+      h1 {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 2rem;
+        color: #0056b3;
+      }
       table {
         width: 100%;
         border-collapse: collapse;
@@ -38,17 +46,26 @@
         text-align: center;
         font-size: 0.9rem;
       }
+      /* Container for buttons and inputs */
+      .action-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
 
       button {
-        margin: 10px 5px;
-        padding: 10px 15px;
-        background-color: #4caf50;
-        color: rgb(20, 20, 20);
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
+        background-color: #0056b3;
         border: none;
+        border-radius: 5px;
         cursor: pointer;
-        /* font-size: 0.9rem; */
-        font-size: 16px;
-        font-weight: 600;
+        transition: background-color 0.3s ease;
       }
 
       button:hover {
@@ -170,10 +187,12 @@
       /* Tooltip container */
       .tooltip {
         visibility: hidden;
-        width: 50px;
-        /* background-color: rgba(0, 0, 0, 0.7); */
-        background-color: #6cea70;
-        color: #fff;
+        width: 100px;
+
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+        backdrop-filter: blur(5px); /* Applies the blur effect */
+        z-index: 999; /* Ensures it is above other content */
+        color: #fffdfd;
         text-align: center;
         border-radius: 5px;
         padding: 10px;
@@ -243,8 +262,14 @@
           gap: 10px;
         }
         .delete-btns :button {
+          font-size: 5px;
           display: flex;
+          width: 50%;
           gap: 10px;
+        }
+        .action-container > div {
+          width: 100%;
+          border: 1px solid grey;
         }
       }
     </style>
@@ -252,45 +277,53 @@
 
   <body>
     <h1 style="text-align: center">Result Compiler</h1>
-    <div class="delete-btns">
-      <button class="tooltiped-btn" id="add-row-btn">
-        Add New Student
-        <!-- Tooltip for Add Student Row -->
-        <div class="tooltip">
-          <img
-            width="30"
-            height="30"
-            src="https://img.icons8.com/ios/50/select-row.png"
-            alt="select-row"
-          />
-        </div>
-      </button>
+    <div class="action-container">
+      <div class="delete-btns">
+        <button class="tooltiped-btn" id="add-row-btn">
+          Add New Student
+          <!-- Tooltip for Add Student Row -->
+          <div class="tooltip">
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/ios/50/select-row.png"
+              alt="select-row"
+            />
+          </div>
+        </button>
 
-      <button class="tooltiped-btn" id="add-column-btn">
-        Add New Subject
-        <!-- Tooltip with the image icon -->
-        <div class="tooltip">
-          <img
-            width="30"
-            height="30"
-            src="https://img.icons8.com/ios/50/select-column.png"
-            alt="select-column"
-          />
-        </div>
-      </button>
-    </div>
+        <button class="tooltiped-btn" id="add-column-btn">
+          Add New Subject
+          <!-- Tooltip with the image icon -->
+          <div class="tooltip">
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/ios/50/select-column.png"
+              alt="select-column"
+            />
+          </div>
+        </button>
+      </div>
 
-    <!-- <button onclick="deleteData()" id="delete-btn">Delete Data</button> -->
-    <div class="delete-btns">
-      <button onclick="deleteData()" class="delete-btn">Delete Data</button>
-      <button onclick="deleteColumn()" class="delete-btn">Delete Column</button>
+      <!-- <button onclick="deleteData()" id="delete-btn">Delete Data</button> -->
+      <div class="delete-btns">
+        <button onclick="deleteData()" class="delete-btn tooltiped-btn">
+          Delete Data
+          <div class="tooltip">Delete Stored Data</div>
+        </button>
+        <button onclick="deleteColumn()" class="delete-btn tooltiped-btn">
+          Delete Column
+          <div class="tooltip">Delete Subject</div>
+        </button>
+      </div>
+      <input
+        id="total-marks"
+        type="number"
+        placeholder="Enter Total Marks"
+        required
+      />
     </div>
-    <input
-      id="total-marks"
-      type="number"
-      placeholder="Enter Total Marks"
-      required
-    />
 
     <table id="result-table">
       <thead>
@@ -299,16 +332,22 @@
       <tbody></tbody>
     </table>
 
-    <button id="calculate-btn">Compile</button>
-    <button id="download-pdf-btn">
-      Download PDF
-      <img
-        width="15"
-        height="15"
-        src="https://img.icons8.com/dotty/80/export-pdf.png"
-        alt="export-pdf"
-      />
-    </button>
+    <div class="action-container">
+      <button id="calculate-btn" class="tooltiped-btn">
+        Compile
+        <div class="tooltip">Compile Result</div>
+      </button>
+      <button id="download-pdf-btn" class="tooltiped-btn">
+        Download PDF
+        <img
+          width="15"
+          height="15"
+          src="https://img.icons8.com/dotty/80/export-pdf.png"
+          alt="export-pdf"
+        />
+        <div class="tooltip">Get .pdf Copy</div>
+      </button>
+    </div>
 
     <!-- Modal HTML -->
     <div id="warningModal">
