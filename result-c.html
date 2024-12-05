@@ -628,6 +628,8 @@
             const marksInput = document.createElement("input");
             marksInput.type = "number";
             marksInput.value = mark;
+            marksInput.placeholder = subjects[subjectIndex];
+            // console.log(subjects[subjectIndex]);
             marksInput.onchange = saveData; // Use function reference, not immediate invocation
             marksCell.appendChild(marksInput);
           });
