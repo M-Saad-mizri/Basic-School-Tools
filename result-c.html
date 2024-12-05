@@ -912,7 +912,7 @@
 
         // Add teacher's signature line
         const finalY = pdf.lastAutoTable.finalY || 35;
-        pdf.text("Teacher's Signature: ____________________", 14, finalY + 20);
+        pdf.text("Teacher's Signature: ____________________", 14, finalY + 15);
         var options = {
           weekday: "short",
           year: "numeric",
@@ -923,7 +923,7 @@
         pdf.text(
           `Dated: ${today.toLocaleDateString("en-US", options)}`,
           240,
-          finalY + 20
+          finalY + 15
         );
 
         // Save the PDF
