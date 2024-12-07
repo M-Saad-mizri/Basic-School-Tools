@@ -382,7 +382,32 @@
         Compile
         <div class="tooltip">Compile Result</div>
       </button>
-      <button id="generate-result-cards-btn">Generate Result Cards</button>
+      <button
+        class="tooltiped-btn"
+        style="display: flex; justify-content: center; align-items: center"
+        id="generate-result-cards-btn"
+      >
+        Generate Result Cards
+        <div class="tooltip">Free For You 💕</div>
+        <span
+          style="
+            padding: 2px;
+            background-color: #423939;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            border-radius: 20px;
+            margin-left: 5px;
+          "
+        >
+          <img
+            width="20"
+            height="20"
+            src="https://img.icons8.com/color/48/crown.png"
+            alt="crown"
+        /></span>
+      </button>
       <button id="download-pdf-btn" class="tooltiped-btn">
         Download PDF
         <img
@@ -669,6 +694,183 @@
         "generate-result-cards-btn"
       );
 
+      // generateResultCardsButton.addEventListener("click", () => {
+      //   const students = Array.from(resultTable.rows)
+      //     .map((row) => {
+      //       const cells = row.cells;
+      //       if (cells.length < 8) return null; // Skip rows without valid data
+
+      //       const name = cells[1].querySelector("input").value;
+      //       const fatherName = cells[2].querySelector("input").value;
+      //       const marks = Array.from(cells)
+      //         .slice(3, subjects.length + 3)
+      //         .map((cell) => cell.querySelector("input").value || 0);
+      //       const totalMarks = cells[subjects.length + 3].innerText || 0;
+      //       const percentage = cells[subjects.length + 4].innerText || "0%";
+      //       const grade = cells[subjects.length + 5].innerText || "N/A";
+
+      //       return { name, fatherName, marks, totalMarks, percentage, grade };
+      //     })
+      //     .filter((student) => student !== null);
+
+      //   if (students.length === 0) {
+      //     alert("No data available to generate result cards.");
+      //     return;
+      //   }
+
+      //   generateResultCards(students);
+      // });
+
+      // function generateResultCards(students) {
+      //   const schoolName = prompt("Enter the School Name:");
+      //   const className = prompt("Enter the Class:");
+      //   const term = prompt("Enter the Term (e.g., 1st Term, 2nd Term):");
+      //   const resultCardsContainer = document.createElement("div");
+      //   resultCardsContainer.style.display = "flex";
+      //   resultCardsContainer.style.flexWrap = "wrap";
+      //   resultCardsContainer.style.gap = "20px";
+      //   resultCardsContainer.style.padding = "20px";
+      //   resultCardsContainer.style.width = "500px";
+
+      //   students.forEach((student) => {
+      //     const card = document.createElement("div");
+      //     card.style.border = "none";
+      //     // card.style.borderRadius = "10px";
+      //     // card.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+      //     // card.style.padding = "20px";
+      //     // card.style.width = "500px";
+      //     // card.style.fontFamily = "Arial, sans-serif";
+      //     // card.style.backgroundColor = "#f9f9f9";
+
+      //     card.innerHTML = `
+      //     <div class="result-card">
+      //           <div class="card-header">
+      //             <h1>${schoolName}</h1> <br />
+      //             <h2 style = "font-weight: 600; text-align: center" >result report</h2>
+      //           </div>
+      //           <div class="card-body">
+
+      // <div style="display: flex; border: 1px solid red; justify-content: flex-start; align-items: center; width: 100%; gap: 20px;">
+      //   <p style="font-weight: 700; font-size: 1.1rem;">Student Name: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
+      //     student.name
+      //   }</span></p>
+      //   <p style="font-weight: 700; font-size: 1.1rem;">Father's Name: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
+      //     student.fatherName
+      //   }</span></p>
+      // </div>
+
+      //  <div style=" display: flex;border: 1px solid red; justify-content: flex-start; align-items: center; width: 100%; gap: 40px; margin-bottom: -15px; margin-top: -15px">
+      //   <p style="font-weight: 600; font-size: 1.1rem;">Class: <span style="font-weight: 700; text-decoration: underline;"> ${className}</span ></p>
+      //   <p style="font-size: 1.1rem;">Term: <span style="font-weight: 700; text-decoration: underline;"> ${term}</span style = "text-decoration: underline;"></p>
+      //   <p style="font-weight: 600; font-size: 1.1rem;">Total Marks: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
+      //     student.totalMarks
+      //   }</span></p>
+      // </div>
+      // <!-- Marks & Percentage Section -->
+      // <div style="display: flex;border: 1px solid red; justify-content: flex-start; align-items: center; width: 100%; gap: 40px; margin-bottom: 15px;margin-top: -15px">
+
+      //   <p style="font-weight: 600;font-size: 1.1rem;">Percentage:<span style="font-weight: 700; text-decoration: underline;"> ${
+      //     student.percentage
+      //   }</span>%</p>
+      //       <p style="font-weight: 600;font-size: 1.2rem; font-weight: 700; color: #4CAF50; margin-top: 20px;">Grade:
+      //   <span style="font-weight: 700; color: #333; text-decoration: underline;"> ${
+      //     student.grade
+      //   }</span>
+      // </p>
+      // </div>
+      //             <table>
+      //               <thead>
+      //                 <tr>
+      //                   <th>Subject</th>
+      //                   <th>Marks</th>
+      //                   <th>comments</th>
+      //                 </tr>
+      //               </thead>
+      //               <tbody>
+      //                 ${student.marks
+      //                   .map(
+      //                     (mark, index) => `
+      //                   <tr>
+      //                     <td>${subjects[index]}</td>
+      //                     <td>${mark}</td>
+      //                     <td></td>
+      //                   </tr>`
+      //                   )
+      //                   .join("")}
+      //               </tbody>
+      //             </table>
+      //           </div>
+      //           <textarea style="margin-top: 20px; width: 99%; border-radius: 5px; height: 60px" placeholder="Feedback"></textarea>
+      //           <div class="card-footer">
+      //             <p>Grade Criteria:</p>
+
+      //               <span>A+: 90-100%</span>
+      //               <span style="margin: 0 20px">A: 80-89%</span>
+      //               <span>B: 70-79%</span> <br />
+      //               <span>C: 60-69%</span>
+      //               <span style="margin: 0 20px 0px 40px">D: 50-59%</span>
+      //               <span>F: Below 50%</span>
+
+      //           </div>
+      //         </div>
+      //   `;
+
+      //     resultCardsContainer.appendChild(card);
+      //   });
+
+      //   // Create a printable container
+      //   const printableContainer = document.createElement("div");
+      //   printableContainer.style.position = "fixed";
+      //   printableContainer.style.top = "0";
+      //   printableContainer.style.left = "0";
+      //   printableContainer.style.width = "100vw";
+      //   printableContainer.style.height = "100vh";
+      //   printableContainer.style.backgroundColor = "white";
+      //   printableContainer.style.zIndex = "1000";
+      //   printableContainer.style.overflowY = "auto";
+      //   printableContainer.appendChild(resultCardsContainer);
+
+      //   // Add print and close buttons
+      //   const printButton = document.createElement("button");
+      //   printButton.innerText = "Print";
+      //   printButton.style.position = "fixed";
+      //   printButton.style.top = "10px";
+      //   printButton.style.right = "10px";
+      //   printButton.style.padding = "10px 20px";
+      //   printButton.style.backgroundColor = "#4CAF50";
+      //   printButton.style.color = "white";
+      //   printButton.style.border = "none";
+      //   printButton.style.borderRadius = "5px";
+      //   printButton.style.cursor = "pointer";
+
+      //   printButton.addEventListener("click", () => {
+      //     window.print();
+      //   });
+
+      //   const closeButton = document.createElement("button");
+      //   closeButton.innerText = "Close";
+      //   closeButton.style.position = "fixed";
+      //   closeButton.style.top = "10px";
+      //   closeButton.style.right = "80px";
+      //   closeButton.style.padding = "10px 20px";
+      //   closeButton.style.backgroundColor = "#f44336";
+      //   closeButton.style.color = "white";
+      //   closeButton.style.border = "none";
+      //   closeButton.style.borderRadius = "5px";
+      //   closeButton.style.cursor = "pointer";
+
+      //   closeButton.addEventListener("click", () => {
+      //     document.body.removeChild(printableContainer);
+      //   });
+
+      //   printableContainer.appendChild(printButton);
+      //   printableContainer.appendChild(closeButton);
+
+      //   document.body.appendChild(printableContainer);
+      // }
+
+      // Sort table by total marks
+
       generateResultCardsButton.addEventListener("click", () => {
         const students = Array.from(resultTable.rows)
           .map((row) => {
@@ -695,156 +897,183 @@
 
         generateResultCards(students);
       });
-
+      const feedbackByGrade = {
+        "A+": [
+          "Excellent effort, keep up the great work!",
+          "Outstanding performance, you're a role model!",
+          "Superb results! You should be very proud.",
+          "Your hard work is clearly paying off!",
+          "Keep striving for excellence, you're almost there!",
+          "Fantastic job! You're setting a new standard.",
+          "You have mastered the material, keep it up!",
+          "Top-notch performance! Keep the momentum going.",
+          "Excellent understanding and application of concepts!",
+          "You’ve demonstrated exceptional skills and dedication.",
+        ],
+        A: [
+          "Great job, you're improving every day!",
+          "Very good effort, but there’s still room to grow.",
+          "Your performance is commendable, keep pushing!",
+          "Solid work this term, stay focused!",
+          "You’re making strong progress, keep at it!",
+          "You’ve done really well, continue with this effort!",
+          "Impressive work, continue striving for success.",
+          "Good performance, but there’s potential for more.",
+          "You're on the right track, now keep moving forward.",
+          "Keep up the great work, you're doing well!",
+        ],
+        B: [
+          "Good effort, but there's still room for more growth.",
+          "You’ve done well, now push for better results!",
+          "Nice work, but you need to focus more on weak areas.",
+          "Good, but there's potential to do even better.",
+          "Your effort is visible, aim for more consistency.",
+          "You're improving, but stay more focused in class.",
+          "Well done, but I know you can do even better!",
+          "Great start, now let's focus on strengthening the areas you find challenging.",
+          "Good progress, but you need to improve your study habits.",
+          "You’ve made progress, keep up the hard work!",
+        ],
+        C: [
+          "Satisfactory effort, but there’s much room for improvement.",
+          "Keep working, but focus on areas you find difficult.",
+          "You’ve made progress, but focus more on weak spots.",
+          "You did okay, but a little more effort will go a long way.",
+          "Keep at it! Review the challenging topics.",
+          "You can do better with more focus and effort.",
+          "You're on the right track, but you need to study more consistently.",
+          "You’ve shown some improvement, but you can do more.",
+          "Good attempt, but please work on understanding the material better.",
+          "Decent effort, but we need to improve the quality of your work.",
+        ],
+        D: [
+          "Needs improvement in several areas.",
+          "You’ve made some progress, but you need to work harder.",
+          "You need to spend more time on your studies.",
+          "Focus more on understanding the concepts.",
+          "More effort is required to improve your performance.",
+          "Try to seek help in subjects you're struggling with.",
+          "You can do better with consistent effort and attention.",
+          "Focus on the basics and improve your weak areas.",
+          "You’ve shown some potential, but it needs more work.",
+          "Please put in more effort and stay more focused.",
+        ],
+        F: [
+          "Failed, please put in more effort and seek help if needed.",
+          "It’s time to start working harder, focus on your studies.",
+          "You need to dedicate more time and effort into your work.",
+          "Failed, but you have the potential to do better.",
+          "This result is not acceptable; let's work together to improve.",
+          "You need to work harder and address the areas you're struggling with.",
+          "Don’t give up, but commit more time to your studies.",
+          "You must improve your approach to studying.",
+          "Failure is not the end, but a starting point to work harder.",
+          "Seek help, revise thoroughly, and make sure to give your best effort.",
+        ],
+      };
+      // two
       function generateResultCards(students) {
-        const schoolName = prompt("Enter the School Name:");
-        const className = prompt("Enter the Class:");
-        const term = prompt("Enter the Term (e.g., 1st Term, 2nd Term):");
-        const resultCardsContainer = document.createElement("div");
-        resultCardsContainer.style.display = "flex";
-        resultCardsContainer.style.flexWrap = "wrap";
-        resultCardsContainer.style.gap = "20px";
-        resultCardsContainer.style.padding = "20px";
-        resultCardsContainer.style.width = "500px";
+        const schoolName = prompt("Enter the School Name:") || "Skipped";
+        const className = prompt("Enter the Class:") || "Skipped";
+        const term =
+          prompt("Enter the Term (e.g., 1st Term, 2nd Term):") || "Skipped";
 
-        students.forEach((student) => {
-          const card = document.createElement("div");
-          card.style.border = "none";
-          // card.style.borderRadius = "10px";
-          // card.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-          // card.style.padding = "20px";
-          // card.style.width = "500px";
-          // card.style.fontFamily = "Arial, sans-serif";
-          // card.style.backgroundColor = "#f9f9f9";
+        // Create jsPDF instance
+        const { jsPDF } = window.jspdf; // Ensure jsPDF is correctly accessed
+        const doc = new jsPDF();
 
-          card.innerHTML = `
-          <div class="result-card">
-                <div class="card-header">
-                  <h3>${schoolName}</h3> <hr />
-                </div>
-                <div class="card-body">
+        let count = 0;
 
-      <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%; gap: 20px; margin-bottom: 15px;">
-        <p style="font-weight: 700; font-size: 1.1rem;">Student Name: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
-          student.name
-        }</span></p>
-        <p style="font-weight: 700; font-size: 1.1rem;">Father's Name: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
-          student.fatherName
-        }</span></p>
-      </div>
+        // Loop through each student and generate a page
+        students.forEach((student, index) => {
+          if (index > 0) {
+            doc.addPage(); // Add a new page for each student
+          }
+          count++;
 
-       <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%; gap: 40px; margin-bottom: -5px;">
-        <p style="font-weight: 600; font-size: 1.1rem;">Class: <span style="font-weight: 700; text-decoration: underline;"> ${className}</span ></p>
-        <p style="font-size: 1.1rem;">Term: <span style="font-weight: 700; text-decoration: underline;"> ${term}</span style = "text-decoration: underline;"></p>
-        <p style="font-weight: 600; font-size: 1.1rem;">Total Marks: <span style="text-decoration: underline; color: #2C3E50; font-weight: 700;"> ${
-          student.totalMarks
-        }</span></p>
-      </div>
-      <!-- Marks & Percentage Section -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%; gap: 40px; margin-bottom: 15px;">
+          // Draw a border around the page
+          doc.setDrawColor("#5A6C57"); // Black border color
+          doc.setLineWidth(1); // Border thickness
+          doc.rect(10, 10, 190, 277); // x, y, width, height (adjust as needed)
 
-        <p style="font-weight: 600;font-size: 1.1rem;">Percentage:<span style="font-weight: 700; text-decoration: underline;"> ${
-          student.percentage
-        }</span>%</p>
-            <p style="font-weight: 600;font-size: 1.2rem; font-weight: 700; color: #4CAF50; margin-top: 20px;">Grade:
-        <span style="font-weight: 700; color: #333; text-decoration: underline;"> ${
-          student.grade
-        }</span>
-      </p>
-      </div>
+          // Add title and student details
+          doc.setFontSize(20);
+          doc.setTextColor("#355F2E");
+          doc.text(schoolName, 105, 23, null, null, "center"); // School name centered
+          doc.setFontSize(14);
+          doc.setTextColor(0, 0, 0);
+          doc.text("Result Report", 105, 35, null, null, "center");
+          doc.setFontSize(12);
+          doc.text(`Name: ${student.name}`, 20, 60);
+          doc.text(
+            `Father's Name: ${student.fatherName}`,
+            85 + student.name.length,
+            60
+          );
+          doc.setFontSize(11);
+          doc.text(`Class: ${className}`, 20, 75);
+          doc.text(`Term: ${term}`, 46, 75);
+          doc.text(`Total Marks: ${student.totalMarks}`, 88, 75);
+          doc.text(`Percentage: ${student.percentage}%`, 128, 75);
+          doc.text(`Grade: ${student.grade}`, 178, 75);
 
+          // Add table for marks
+          const tableData = student.marks.map((mark, index) => [
+            subjects[index],
+            mark,
+            "",
+          ]);
+          doc.autoTable({
+            startY: 90,
+            head: [["Subject", "Marks", "Comments"]],
+            body: tableData,
+            theme: "grid",
+            styles: { fontSize: 10, cellPadding: 2, halign: "center" },
+          });
 
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Subject</th>
-                        <th>Marks</th>
-                        <th>comments</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${student.marks
-                        .map(
-                          (mark, index) => `
-                        <tr>
-                          <td>${subjects[index]}</td>
-                          <td>${mark}</td>
-                          <td></td>
-                        </tr>`
-                        )
-                        .join("")}
-                    </tbody>
-                  </table>
-                </div>
-                <div class="card-footer">
-                  <p>Grade Criteria:</p>
-                  <ul>
-                    <li>A+: 90-100%</li>
-                    <li>A: 80-89%</li>
-                    <li>B: 70-79%</li>
-                    <li>C: 60-69%</li>
-                    <li>D: 50-59%</li>
-                    <li>F: Below 50%</li>
-                  </ul>
-                </div>
-              </div>
-        `;
+          // Add feedback text box
+          doc.text("Feedback:", 20, doc.lastAutoTable.finalY + 10);
+          doc.rect(15, doc.lastAutoTable.finalY + 15, 180, 40); // Rect for feedback area
 
-          resultCardsContainer.appendChild(card);
+          // Randomly select feedback based on the student's grade
+          const gradeFeedback = feedbackByGrade[student.grade] || [
+            "No feedback available.",
+          ];
+          const randomFeedback =
+            gradeFeedback[Math.floor(Math.random() * gradeFeedback.length)];
+
+          doc.setFontSize(10);
+          doc.text(randomFeedback, 20, doc.lastAutoTable.finalY + 25);
+
+          // Add grade criteria at the bottom of the page
+          doc.setFontSize(10);
+          doc.text("Grade Criteria Used:", 20, doc.lastAutoTable.finalY + 65);
+          doc.text(
+            "A+: 90-100%,     A: 80-89%,     B: 70-79%,     C: 60-69%,     D: 50-59%,     F: Below 50%",
+            20,
+            doc.lastAutoTable.finalY + 75
+          );
+          const currentDate = new Date();
+          const formattedDate = currentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          doc.setFontSize(8);
+          doc.text(
+            `Dated: ${formattedDate}`,
+            37,
+            doc.lastAutoTable.finalY + 105,
+            null,
+            null,
+            "center"
+          );
         });
 
-        // Create a printable container
-        const printableContainer = document.createElement("div");
-        printableContainer.style.position = "fixed";
-        printableContainer.style.top = "0";
-        printableContainer.style.left = "0";
-        printableContainer.style.width = "100vw";
-        printableContainer.style.height = "100vh";
-        printableContainer.style.backgroundColor = "white";
-        printableContainer.style.zIndex = "1000";
-        printableContainer.style.overflowY = "auto";
-        printableContainer.appendChild(resultCardsContainer);
-
-        // Add print and close buttons
-        const printButton = document.createElement("button");
-        printButton.innerText = "Print";
-        printButton.style.position = "fixed";
-        printButton.style.top = "10px";
-        printButton.style.right = "10px";
-        printButton.style.padding = "10px 20px";
-        printButton.style.backgroundColor = "#4CAF50";
-        printButton.style.color = "white";
-        printButton.style.border = "none";
-        printButton.style.borderRadius = "5px";
-        printButton.style.cursor = "pointer";
-
-        printButton.addEventListener("click", () => {
-          window.print();
-        });
-
-        const closeButton = document.createElement("button");
-        closeButton.innerText = "Close";
-        closeButton.style.position = "fixed";
-        closeButton.style.top = "10px";
-        closeButton.style.right = "80px";
-        closeButton.style.padding = "10px 20px";
-        closeButton.style.backgroundColor = "#f44336";
-        closeButton.style.color = "white";
-        closeButton.style.border = "none";
-        closeButton.style.borderRadius = "5px";
-        closeButton.style.cursor = "pointer";
-
-        closeButton.addEventListener("click", () => {
-          document.body.removeChild(printableContainer);
-        });
-
-        printableContainer.appendChild(printButton);
-        printableContainer.appendChild(closeButton);
-
-        document.body.appendChild(printableContainer);
+        // Save the generated PDF with the name "result_cards.pdf"
+        doc.save(`${count} result cards for class ${className}- ${term}.pdf`);
       }
 
-      // Sort table by total marks
       function sortTableByTotalMarks() {
         const rows = Array.from(resultTable.rows);
         rows.sort((rowA, rowB) => {
