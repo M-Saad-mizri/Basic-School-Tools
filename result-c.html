@@ -514,15 +514,15 @@
         deleteIcon.src =
           "data:image/svg+xml;charset=UTF-8," +
           encodeURIComponent(`
-              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#32bdef"></stop>
-                  <stop offset="1" stop-color="#1ea2e4"></stop>
-                </linearGradient>
-                <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
-                <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
-                <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
-              </svg>`); // Encode SVG as data URI
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+                      <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#32bdef"></stop>
+                        <stop offset="1" stop-color="#1ea2e4"></stop>
+                      </linearGradient>
+                      <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
+                      <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
+                      <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
+                    </svg>`); // Encode SVG as data URI
 
         deleteIcon.alt = "Delete Row";
         deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
@@ -1002,11 +1002,25 @@
         ],
       };
 
+      // Helper function to capitalize the first letter of each word
+      function capitalizeWords(str) {
+        return str
+          .toLowerCase()
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      }
+
       function generateResultCards(students) {
-        const schoolName = prompt("Enter the School Name:") || "Skipped";
-        const className = prompt("Enter the Class:") || "Skipped";
-        const term =
-          prompt("Enter the Term (e.g., 1st Term, 2nd Term):") || "Skipped";
+        const schoolName = capitalizeWords(
+          prompt("Enter the School Name:") || "Skipped"
+        );
+        const className = capitalizeWords(
+          prompt("Enter the Class:") || "Skipped"
+        );
+        const term = capitalizeWords(
+          prompt("Enter the Term (e.g., 1st Term, 2nd Term):") || "Skipped"
+        );
 
         // Create jsPDF instance
         const { jsPDF } = window.jspdf; // Ensure jsPDF is correctly accessed
@@ -1032,24 +1046,24 @@
           doc.text(schoolName, 105, 23, null, null, "center"); // School name centered
           doc.setFontSize(14);
           doc.setTextColor(0, 0, 0);
-          doc.text("Result Report", 105, 35, null, null, "center");
+          doc.text("Result Report", 105, 35, null, null, "center"); // Title in uppercase
           doc.setFontSize(12);
-          doc.text(`Name: ${student.name}`, 20, 60);
+          doc.text(`Name: ${capitalizeWords(student.name)}`, 20, 60); // Student name with capitalization
           doc.text(
-            `Father's Name: ${student.fatherName}`,
+            `Father's Name: ${capitalizeWords(student.fatherName)}`,
             85 + student.name.length,
             60
-          );
+          ); // Father's name with capitalization
           doc.setFontSize(11);
-          doc.text(`Class: ${className}`, 20, 75);
-          doc.text(`Term: ${term}`, 46, 75);
+          doc.text(`Class: ${className}`, 20, 75); // Class with capitalization
+          doc.text(`Term: ${term}`, 46, 75); // Term with capitalization
           doc.text(`Total Marks: ${student.totalMarks}`, 88, 75);
           doc.text(`Percentage: ${student.percentage}%`, 128, 75);
-          doc.text(`Grade: ${student.grade}`, 178, 75);
+          doc.text(`Grade: ${student.grade.toUpperCase()}`, 178, 75); // Grade in uppercase
 
           // Add table for marks
           const tableData = student.marks.map((mark, index) => [
-            subjects[index],
+            capitalizeWords(subjects[index]), // Subject with capitalization
             mark,
             "",
           ]);
@@ -1062,13 +1076,13 @@
           });
 
           // Add feedback text box
-          doc.text("Feedback:", 20, doc.lastAutoTable.finalY + 10);
+          doc.text("Feedback:", 20, doc.lastAutoTable.finalY + 10); // Feedback with capitalization
           doc.rect(15, doc.lastAutoTable.finalY + 15, 180, 40); // Rect for feedback area
 
           // Randomly select feedback based on the student's grade
           const gradeFeedback = feedbackByGrade[student.grade] || [
             "No feedback available.",
-          ];
+          ]; // Feedback with capitalization
           const randomFeedback =
             gradeFeedback[Math.floor(Math.random() * gradeFeedback.length)];
 
@@ -1077,7 +1091,7 @@
 
           // Add grade criteria at the bottom of the page
           doc.setFontSize(10);
-          doc.text("Grade Criteria Used:", 20, doc.lastAutoTable.finalY + 65);
+          doc.text("Grade Criteria Used:", 20, doc.lastAutoTable.finalY + 65); // Grade criteria with capitalization
           doc.text(
             "A+: 90-100%,     A: 80-89%,     B: 70-79%,     C: 60-69%,     D: 50-59%,     F: Below 50%",
             20,
@@ -1101,7 +1115,7 @@
         });
 
         // Save the generated PDF with the name "result_cards.pdf"
-        doc.save(`${count} result cards for class ${className}- ${term}.pdf`);
+        doc.save(`${count} result cards for class ${className} - ${term}.pdf`);
       }
 
       function sortTableByTotalMarks() {
@@ -1178,15 +1192,15 @@
           deleteIcon.src =
             "data:image/svg+xml;charset=UTF-8," +
             encodeURIComponent(`
-              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#32bdef"></stop>
-                  <stop offset="1" stop-color="#1ea2e4"></stop>
-                </linearGradient>
-                <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
-                <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
-                <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
-              </svg>`); // Encode SVG as data URI
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+                      <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#32bdef"></stop>
+                        <stop offset="1" stop-color="#1ea2e4"></stop>
+                      </linearGradient>
+                      <path fill="url(#nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1)" d="M39,10l-2.835,31.181C36.072,42.211,35.208,43,34.174,43H13.826	c-1.034,0-1.898-0.789-1.992-1.819L9,10H39z"></path>
+                      <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
+                      <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
+                    </svg>`); // Encode SVG as data URI
 
           deleteIcon.alt = "Delete Row";
           deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
