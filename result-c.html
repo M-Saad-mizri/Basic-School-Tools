@@ -323,13 +323,13 @@
       </div>
 
       <div class="delete-btns">
-        <button onclick="deleteData()" class="delete-btn tooltiped-btn">
-          Delete Data
-          <div class="tooltip">Delete Stored Data</div>
-        </button>
         <button onclick="deleteColumn()" class="delete-btn tooltiped-btn">
           Delete Subject
           <div class="tooltip">Delete Subject</div>
+        </button>
+        <button onclick="deleteData()" class="delete-btn tooltiped-btn">
+          Delete Data
+          <div class="tooltip">Delete Stored Student Data</div>
         </button>
       </div>
       <input
@@ -855,7 +855,7 @@
           doc.setFontSize(11);
           doc.text(`Class: ${className}`, 20, 75); // Class with capitalization
           doc.text(`Term: ${term}`, 66, 75); // Term with capitalization
-          doc.text(`Percentage: ${student.percentage}%`, 108, 75);
+          doc.text(`Percentage: ${student.percentage}`, 108, 75);
           doc.text(`Grade: ${student.grade.toUpperCase()}`, 158, 75); // Grade in uppercase
 
           // Add table for marks
