@@ -813,11 +813,14 @@
       );
 
       generateResultCardsButton.addEventListener("click", () => {
+        window.location.reload();
         const students = Array.from(resultTable.rows)
           .map((row) => {
             const cells = row.cells;
             if (cells.length < 8) return null; // Skip rows without valid data
 
+            const position = cells[0].innerText;
+            console.log(position); // for debugging
             const name = cells[1].querySelector("input").value;
             const fatherName = cells[2].querySelector("input").value;
             const marks = Array.from(cells)
@@ -827,7 +830,15 @@
             const percentage = cells[subjects.length + 4].innerText || "0%";
             const grade = cells[subjects.length + 5].innerText || "N/A";
 
-            return { name, fatherName, marks, totalMarks, percentage, grade };
+            return {
+              position,
+              name,
+              fatherName,
+              marks,
+              totalMarks,
+              percentage,
+              grade,
+            };
           })
           .filter((student) => student !== null);
 
@@ -952,6 +963,7 @@
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ");
       }
+
       function generateResultCards(students) {
         const schoolName = capitalizeWords(
           prompt("Enter the School Name:") ||
@@ -1000,7 +1012,8 @@
           doc.text(`Class: ${className}`, 20, 75); // Class with capitalization
           doc.text(`Term: ${term}`, 66, 75); // Term with capitalization
           doc.text(`Percentage: ${student.percentage}`, 108, 75);
-          doc.text(`Grade: ${student.grade.toUpperCase()}`, 158, 75); // Grade in uppercase
+          doc.text(`Grade: ${student.grade.toUpperCase()}`, 145, 75); // Grade in uppercase
+          doc.text(`Position: ${student.position}`, 168, 75); // Grade in uppercase
 
           // Add table for marks
           const tableData = student.marks.map((mark, index) => [
@@ -1437,19 +1450,34 @@
       const faqs = [
         {
           q: "How do I add a new student?",
-          a: "Click the '+ Student' button and enter one or more names (comma or new line separated), eg: name1,name2,name3,..... Each valid name will create a new row with inputs for subject marks.",
+          a: `Click the <strong>"+ Student" button</strong> and enter the name of the student and hit enter, it will create a new row for the student you entered.`,
         },
         {
           q: "Can I add multiple students at once?",
-          a: "Yes. When prompted, enter student names separated by commas or new lines. Invalid names (empty or starting with a number) will be skipped.",
+          a: `Yes. When prompted, enter more names <strong>"(separated by comma), eg: name1,name2,name3,....."</strong> Each valid name will create a new row with inputs for subject marks. Invalid names (empty or starting with a number) will be skipped.`,
         },
         {
           q: "How do I remove a student?",
-          a: "Click the trash icon at the end of the row to remove that student. Serial numbers will automatically update.",
+          a: `Click the <strong>"trash icon"</strong> at the end of the row to remove that student. Serial numbers will automatically update. if not will update on page reload`,
         },
         {
           q: "How do I remove a subject?",
-          a: "Each subject column has a red trash icon in the header. Click it to remove that subject from all student rows.",
+          a: `Click the <strong>"Delete Subject" button</strong> and enter the name of the subject or its index and hit enter. after confirmation, it will delete the whole column of the entered subject.`,
+        },
+        {
+          q: "Can I delete multiple subjects at once?",
+          a: `Yes. When prompted, you can enter multiple subject names separated by commas, like <strong>"name1, name2, name3"</strong>. Each valid name will create a new row with input fields for subject marks.
+
+Subject names must not be empty or start with a number — such entries will be skipped automatically.
+
+For example:
+<ul>
+  <li><strong>Valid:</strong> "name1,name2,name2"</li>
+  <li><strong>valid:</strong> "name1,1,name2" (only "name1" and "name2" will be added)</li>
+  <li><strong>valid:</strong> "0,name1,2" (only "name1" will be added)</li>
+</ul>
+
+You can also delete multiple subjects by entering the same combinations — any valid subject name will be removed, and invalid ones will be ignored.`,
         },
         {
           q: "How is the grade calculated?",
@@ -1457,15 +1485,15 @@
         },
         {
           q: "Can I download the result card?",
-          a: "Yes! After generating a result, click the 'Download Card' button to save it as an image.",
+          a: `Yes! After generating a result, click the <strong>"Generate Result Cards"</strong> button to save it as an pdf file.`,
         },
         {
-          q: "How do I reset the form?",
-          a: "Click the 'Reset' button at the bottom to clear all data and start fresh.",
+          q: "How do I reset the Student Table?",
+          a: `Click the <strong>"delete data" button</strong> to clear all data and start fresh table.`,
         },
         {
           q: "Does this save student data?",
-          a: "Yes. Your entries are saved in your browser's local storage, so they’ll still be there if you reload the page.",
+          a: "Yes. Your entries are saved in your browser's local storage, so they’ll still be there if you reload the page. but remember that this data is not saved on the server, so it will be lost if you clear your browser's local storage or switch browsers.",
         },
       ];
 
