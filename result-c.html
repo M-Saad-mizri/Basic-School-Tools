@@ -1,450 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Result Compiler</title>
-    <style>
-      /* Base styles */
-      body {
-        text-transform: capitalize;
-        font-family: "Segoe UI", Arial, sans-serif;
-        margin: 20px;
-        padding: 0;
-        background-color: #f4f4f9;
-        color: #333;
-        box-sizing: border-box;
-      }
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result Compiler</title>
+  <style>
+    /* Base styles */
+    body {
+      text-transform: capitalize;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 2rem;
+      color: #0056b3;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow-x: auto;
+      display: block;
+      /* Allows horizontal scrolling */
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ddd;
+      white-space: nowrap;
+      /* Prevents wrapping */
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 80px;
+      padding: 5px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* Container for buttons and inputs */
+    .action-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #fff;
+      background-color: #0056b3;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #5fc464;
+      color: #f1f6f1;
+    }
+
+    #calculate-btn {
+      background-color: #008cba;
+      height: 45px;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+    }
+
+    .delete-btn:hover {
+      background-color: #f9695f;
+    }
+
+    #total-marks {
+      width: 130px;
+      padding: 4.7px;
+      height: 25px;
+    }
+
+    #download-pdf-btn {
+      background-color: #ee1b24;
+      display: inline-block;
+      height: 45px;
+      margin-left: 5px;
+    }
+
+    .delete-btns {
+      display: inline-block;
+    }
+
+    #warningModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #modalContent {
+      background-color: #fff;
+      padding: 20px;
+      width: 300px;
+      border: 3px solid #cac009;
+      box-shadow: 2px 2px 2px rgb(104, 97, 97);
+    }
+
+    .modal-buttons {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-left: 30px;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    #dontShowAgain {
+      margin-top: 10px;
+      display: flex;
+      margin-left: 21px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #dontShowAgain input {
+      margin-right: 10px;
+    }
+
+    .tooltiped-btn {
+      position: relative;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      visibility: hidden;
+      width: 100px;
+
+      background: rgba(0, 0, 0, 0.5);
+      /* Semi-transparent overlay */
+      backdrop-filter: blur(5px);
+      /* Applies the blur effect */
+      z-index: 999;
+      /* Ensures it is above other content */
+      color: #fffdfd;
+      text-align: center;
+      border-radius: 5px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      /* Position above the button */
+      left: 70%;
+      margin-left: -75px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* Tooltip arrow */
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #6cea70 transparent transparent transparent;
+    }
+
+    /* Show the tooltip when hovering over the button */
+    .tooltiped-btn:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    #faq-section {
+      max-width: 870px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #faq-section h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      color: #222;
+      margin-bottom: 25px;
+    }
+
+    #faqSearch {
+      width: 96%;
+      padding: 12px 14px;
+      font-size: 1rem;
+      margin-bottom: 25px;
+      /* margin-right: 100px; */
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    #faqSearch:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+      outline: none;
+    }
+
+    #faqList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #faqList li {
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e1e1e1;
+      transition: background-color 0.2s ease-in-out,
+        transform 0.1s ease-in-out;
+    }
+
+    #faqList li:hover {
+      background-color: #f1f3f5;
+      transform: translateY(-1px);
+    }
+
+    #faqList strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      color: #222;
+    }
+
+    #faqList span {
+      font-size: 0.97rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .transfer-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .transfer-box {
+      background: #fdfdfd;
+      padding: 15px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 530px) {
       h1 {
+        font-size: 1.5rem;
         text-align: center;
-        margin: 20px 0;
-        font-size: 2rem;
-        color: #0056b3;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        overflow-x: auto;
-        display: block;
-        /* Allows horizontal scrolling */
       }
 
-      th,
-      td {
-        padding: 8px;
-        text-align: center;
-        border: 1px solid #ddd;
-        white-space: nowrap;
-        /* Prevents wrapping */
+      table {
+        font-size: 0.9rem;
+        /* Smaller font for smaller screens */
+      }
+
+      button {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 1rem;
+        margin: 5px 0;
       }
 
       input[type="number"],
       input[type="text"] {
-        width: 80px;
-        padding: 5px;
-        text-align: center;
-        font-size: 0.9rem;
-      }
-      /* Container for buttons and inputs */
-      .action-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin: 20px 0;
+        width: 50px;
+        font-size: 0.8rem;
       }
 
-      button {
-        padding: 10px 20px;
-        margin-bottom: 20px;
-        font-size: 1rem;
-        font-weight: bold;
-        color: #fff;
-        background-color: #0056b3;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-
-      button:hover {
-        background-color: #5fc464;
-        color: #f1f6f1;
-      }
-
-      #calculate-btn {
-        background-color: #008cba;
-        height: 45px;
-      }
-
-      .delete-btn {
-        background-color: #f44336;
-      }
-      .delete-btn:hover {
-        background-color: #f9695f;
-      }
       #total-marks {
-        width: 130px;
-        padding: 4.7px;
-        height: 25px;
+        width: 96.5%;
+        margin: 5px 0 10px 0;
       }
+
       #download-pdf-btn {
-        background-color: #ee1b24;
-        display: inline-block;
-        height: 45px;
-        margin-left: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
       }
+
       .delete-btns {
-        display: inline-block;
+        display: flex;
+        gap: 10px;
       }
-      #warningModal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
+
+      .delete-btns :button {
+        font-size: 5px;
+        display: flex;
+        width: 50%;
+        gap: 10px;
+      }
+
+      .action-container>div {
         width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .transfer-container {
+        flex-direction: row;
         justify-content: center;
-        align-items: center;
+        align-items: stretch;
+        gap: 30px;
       }
 
-      #modalContent {
-        background-color: #fff;
-        padding: 20px;
-        width: 300px;
-        border: 3px solid #cac009;
-        box-shadow: 2px 2px 2px rgb(104, 97, 97);
+      .transfer-box {
+        width: 45%;
+        max-width: none;
       }
+    }
 
-      .modal-buttons {
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .btn {
-        padding: 8px 16px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-left: 30px;
-      }
-
-      .btn:hover {
-        background-color: #45a049;
-      }
-
-      #dontShowAgain {
-        margin-top: 10px;
-        display: flex;
-        margin-left: 21px;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #dontShowAgain input {
-        margin-right: 10px;
-      }
-
-      .tooltiped-btn {
-        position: relative;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-      }
-
-      /* Tooltip container */
-      .tooltip {
-        visibility: hidden;
-        width: 100px;
-
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-        backdrop-filter: blur(5px); /* Applies the blur effect */
-        z-index: 999; /* Ensures it is above other content */
-        color: #fffdfd;
-        text-align: center;
-        border-radius: 5px;
-        padding: 10px;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%; /* Position above the button */
-        left: 70%;
-        margin-left: -75px;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
-      /* Tooltip arrow */
-      .tooltip::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #6cea70 transparent transparent transparent;
-      }
-
-      /* Show the tooltip when hovering over the button */
-      .tooltiped-btn:hover .tooltip {
-        visibility: visible;
-        opacity: 1;
-      }
-
-      #faq-section {
-        max-width: 800px;
-        margin: 60px auto;
-        padding: 30px;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-
-      #faq-section h2 {
-        text-align: center;
-        font-size: 1.8rem;
-        color: #222;
-        margin-bottom: 25px;
-      }
-
-      #faqSearch {
-        width: 96%;
-        padding: 12px 14px;
-        font-size: 1rem;
-        margin-bottom: 25px;
-        /* margin-right: 100px; */
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-      }
-
-      #faqSearch:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-        outline: none;
-      }
-
-      #faqList {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      #faqList li {
-        padding: 16px 20px;
-        margin-bottom: 12px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        border: 1px solid #e1e1e1;
-        transition: background-color 0.2s ease-in-out,
-          transform 0.1s ease-in-out;
-      }
-
-      #faqList li:hover {
-        background-color: #f1f3f5;
-        transform: translateY(-1px);
-      }
-
-      #faqList strong {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 1.1rem;
-        color: #222;
-      }
-
-      #faqList span {
-        font-size: 0.97rem;
-        color: #555;
-        line-height: 1.6;
-      }
-
-      @media (max-width: 530px) {
-        h1 {
-          font-size: 1.5rem;
-          text-align: center;
-        }
-
-        table {
-          font-size: 0.9rem;
-          /* Smaller font for smaller screens */
-        }
-
-        button {
-          width: 100%;
-          padding: 10px 0;
-          font-size: 1rem;
-          margin: 5px 0;
-        }
-
-        input[type="number"],
-        input[type="text"] {
-          width: 50px;
-          font-size: 0.8rem;
-        }
-
-        #total-marks {
-          width: 96.5%;
-          margin: 5px 0 10px 0;
-        }
-        #download-pdf-btn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 12px;
-        }
-        .delete-btns {
-          display: flex;
-          gap: 10px;
-        }
-        .delete-btns :button {
-          font-size: 5px;
-          display: flex;
-          width: 50%;
-          gap: 10px;
-        }
-        .action-container > div {
-          width: 100%;
-        }
-      }
-
-      @media print {
-        .result-card {
-          page-break-after: always;
-          width: 500px;
-          height: 29.7cm;
-          margin: auto;
-          padding: 2cm;
-          box-shadow: none;
-        }
-      }
+    @media print {
       .result-card {
+        page-break-after: always;
         width: 500px;
-        border: 3px solid #d7f874;
-        padding: 20px;
-        margin: 20px 0;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        height: 29.7cm;
+        margin: auto;
+        padding: 2cm;
+        box-shadow: none;
       }
-      .card-header h1 {
-        text-transform: capitalize;
-        text-align: center;
-        margin: 0;
-      }
-      .card-header h3 {
-        text-transform: capitalize;
-        text-align: center;
-        margin: 0;
-        font-weight: normal;
-      }
-      table {
-        text-transform: capitalize;
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-      table th,
-      table td {
-        border: 1px solid #ddd;
-        text-align: center;
-        padding: 8px;
-        width: 150px;
-      }
-      .card-footer ul {
-        list-style: none;
-        padding: 0;
-      }
-    </style>
-  </head>
+    }
 
-  <body>
-    <h1 style="text-align: center">Result Compiler</h1>
+    .result-card {
+      width: 500px;
+      border: 3px solid #d7f874;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
 
-    <div class="action-container">
-      <div class="delete-btns">
-        <button class="tooltiped-btn" id="add-row-btn">
-          <strong>+</strong> Student
-          <!-- Tooltip for Add Student Row -->
-          <div class="tooltip">
-            <img
-              width="30"
-              height="30"
-              src="https://img.icons8.com/ios/50/select-row.png"
-              alt="select-row"
-            />
-          </div>
-        </button>
+    .card-header h1 {
+      text-transform: capitalize;
+      text-align: center;
+      margin: 0;
+    }
 
-        <button class="tooltiped-btn" id="add-column-btn">
-          <strong>+</strong> Subject
-          <!-- Tooltip with the image icon -->
-          <div class="tooltip">
-            <img
-              width="30"
-              height="30"
-              src="https://img.icons8.com/ios/50/select-column.png"
-              alt="select-column"
-            />
-          </div>
-        </button>
-      </div>
+    .card-header h3 {
+      text-transform: capitalize;
+      text-align: center;
+      margin: 0;
+      font-weight: normal;
+    }
 
-      <div class="delete-btns">
-        <button onclick="deleteColumn()" class="delete-btn tooltiped-btn">
-          Delete Subject
-          <div class="tooltip">Delete Subject</div>
-        </button>
-        <button onclick="deleteData()" class="delete-btn tooltiped-btn">
-          Delete Data
-          <div class="tooltip">Delete Stored Student Data</div>
-        </button>
-      </div>
-      <input
-        id="total-marks"
-        type="number"
-        placeholder="Enter Total Marks"
-        required
-      />
+    table {
+      text-transform: capitalize;
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 8px;
+      width: 150px;
+    }
+
+    .card-footer ul {
+      list-style: none;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="text-align: center">Result Compiler</h1>
+
+  <div class="action-container">
+    <div class="delete-btns">
+      <button class="tooltiped-btn" id="add-row-btn">
+        <strong>+</strong> Student
+        <!-- Tooltip for Add Student Row -->
+        <div class="tooltip">
+          <img width="30" height="30" src="https://img.icons8.com/ios/50/select-row.png" alt="select-row" />
+        </div>
+      </button>
+
+      <button class="tooltiped-btn" id="add-column-btn">
+        <strong>+</strong> Subject
+        <!-- Tooltip with the image icon -->
+        <div class="tooltip">
+          <img width="30" height="30" src="https://img.icons8.com/ios/50/select-column.png" alt="select-column" />
+        </div>
+      </button>
     </div>
 
-    <table id="result-table">
-      <thead>
-        <tr></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="delete-btns">
+      <button onclick="deleteColumn()" class="delete-btn tooltiped-btn">
+        Delete Subject
+        <div class="tooltip">Delete Subject</div>
+      </button>
+      <button onclick="deleteData()" class="delete-btn tooltiped-btn">
+        Delete Data
+        <div class="tooltip">Delete Stored Student Data</div>
+      </button>
+    </div>
+    <input id="total-marks" type="number" placeholder="Enter Total Marks" required />
+  </div>
 
-    <div class="action-container">
-      <div class="delete-btns">
-        <button id="calculate-btn" class="tooltiped-btn">
-          Compile
-          <div class="tooltip">Compile Result</div>
-        </button>
+  <table id="result-table">
+    <thead>
+      <tr></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-        <button id="download-pdf-btn" class="tooltiped-btn">
-          <img
-            width="18"
-            height="15"
-            src="https://img.icons8.com/arcade/64/download.png"
-            alt="download"
-          />
-          PDF
-          <div class="tooltip">Get .pdf Copy</div>
-        </button>
-      </div>
-      <div class="delete-btns">
-        <button
-          class="tooltiped-btn"
-          style="display: flex; justify-content: center; align-items: center"
-          id="generate-result-cards-btn"
-        >
-          Generate Result Cards
-          <div class="tooltip">Free For You 💕</div>
-          <span
-            style="
+  <div class="action-container">
+    <div class="delete-btns">
+      <button id="calculate-btn" class="tooltiped-btn">
+        Compile
+        <div class="tooltip">Compile Result</div>
+      </button>
+
+      <button id="download-pdf-btn" class="tooltiped-btn">
+        <img width="18" height="15" src="https://img.icons8.com/arcade/64/download.png" alt="download" />
+        PDF
+        <div class="tooltip">Get .pdf Copy</div>
+      </button>
+    </div>
+    <div class="delete-btns">
+      <button class="tooltiped-btn" style="display: flex; justify-content: center; align-items: center"
+        id="generate-result-cards-btn">
+        Generate Result Cards
+        <div class="tooltip">Free For You 💕</div>
+        <span style="
               padding: 2px;
               background-color: #423939;
               display: flex;
@@ -453,183 +482,171 @@
               width: 20px;
               border-radius: 20px;
               margin-left: 5px;
-            "
-          >
-            <img
-              width="20"
-              height="20"
-              src="https://img.icons8.com/color/48/crown.png"
-              alt="crown"
-          /></span>
+            ">
+          <img width="20" height="20" src="https://img.icons8.com/color/48/crown.png" alt="crown" /></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal HTML -->
+  <div id="warningModal">
+    <div id="modalContent">
+      <div style="text-align: center">
+        <img width="48" height="48" src="https://img.icons8.com/fluency/48/add-reminder.png" alt="add-reminder" />
+      </div>
+      <h3 style="text-align: center">Important Reminder</h3>
+      <hr />
+      <ol>
+        <li>
+          Do not forget to press "Compile", otherwise you may lose your data.
+        </li>
+        <br />
+        <li>
+          You can now export your data to share it with other devices, import it back anytime, and continue editing
+          seamlessly.
+        </li>
+      </ol>
+
+      <div id="dontShowAgain">
+        <input type="checkbox" id="dontShowAgainCheckbox" />
+        <label for="dontShowAgainCheckbox">Don't show again</label>
+        <button class="btn" id="closeModalButton">O.K</button>
+      </div>
+
+      <div class="modal-buttons">
+        <!-- <button class="btn" id="closeModalButton">O.K</button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Data transfer section -->
+  <section id="data-transfer" style="text-align:center; margin: 10px auto; padding: 15px;
+         border: 2px solid #ccc; border-radius: 15px; width: 87%;
+         max-width: 900px; background: #fafafa;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+
+    <h2 style="margin-bottom: 10px; color: #333;">Export / Import Results</h2>
+    <p style="font-size: 14px; color: #555; margin-bottom: 25px;">
+      Use this section to <strong>backup</strong> or <strong>share</strong> your data between devices.
+    </p>
+
+    <div class="transfer-container">
+      <!-- Export Section -->
+      <div class="transfer-box">
+        <h3 style="margin: 0 0 8px; color: #222;">⬆️ Export Data</h3>
+        <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
+          Create a backup or share your data with another device.
+        </p>
+        <button onclick="exportResults()" style="padding: 10px 20px; border: none; border-radius: 6px;
+               background-color: #2b7cff; color: white; cursor: pointer; font-size: 14px;">
+          Export / Share Data
+        </button>
+      </div>
+
+      <!-- Import Section -->
+      <div class="transfer-box">
+        <h3 style="margin: 0 0 8px; color: #222;">⬇️ Import Data</h3>
+        <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
+          Select the exported file or paste a shared link to restore your data.
+        </p>
+        <button onclick="importResults()" style="padding: 10px 20px; border: none; border-radius: 6px;
+               background-color: #28a745; color: white; cursor: pointer; font-size: 14px;">
+          Import Data
         </button>
       </div>
     </div>
 
-    <!-- Modal HTML -->
-    <div id="warningModal">
-      <div id="modalContent">
-        <div style="text-align: center">
-          <img
-            width="48"
-            height="48"
-            src="https://img.icons8.com/fluency/48/add-reminder.png"
-            alt="add-reminder"
-          />
-        </div>
-        <h3 style="text-align: center">Important Reminder</h3>
-        <hr />
-        <ol>
-          <li>
-            Do not forget to press "Compile", otherwise you may lose your data.
-          </li>
-          <br />
-          <li>
-  You can now export your data to share it with other devices, import it back anytime, and continue editing seamlessly.
-          </li>
-        </ol>
+    <p style="font-size: 12px; color: #777; margin-top: 25px;">
+      💡 <strong>Tip:</strong> After exporting, you can share the file or link via
+      <em>WhatsApp</em>, <em>Bluetooth</em>, or any sharing app to move data to another device.
+    </p>
+  </section>
 
-        <div id="dontShowAgain">
-          <input type="checkbox" id="dontShowAgainCheckbox" />
-          <label for="dontShowAgainCheckbox">Don't show again</label>
-          <button class="btn" id="closeModalButton">O.K</button>
-        </div>
+  <!-- faq section -->
+  <section id="faq-section">
+    <h2>📘 Help & FAQ</h2>
+    <input type="text" id="faqSearch" placeholder="Type your question..." />
 
-        <div class="modal-buttons">
-          <!-- <button class="btn" id="closeModalButton">O.K</button> -->
-        </div>
-      </div>
-    </div>
-<section id="data-transfer" 
-  style="text-align:center; margin: 10px; padding: 15px; 
-         border: 2px solid #ccc; border-radius: 15px; width: 87%; max-width: 500px; 
-         background: #fafafa; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+    <ul id="faqList">
+      <!-- FAQs will be rendered here -->
+    </ul>
+  </section>
 
-  <h2 style="margin-bottom: 10px; color: #333;">Export / Import Results</h2>
-  <p style="font-size: 14px; color: #555; margin-bottom: 25px;">
-    Use this section to <strong>backup</strong> or <strong>share</strong> your data between devices.
-  </p>
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <!-- autoTable Plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
-  <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+  <script>
+    // Get elements
+    const resultTable = document
+      .getElementById("result-table")
+      .getElementsByTagName("tbody")[0];
+    const addRowButton = document.getElementById("add-row-btn");
+    const addColumnButton = document.getElementById("add-column-btn");
+    const calculateButton = document.getElementById("calculate-btn");
+    let subjects = ["English", "Eng B/R", "Urdu"]; // Default subjects
 
-    <!-- Export Section -->
-    <div style="background: #fdfdfd; padding: 15px; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #ddd;">
-      <h3 style="margin: 0 0 8px; color: #222;">⬆️ Export Data</h3>
-      <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
-        Create a backup or share your data with another device.
-      </p>
-      <button onclick="exportResults()" 
-              style="padding: 10px 20px; border: none; border-radius: 6px; 
-                     background-color: #2b7cff; color: white; cursor: pointer; font-size: 14px;">
-        Export / Share Data
-      </button>
-    </div>
+    // Add row (student)
+    addRowButton.addEventListener("click", () => {
+      const input = prompt(
+        "Enter student name(s), separated by commas or new lines:"
+      );
+      if (!input) return;
 
-    <!-- Import Section -->
-    <div style="background: #fdfdfd; padding: 15px; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #ddd;">
-      <h3 style="margin: 0 0 8px; color: #222;">⬇️ Import Data</h3>
-      <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
-        Select the exported file or paste a shared link to restore your data.
-      </p>
-      <button onclick="importResults()" 
-              style="padding: 10px 20px; border: none; border-radius: 6px; 
-                     background-color: #28a745; color: white; cursor: pointer; font-size: 14px;">
-        Import Data
-      </button>
-    </div>
+      const names = input
+        .split(/[\n,]+/)
+        .map((name) => name.trim())
+        .filter((name) => name && !/^\d/.test(name)); // Remove empty and names starting with numbers
 
-  </div>
-
-  <p style="font-size: 12px; color: #777; margin-top: 25px;">
-    💡 <strong>Tip:</strong> After exporting, you can share the file or link via 
-    <em>WhatsApp</em>, <em>Bluetooth</em>, or any sharing app to move data to another device.
-  </p>
-
-</section>
-    
-    <section id="faq-section">
-      <h2>📘 Help & FAQ</h2>
-      <input type="text" id="faqSearch" placeholder="Type your question..." />
-
-      <ul id="faqList">
-        <!-- FAQs will be rendered here -->
-      </ul>
-    </section>
-
-    <!-- jsPDF Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <!-- autoTable Plugin -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
-    <script>
-      // Get elements
-      const resultTable = document
-        .getElementById("result-table")
-        .getElementsByTagName("tbody")[0];
-      const addRowButton = document.getElementById("add-row-btn");
-      const addColumnButton = document.getElementById("add-column-btn");
-      const calculateButton = document.getElementById("calculate-btn");
-      let subjects = ["English", "Eng B/R", "Urdu"]; // Default subjects
-
-      // Add row (student)
-      addRowButton.addEventListener("click", () => {
-        const input = prompt(
-          "Enter student name(s), separated by commas or new lines:"
+      if (names.length === 0) {
+        alert(
+          "No valid names entered. Names must not be empty or start with a number."
         );
-        if (!input) return;
+        return;
+      }
 
-        const names = input
-          .split(/[\n,]+/)
-          .map((name) => name.trim())
-          .filter((name) => name && !/^\d/.test(name)); // Remove empty and names starting with numbers
+      names.forEach((studentName) => {
+        const row = resultTable.insertRow();
+        const serialCell = row.insertCell(0);
+        const nameCell = row.insertCell(1);
+        const fatherNameCell = row.insertCell(2);
 
-        if (names.length === 0) {
-          alert(
-            "No valid names entered. Names must not be empty or start with a number."
-          );
-          return;
-        }
+        serialCell.innerHTML = ""; // Let updateSerialNumbers() set correct value later
 
-        names.forEach((studentName) => {
-          const row = resultTable.insertRow();
-          const serialCell = row.insertCell(0);
-          const nameCell = row.insertCell(1);
-          const fatherNameCell = row.insertCell(2);
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Name";
+        nameInput.value = studentName;
+        nameCell.appendChild(nameInput);
 
-          serialCell.innerHTML = ""; // Let updateSerialNumbers() set correct value later
+        const fatherNameInput = document.createElement("input");
+        fatherNameInput.type = "text";
+        fatherNameInput.placeholder = "Father's Name";
+        fatherNameCell.appendChild(fatherNameInput);
 
-          const nameInput = document.createElement("input");
-          nameInput.type = "text";
-          nameInput.placeholder = "Name";
-          nameInput.value = studentName;
-          nameCell.appendChild(nameInput);
+        subjects.forEach((subject, index) => {
+          const cell = row.insertCell(index + 3);
+          const marksInput = document.createElement("input");
+          marksInput.type = "number";
+          marksInput.placeholder = subject;
+          cell.appendChild(marksInput);
 
-          const fatherNameInput = document.createElement("input");
-          fatherNameInput.type = "text";
-          fatherNameInput.placeholder = "Father's Name";
-          fatherNameCell.appendChild(fatherNameInput);
+          // Tooltip logic left as-is
+          marksInput.title = `${studentName} - ${subject}`;
+        });
 
-          subjects.forEach((subject, index) => {
-            const cell = row.insertCell(index + 3);
-            const marksInput = document.createElement("input");
-            marksInput.type = "number";
-            marksInput.placeholder = subject;
-            cell.appendChild(marksInput);
+        // Add Total, Percentage, Grade (position left as-is)
+        row.insertCell(subjects.length + 3);
+        row.insertCell(subjects.length + 4);
+        row.insertCell(subjects.length + 5);
 
-            // Tooltip logic left as-is
-            marksInput.title = `${studentName} - ${subject}`;
-          });
-
-          // Add Total, Percentage, Grade (position left as-is)
-          row.insertCell(subjects.length + 3);
-          row.insertCell(subjects.length + 4);
-          row.insertCell(subjects.length + 5);
-
-          // Add Delete Button
-          const deleteCell = row.insertCell(subjects.length + 6);
-          const deleteIcon = document.createElement("img");
-          deleteIcon.src =
-            "data:image/svg+xml;charset=UTF-8," +
-            encodeURIComponent(`
+        // Add Delete Button
+        const deleteCell = row.insertCell(subjects.length + 6);
+        const deleteIcon = document.createElement("img");
+        deleteIcon.src =
+          "data:image/svg+xml;charset=UTF-8," +
+          encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48">
           <linearGradient id="grad" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#32bdef"></stop>
@@ -639,565 +656,565 @@
           <path fill="#0176d0" d="M32,7c0-1.105-0.895-2-2-2H18c-1.105,0-2,0.895-2,2c0,0,0,0.634,0,1h16C32,7.634,32,7,32,7z"></path>
           <path fill="#007ad9" d="M7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
         </svg>`);
-          deleteIcon.alt = "Delete Row";
-          deleteIcon.style.cursor = "pointer";
-          deleteIcon.onclick = () => {
-            row.remove();
-            updateSerialNumbers(); // Fix serial numbers after delete
-            saveData();
-          };
-
-          deleteCell.appendChild(deleteIcon);
-        });
-
-        updateSerialNumbers(); // Update after all insertions
-        saveData();
-      });
-
-      // Helper to update serial numbers after add/delete
-      function updateSerialNumbers() {
-        Array.from(resultTable.rows).forEach((r, i) => {
-          r.cells[0].innerText = i + 1;
-        });
-      }
-
-      // Add column (subject)
-      addColumnButton.addEventListener("click", () => {
-        const input = prompt(
-          "Enter subject names (comma or new line separated):"
-        );
-        if (!input) return;
-
-        // Split input into an array of trimmed subject names
-        const newSubjects = input
-          .split(/[\n,]+/)
-          .map((name) => name.trim())
-          .filter((name) => name); // Remove empty strings
-
-        // Loop through each subject
-        newSubjects.forEach((subjectName) => {
-          // Check for duplicates (case-insensitive)
-          const isDuplicate = subjects.some(
-            (existing) => existing.toLowerCase() === subjectName.toLowerCase()
-          );
-          if (isDuplicate) return; // Skip if already exists
-
-          const newSubjectIndex = subjects.length;
-          subjects.push(subjectName);
-
-          // Insert header
-          const header = resultTable.closest("table").querySelector("thead tr");
-          const newHeaderCell = document.createElement("th");
-          newHeaderCell.innerText = subjectName;
-          header.insertBefore(
-            newHeaderCell,
-            header.children[newSubjectIndex + 3] // +3 for S.No, Name, Father Name
-          );
-
-          // Insert new column for each student row
-          const rows = resultTable.rows;
-          Array.from(rows).forEach((row) => {
-            const cell = row.insertCell(newSubjectIndex + 3);
-            const marksInput = document.createElement("input");
-            marksInput.type = "number";
-            marksInput.placeholder = subjectName;
-            cell.appendChild(marksInput);
-
-            const nameInput = row.cells[1]?.querySelector("input");
-            marksInput.title = nameInput
-              ? `${nameInput.value} - ${subjectName}`
-              : subjectName;
-          });
-        });
-
-        // Save updated state
-        saveData();
-      });
-
-      function deleteColumn() {
-        // Display all subjects with their indices for easy selection
-        let subjectList = "";
-        subjects.forEach((subject, index) => {
-          subjectList += `${index}: ${subject}\n`;
-        });
-
-        const input = prompt(
-          `Subjects with indices:\n${subjectList}\n\nEnter the index numbers or subject names to delete (comma-separated):`
-        );
-
-        if (input === null) return; // User canceled prompt
-
-        const rawItems = input
-          .split(",")
-          .map((item) => item.trim())
-          .filter(Boolean);
-        if (rawItems.length === 0) {
-          alert("You didn't enter anything.");
-          return;
-        }
-
-        const fixedOffset = 3; // First 3 columns are not subjects
-        const lowerCasedSubjects = subjects.map((s) => s.toLowerCase());
-        const toDeleteIndices = new Set();
-        const subjectNamesToDelete = [];
-
-        rawItems.forEach((item) => {
-          const num = parseInt(item);
-          if (!isNaN(num) && num >= 0 && num < subjects.length) {
-            toDeleteIndices.add(num);
-          } else {
-            const subjectIndex = lowerCasedSubjects.indexOf(item.toLowerCase());
-            if (subjectIndex !== -1) {
-              toDeleteIndices.add(subjectIndex);
-            } else {
-              alert(`Invalid input or subject not found: "${item}"`);
-            }
-          }
-        });
-
-        if (toDeleteIndices.size === 0) {
-          alert("No valid subjects to delete.");
-          return;
-        }
-
-        // Gather subject names from the final indices
-        const sortedIndices = Array.from(toDeleteIndices).sort((a, b) => a - b);
-        sortedIndices.forEach((index) => {
-          subjectNamesToDelete.push(subjects[index]);
-        });
-
-        // Confirmation dialog with subject names
-        const confirmDelete = confirm(
-          `Are you sure you want to delete the following subject(s)?\n\n${subjectNamesToDelete.join(
-            ", "
-          )}`
-        );
-        if (!confirmDelete) return;
-
-        // Delete from end to avoid index shifting
-        sortedIndices
-          .sort((a, b) => b - a)
-          .forEach((index) => {
-            subjects.splice(index, 1);
-
-            // Delete header cell
-            const header = resultTable
-              .closest("table")
-              .querySelector("thead tr");
-            header.deleteCell(index + fixedOffset);
-
-            // Delete subject column from each row
-            const rows = resultTable.rows;
-            Array.from(rows).forEach((row) => {
-              row.deleteCell(index + fixedOffset);
-            });
-          });
-
-        try {
+        deleteIcon.alt = "Delete Row";
+        deleteIcon.style.cursor = "pointer";
+        deleteIcon.onclick = () => {
+          row.remove();
+          updateSerialNumbers(); // Fix serial numbers after delete
           saveData();
-        } catch (err) {
-          console.error("Failed to save data:", err);
-          alert("Subjects deleted but failed to save.");
-        }
-      }
+        };
 
-      // Calculate result
-      calculateButton.addEventListener("click", () => {
-        let totalMarksforresult = document.getElementById("total-marks").value; // Change const to let
-        if (totalMarksforresult === "") {
-          // If totalMarksforresult is empty, prompt the user
-          totalMarksforresult = prompt(
-            "Enter Total Number to calculate % and Grade"
-          );
+        deleteCell.appendChild(deleteIcon);
+      });
 
-          // If the user cancels or enters an invalid value (e.g., non-numeric), handle it
-          if (
-            totalMarksforresult === null ||
-            isNaN(totalMarksforresult) ||
-            totalMarksforresult === ""
-          ) {
-            alert(
-              "Invalid input. Please enter a valid number for total marks."
-            );
-            return; // Stop further execution if invalid input
-          }
-        }
+      updateSerialNumbers(); // Update after all insertions
+      saveData();
+    });
 
-        // Proceed with the calculation if the totalMarksforresult is valid
-        totalMarksforresult = parseFloat(totalMarksforresult); // Convert the input value to a number
+    // Helper to update serial numbers after add/delete
+    function updateSerialNumbers() {
+      Array.from(resultTable.rows).forEach((r, i) => {
+        r.cells[0].innerText = i + 1;
+      });
+    }
 
+    // Add column (subject)
+    addColumnButton.addEventListener("click", () => {
+      const input = prompt(
+        "Enter subject names (comma or new line separated):"
+      );
+      if (!input) return;
+
+      // Split input into an array of trimmed subject names
+      const newSubjects = input
+        .split(/[\n,]+/)
+        .map((name) => name.trim())
+        .filter((name) => name); // Remove empty strings
+
+      // Loop through each subject
+      newSubjects.forEach((subjectName) => {
+        // Check for duplicates (case-insensitive)
+        const isDuplicate = subjects.some(
+          (existing) => existing.toLowerCase() === subjectName.toLowerCase()
+        );
+        if (isDuplicate) return; // Skip if already exists
+
+        const newSubjectIndex = subjects.length;
+        subjects.push(subjectName);
+
+        // Insert header
+        const header = resultTable.closest("table").querySelector("thead tr");
+        const newHeaderCell = document.createElement("th");
+        newHeaderCell.innerText = subjectName;
+        header.insertBefore(
+          newHeaderCell,
+          header.children[newSubjectIndex + 3] // +3 for S.No, Name, Father Name
+        );
+
+        // Insert new column for each student row
         const rows = resultTable.rows;
         Array.from(rows).forEach((row) => {
-          const cells = row.cells;
-          if (cells.length > 8) {
-            // Skip header row
-            let totalMarks = 0;
-            for (let i = 3; i < subjects.length + 3; i++) {
-              const marks = cells[i].getElementsByTagName("input")[0].value;
-              if (marks !== "") {
-                totalMarks += parseFloat(marks); // Add up the marks
-              }
-            }
+          const cell = row.insertCell(newSubjectIndex + 3);
+          const marksInput = document.createElement("input");
+          marksInput.type = "number";
+          marksInput.placeholder = subjectName;
+          cell.appendChild(marksInput);
 
-            const percentage = (totalMarks / totalMarksforresult) * 100; // Calculate percentage
-            const grade = getGrade(percentage); // Get grade based on percentage
-
-            // Update the table cells with total marks, percentage, and grade
-            cells[subjects.length + 3].innerText = totalMarks;
-            cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
-            cells[subjects.length + 5].innerText = grade;
-          }
+          const nameInput = row.cells[1]?.querySelector("input");
+          marksInput.title = nameInput
+            ? `${nameInput.value} - ${subjectName}`
+            : subjectName;
         });
-
-        sortTableByTotalMarks(); // Sort the table after calculation
-        saveData(); // Save the data
       });
 
-      const generateResultCardsButton = document.getElementById(
-        "generate-result-cards-btn"
+      // Save updated state
+      saveData();
+    });
+
+    function deleteColumn() {
+      // Display all subjects with their indices for easy selection
+      let subjectList = "";
+      subjects.forEach((subject, index) => {
+        subjectList += `${index}: ${subject}\n`;
+      });
+
+      const input = prompt(
+        `Subjects with indices:\n${subjectList}\n\nEnter the index numbers or subject names to delete (comma-separated):`
       );
 
-      generateResultCardsButton.addEventListener("click", () => {
-        window.location.reload();
-        const students = Array.from(resultTable.rows)
-          .map((row) => {
-            const cells = row.cells;
-            if (cells.length < 8) return null; // Skip rows without valid data
+      if (input === null) return; // User canceled prompt
 
-            const position = cells[0].innerText;
-            console.log(position); // for debugging
-            const name = cells[1].querySelector("input").value;
-            const fatherName = cells[2].querySelector("input").value;
-            const marks = Array.from(cells)
-              .slice(3, subjects.length + 3)
-              .map((cell) => cell.querySelector("input").value || 0);
-            const totalMarks = cells[subjects.length + 3].innerText || 0;
-            const percentage = cells[subjects.length + 4].innerText || "0%";
-            const grade = cells[subjects.length + 5].innerText || "N/A";
+      const rawItems = input
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+      if (rawItems.length === 0) {
+        alert("You didn't enter anything.");
+        return;
+      }
 
-            return {
-              position,
-              name,
-              fatherName,
-              marks,
-              totalMarks,
-              percentage,
-              grade,
-            };
-          })
-          .filter((student) => student !== null);
+      const fixedOffset = 3; // First 3 columns are not subjects
+      const lowerCasedSubjects = subjects.map((s) => s.toLowerCase());
+      const toDeleteIndices = new Set();
+      const subjectNamesToDelete = [];
 
-        if (students.length === 0) {
-          alert("No data available to generate result cards.");
-          return;
+      rawItems.forEach((item) => {
+        const num = parseInt(item);
+        if (!isNaN(num) && num >= 0 && num < subjects.length) {
+          toDeleteIndices.add(num);
+        } else {
+          const subjectIndex = lowerCasedSubjects.indexOf(item.toLowerCase());
+          if (subjectIndex !== -1) {
+            toDeleteIndices.add(subjectIndex);
+          } else {
+            alert(`Invalid input or subject not found: "${item}"`);
+          }
         }
-
-        generateResultCards(students);
       });
 
-      const feedbackByGrade = {
-        "A+": [
-          "Excellent effort, keep up the great work!",
-          "Outstanding performance, you're a role model!",
-          "Superb results! You should be very proud.",
-          "Your hard work is clearly paying off!",
-          "Keep striving for excellence, you're almost there!",
-          "Fantastic job! You're setting a new standard.",
-          "You have mastered the material, keep it up!",
-          "Top-notch performance! Keep the momentum going.",
-          "Excellent understanding and application of concepts!",
-          "You’ve demonstrated exceptional skills and dedication.",
-          "You're truly setting the bar for excellence, amazing work!",
-          "A fantastic display of commitment and intellect, keep soaring!",
-          "Your achievements are remarkable, well done!",
-          "You've gone above and beyond, keep it up!",
-          "Your results are outstanding, continue to push boundaries!",
-        ],
-        A: [
-          "Great job, you're improving every day!",
-          "Very good effort, but there’s still room to grow.",
-          "Your performance is commendable, keep pushing!",
-          "Solid work this term, stay focused!",
-          "You’re making strong progress, keep at it!",
-          "You’ve done really well, continue with this effort!",
-          "Impressive work, continue striving for success.",
-          "Good performance, but there’s potential for more.",
-          "You're on the right track, now keep moving forward.",
-          "Keep up the great work, you're doing well!",
-          "You're showing a lot of promise, keep pushing for that next level!",
-          "You're steadily improving—keep that momentum going!",
-          "Your efforts are paying off, great progress!",
-          "You're demonstrating a solid understanding, now aim for perfection!",
-          "Your work is impressive, just fine-tune a few areas for excellence.",
-        ],
-        B: [
-          "Good effort, but there's still room for more growth.",
-          "You’ve done well, now push for better results!",
-          "Nice work, but you need to focus more on weak areas.",
-          "Good, but there's potential to do even better.",
-          "Your effort is visible, aim for more consistency.",
-          "You're improving, but stay more focused in class.",
-          "Well done, but I know you can do even better!",
-          "Great start, now let's focus on strengthening the areas you find challenging.",
-          "Good progress, but you need to improve your study habits.",
-          "You’ve made progress, keep up the hard work!",
-          "Solid effort, but it's time to aim for higher consistency.",
-          "You're almost there! Focus on refining the details.",
-          "You're making steady progress, now take it to the next level.",
-          "Consistency will take your performance to new heights—keep working!",
-          "You have good potential, focus on improving weak spots for better results.",
-        ],
-        C: [
-          "Satisfactory effort, but there’s much room for improvement.",
-          "Keep working, but focus on areas you find difficult.",
-          "You’ve made progress, but focus more on weak spots.",
-          "You did okay, but a little more effort will go a long way.",
-          "Keep at it! Review the challenging topics.",
-          "You can do better with more focus and effort.",
-          "You're on the right track, but you need to study more consistently.",
-          "You’ve shown some improvement, but you can do more.",
-          "Good attempt, but please work on understanding the material better.",
-          "Decent effort, but we need to improve the quality of your work.",
-          "You’re showing progress, now let's aim for greater results!",
-          "There’s room for growth, try to sharpen your focus!",
-          "Consistency and more practice will yield better results.",
-          "You’re capable of more—let’s focus on pushing past obstacles.",
-          "You can achieve more with a stronger study routine and persistence.",
-        ],
-        D: [
-          "Needs improvement in several areas.",
-          "You’ve made some progress, but you need to work harder.",
-          "You need to spend more time on your studies.",
-          "Focus more on understanding the concepts.",
-          "More effort is required to improve your performance.",
-          "Try to seek help in subjects you're struggling with.",
-          "You can do better with consistent effort and attention.",
-          "Focus on the basics and improve your weak areas.",
-          "You’ve shown some potential, but it needs more work.",
-          "Please put in more effort and stay more focused.",
-          "You're capable of improvement, but more consistent effort is needed.",
-          "Consider seeking extra help for areas that are unclear.",
-          "Focus on one topic at a time to boost your understanding.",
-          "Your progress has been slow, but you're not far from improvement.",
-          "With more effort, you can turn this around and show great results!",
-        ],
-        F: [
-          "Failed, please put in more effort and seek help if needed.",
-          "It’s time to start working harder, focus on your studies.",
-          "You need to dedicate more time and effort into your work.",
-          "Failed, but you have the potential to do better.",
-          "This result is not acceptable; let's work together to improve.",
-          "You need to work harder and address the areas you're struggling with.",
-          "Don’t give up, but commit more time to your studies.",
-          "You must improve your approach to studying.",
-          "Failure is not the end, but a starting point to work harder.",
-          "Seek help, revise thoroughly, and make sure to give your best effort.",
-          "You are capable of improvement, but it’s time to make a serious change.",
-          "It's time to revisit your study methods and dedicate yourself fully.",
-          "Failure is temporary, but consistent effort will bring success.",
-          "Let’s break down the areas you struggle with and make a plan for improvement.",
-          "This is a setback, but with hard work, success is still within reach.",
-        ],
-      };
-
-      // Helper function to capitalize the first letter of each word
-      function capitalizeWords(str) {
-        return str
-          .toLowerCase()
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
+      if (toDeleteIndices.size === 0) {
+        alert("No valid subjects to delete.");
+        return;
       }
 
-      function generateResultCards(students) {
-        const schoolName = capitalizeWords(
-          prompt("Enter the School Name:") ||
-            "_________________________________________"
-        );
-        const className = capitalizeWords(
-          prompt("Enter the Class:") || "__________"
-        );
-        const term = capitalizeWords(
-          prompt("Enter the Term (e.g., 1st Term, 2nd Term):") || "__________"
+      // Gather subject names from the final indices
+      const sortedIndices = Array.from(toDeleteIndices).sort((a, b) => a - b);
+      sortedIndices.forEach((index) => {
+        subjectNamesToDelete.push(subjects[index]);
+      });
+
+      // Confirmation dialog with subject names
+      const confirmDelete = confirm(
+        `Are you sure you want to delete the following subject(s)?\n\n${subjectNamesToDelete.join(
+          ", "
+        )}`
+      );
+      if (!confirmDelete) return;
+
+      // Delete from end to avoid index shifting
+      sortedIndices
+        .sort((a, b) => b - a)
+        .forEach((index) => {
+          subjects.splice(index, 1);
+
+          // Delete header cell
+          const header = resultTable
+            .closest("table")
+            .querySelector("thead tr");
+          header.deleteCell(index + fixedOffset);
+
+          // Delete subject column from each row
+          const rows = resultTable.rows;
+          Array.from(rows).forEach((row) => {
+            row.deleteCell(index + fixedOffset);
+          });
+        });
+
+      try {
+        saveData();
+      } catch (err) {
+        console.error("Failed to save data:", err);
+        alert("Subjects deleted but failed to save.");
+      }
+    }
+
+    // Calculate result
+    calculateButton.addEventListener("click", () => {
+      let totalMarksforresult = document.getElementById("total-marks").value; // Change const to let
+      if (totalMarksforresult === "") {
+        // If totalMarksforresult is empty, prompt the user
+        totalMarksforresult = prompt(
+          "Enter Total Number to calculate % and Grade"
         );
 
-        // Create jsPDF instance
-        const { jsPDF } = window.jspdf; // Ensure jsPDF is correctly accessed
-        const doc = new jsPDF();
+        // If the user cancels or enters an invalid value (e.g., non-numeric), handle it
+        if (
+          totalMarksforresult === null ||
+          isNaN(totalMarksforresult) ||
+          totalMarksforresult === ""
+        ) {
+          alert(
+            "Invalid input. Please enter a valid number for total marks."
+          );
+          return; // Stop further execution if invalid input
+        }
+      }
 
-        let count = 0;
+      // Proceed with the calculation if the totalMarksforresult is valid
+      totalMarksforresult = parseFloat(totalMarksforresult); // Convert the input value to a number
 
-        // Loop through each student and generate a page
-        students.forEach((student, index) => {
-          if (index > 0) {
-            doc.addPage(); // Add a new page for each student
+      const rows = resultTable.rows;
+      Array.from(rows).forEach((row) => {
+        const cells = row.cells;
+        if (cells.length > 8) {
+          // Skip header row
+          let totalMarks = 0;
+          for (let i = 3; i < subjects.length + 3; i++) {
+            const marks = cells[i].getElementsByTagName("input")[0].value;
+            if (marks !== "") {
+              totalMarks += parseFloat(marks); // Add up the marks
+            }
           }
-          count++;
 
-          // Draw a border around the page
-          doc.setDrawColor("#5A6C57"); // Black border color
-          doc.setLineWidth(1); // Border thickness
-          doc.rect(10, 10, 190, 277); // x, y, width, height (adjust as needed)
+          const percentage = (totalMarks / totalMarksforresult) * 100; // Calculate percentage
+          const grade = getGrade(percentage); // Get grade based on percentage
 
-          // Add title and student details
-          doc.setFontSize(20);
-          doc.setTextColor("#355F2E");
-          doc.text(schoolName, 105, 23, null, null, "center"); // School name centered
-          doc.setFontSize(14);
-          doc.setTextColor(0, 0, 0);
-          doc.text("Result Report", 105, 35, null, null, "center"); // Title in uppercase
-          doc.setFontSize(12);
-          doc.text(`Name: ${capitalizeWords(student.name)}`, 20, 60); // Student name with capitalization
-          doc.text(
-            `Father's Name: ${capitalizeWords(student.fatherName)}`,
-            85 + student.name.length,
-            60
-          ); // Father's name with capitalization
-          doc.setFontSize(11);
-          doc.text(`Class: ${className}`, 20, 75); // Class with capitalization
-          doc.text(`Term: ${term}`, 66, 75); // Term with capitalization
-          doc.text(`Percentage: ${student.percentage}`, 108, 75);
-          doc.text(`Grade: ${student.grade.toUpperCase()}`, 145, 75); // Grade in uppercase
-          doc.text(`Position: ${student.position}`, 168, 75); // Grade in uppercase
+          // Update the table cells with total marks, percentage, and grade
+          cells[subjects.length + 3].innerText = totalMarks;
+          cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
+          cells[subjects.length + 5].innerText = grade;
+        }
+      });
 
-          // Add table for marks
-          const tableData = student.marks.map((mark, index) => [
-            capitalizeWords(subjects[index]), // Subject with capitalization
-            mark,
-            "",
-          ]);
+      sortTableByTotalMarks(); // Sort the table after calculation
+      saveData(); // Save the data
+    });
 
-          // Calculate the total marks
-          const totalMarks = student.totalMarks;
+    const generateResultCardsButton = document.getElementById(
+      "generate-result-cards-btn"
+    );
 
-          // Add the total marks row
-          tableData.push(["Total Marks", totalMarks, ""]);
+    generateResultCardsButton.addEventListener("click", () => {
+      window.location.reload();
+      const students = Array.from(resultTable.rows)
+        .map((row) => {
+          const cells = row.cells;
+          if (cells.length < 8) return null; // Skip rows without valid data
 
-          doc.autoTable({
-            startY: 90,
-            head: [["Subject", "Marks", "Comments"]],
-            body: tableData,
-            theme: "grid",
-            styles: { fontSize: 10, cellPadding: 2, halign: "center" },
-          });
+          const position = cells[0].innerText;
+          console.log(position); // for debugging
+          const name = cells[1].querySelector("input").value;
+          const fatherName = cells[2].querySelector("input").value;
+          const marks = Array.from(cells)
+            .slice(3, subjects.length + 3)
+            .map((cell) => cell.querySelector("input").value || 0);
+          const totalMarks = cells[subjects.length + 3].innerText || 0;
+          const percentage = cells[subjects.length + 4].innerText || "0%";
+          const grade = cells[subjects.length + 5].innerText || "N/A";
 
-          // Add feedback text box
-          doc.text("Feedback:", 20, doc.lastAutoTable.finalY + 10); // Feedback with capitalization
-          doc.rect(15, doc.lastAutoTable.finalY + 15, 180, 40); // Rect for feedback area
+          return {
+            position,
+            name,
+            fatherName,
+            marks,
+            totalMarks,
+            percentage,
+            grade,
+          };
+        })
+        .filter((student) => student !== null);
 
-          // Randomly select feedback based on the student's grade
-          const gradeFeedback = feedbackByGrade[student.grade] || [
-            "No feedback available.",
-          ]; // Feedback with capitalization
-          const randomFeedback =
-            gradeFeedback[Math.floor(Math.random() * gradeFeedback.length)];
+      if (students.length === 0) {
+        alert("No data available to generate result cards.");
+        return;
+      }
 
-          doc.setFontSize(10);
-          doc.text(randomFeedback, 20, doc.lastAutoTable.finalY + 25);
+      generateResultCards(students);
+    });
 
-          // Add grade criteria at the bottom of the page
-          doc.setFontSize(10);
-          doc.text("Grade Criteria Used:", 20, doc.lastAutoTable.finalY + 65); // Grade criteria with capitalization
-          doc.text(
-            "A+: 90-100%,     A: 80-89%,     B: 70-79%,     C: 60-69%,     D: 50-59%,     F: Below 50%",
-            20,
-            doc.lastAutoTable.finalY + 75
-          );
-          const currentDate = new Date();
-          const formattedDate = currentDate.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-          doc.setFontSize(8);
-          doc.text(
-            `Dated: ${formattedDate}`,
-            37,
-            doc.lastAutoTable.finalY + 105,
-            null,
-            null,
-            "center"
-          );
+    const feedbackByGrade = {
+      "A+": [
+        "Excellent effort, keep up the great work!",
+        "Outstanding performance, you're a role model!",
+        "Superb results! You should be very proud.",
+        "Your hard work is clearly paying off!",
+        "Keep striving for excellence, you're almost there!",
+        "Fantastic job! You're setting a new standard.",
+        "You have mastered the material, keep it up!",
+        "Top-notch performance! Keep the momentum going.",
+        "Excellent understanding and application of concepts!",
+        "You’ve demonstrated exceptional skills and dedication.",
+        "You're truly setting the bar for excellence, amazing work!",
+        "A fantastic display of commitment and intellect, keep soaring!",
+        "Your achievements are remarkable, well done!",
+        "You've gone above and beyond, keep it up!",
+        "Your results are outstanding, continue to push boundaries!",
+      ],
+      A: [
+        "Great job, you're improving every day!",
+        "Very good effort, but there’s still room to grow.",
+        "Your performance is commendable, keep pushing!",
+        "Solid work this term, stay focused!",
+        "You’re making strong progress, keep at it!",
+        "You’ve done really well, continue with this effort!",
+        "Impressive work, continue striving for success.",
+        "Good performance, but there’s potential for more.",
+        "You're on the right track, now keep moving forward.",
+        "Keep up the great work, you're doing well!",
+        "You're showing a lot of promise, keep pushing for that next level!",
+        "You're steadily improving—keep that momentum going!",
+        "Your efforts are paying off, great progress!",
+        "You're demonstrating a solid understanding, now aim for perfection!",
+        "Your work is impressive, just fine-tune a few areas for excellence.",
+      ],
+      B: [
+        "Good effort, but there's still room for more growth.",
+        "You’ve done well, now push for better results!",
+        "Nice work, but you need to focus more on weak areas.",
+        "Good, but there's potential to do even better.",
+        "Your effort is visible, aim for more consistency.",
+        "You're improving, but stay more focused in class.",
+        "Well done, but I know you can do even better!",
+        "Great start, now let's focus on strengthening the areas you find challenging.",
+        "Good progress, but you need to improve your study habits.",
+        "You’ve made progress, keep up the hard work!",
+        "Solid effort, but it's time to aim for higher consistency.",
+        "You're almost there! Focus on refining the details.",
+        "You're making steady progress, now take it to the next level.",
+        "Consistency will take your performance to new heights—keep working!",
+        "You have good potential, focus on improving weak spots for better results.",
+      ],
+      C: [
+        "Satisfactory effort, but there’s much room for improvement.",
+        "Keep working, but focus on areas you find difficult.",
+        "You’ve made progress, but focus more on weak spots.",
+        "You did okay, but a little more effort will go a long way.",
+        "Keep at it! Review the challenging topics.",
+        "You can do better with more focus and effort.",
+        "You're on the right track, but you need to study more consistently.",
+        "You’ve shown some improvement, but you can do more.",
+        "Good attempt, but please work on understanding the material better.",
+        "Decent effort, but we need to improve the quality of your work.",
+        "You’re showing progress, now let's aim for greater results!",
+        "There’s room for growth, try to sharpen your focus!",
+        "Consistency and more practice will yield better results.",
+        "You’re capable of more—let’s focus on pushing past obstacles.",
+        "You can achieve more with a stronger study routine and persistence.",
+      ],
+      D: [
+        "Needs improvement in several areas.",
+        "You’ve made some progress, but you need to work harder.",
+        "You need to spend more time on your studies.",
+        "Focus more on understanding the concepts.",
+        "More effort is required to improve your performance.",
+        "Try to seek help in subjects you're struggling with.",
+        "You can do better with consistent effort and attention.",
+        "Focus on the basics and improve your weak areas.",
+        "You’ve shown some potential, but it needs more work.",
+        "Please put in more effort and stay more focused.",
+        "You're capable of improvement, but more consistent effort is needed.",
+        "Consider seeking extra help for areas that are unclear.",
+        "Focus on one topic at a time to boost your understanding.",
+        "Your progress has been slow, but you're not far from improvement.",
+        "With more effort, you can turn this around and show great results!",
+      ],
+      F: [
+        "Failed, please put in more effort and seek help if needed.",
+        "It’s time to start working harder, focus on your studies.",
+        "You need to dedicate more time and effort into your work.",
+        "Failed, but you have the potential to do better.",
+        "This result is not acceptable; let's work together to improve.",
+        "You need to work harder and address the areas you're struggling with.",
+        "Don’t give up, but commit more time to your studies.",
+        "You must improve your approach to studying.",
+        "Failure is not the end, but a starting point to work harder.",
+        "Seek help, revise thoroughly, and make sure to give your best effort.",
+        "You are capable of improvement, but it’s time to make a serious change.",
+        "It's time to revisit your study methods and dedicate yourself fully.",
+        "Failure is temporary, but consistent effort will bring success.",
+        "Let’s break down the areas you struggle with and make a plan for improvement.",
+        "This is a setback, but with hard work, success is still within reach.",
+      ],
+    };
+
+    // Helper function to capitalize the first letter of each word
+    function capitalizeWords(str) {
+      return str
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+
+    function generateResultCards(students) {
+      const schoolName = capitalizeWords(
+        prompt("Enter the School Name:") ||
+        "_________________________________________"
+      );
+      const className = capitalizeWords(
+        prompt("Enter the Class:") || "__________"
+      );
+      const term = capitalizeWords(
+        prompt("Enter the Term (e.g., 1st Term, 2nd Term):") || "__________"
+      );
+
+      // Create jsPDF instance
+      const { jsPDF } = window.jspdf; // Ensure jsPDF is correctly accessed
+      const doc = new jsPDF();
+
+      let count = 0;
+
+      // Loop through each student and generate a page
+      students.forEach((student, index) => {
+        if (index > 0) {
+          doc.addPage(); // Add a new page for each student
+        }
+        count++;
+
+        // Draw a border around the page
+        doc.setDrawColor("#5A6C57"); // Black border color
+        doc.setLineWidth(1); // Border thickness
+        doc.rect(10, 10, 190, 277); // x, y, width, height (adjust as needed)
+
+        // Add title and student details
+        doc.setFontSize(20);
+        doc.setTextColor("#355F2E");
+        doc.text(schoolName, 105, 23, null, null, "center"); // School name centered
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Result Report", 105, 35, null, null, "center"); // Title in uppercase
+        doc.setFontSize(12);
+        doc.text(`Name: ${capitalizeWords(student.name)}`, 20, 60); // Student name with capitalization
+        doc.text(
+          `Father's Name: ${capitalizeWords(student.fatherName)}`,
+          85 + student.name.length,
+          60
+        ); // Father's name with capitalization
+        doc.setFontSize(11);
+        doc.text(`Class: ${className}`, 20, 75); // Class with capitalization
+        doc.text(`Term: ${term}`, 66, 75); // Term with capitalization
+        doc.text(`Percentage: ${student.percentage}`, 108, 75);
+        doc.text(`Grade: ${student.grade.toUpperCase()}`, 145, 75); // Grade in uppercase
+        doc.text(`Position: ${student.position}`, 168, 75); // Grade in uppercase
+
+        // Add table for marks
+        const tableData = student.marks.map((mark, index) => [
+          capitalizeWords(subjects[index]), // Subject with capitalization
+          mark,
+          "",
+        ]);
+
+        // Calculate the total marks
+        const totalMarks = student.totalMarks;
+
+        // Add the total marks row
+        tableData.push(["Total Marks", totalMarks, ""]);
+
+        doc.autoTable({
+          startY: 90,
+          head: [["Subject", "Marks", "Comments"]],
+          body: tableData,
+          theme: "grid",
+          styles: { fontSize: 10, cellPadding: 2, halign: "center" },
         });
 
-        // Save the generated PDF with the name "result_cards.pdf"
-        doc.save(`${count} result cards for class ${className} - ${term}.pdf`);
-      }
+        // Add feedback text box
+        doc.text("Feedback:", 20, doc.lastAutoTable.finalY + 10); // Feedback with capitalization
+        doc.rect(15, doc.lastAutoTable.finalY + 15, 180, 40); // Rect for feedback area
 
-      function sortTableByTotalMarks() {
-        const rows = Array.from(resultTable.rows);
-        rows.sort((rowA, rowB) => {
-          const totalA = parseFloat(rowA.cells[subjects.length + 3].innerText);
-          const totalB = parseFloat(rowB.cells[subjects.length + 3].innerText);
-          return totalB - totalA; // Sort descending
+        // Randomly select feedback based on the student's grade
+        const gradeFeedback = feedbackByGrade[student.grade] || [
+          "No feedback available.",
+        ]; // Feedback with capitalization
+        const randomFeedback =
+          gradeFeedback[Math.floor(Math.random() * gradeFeedback.length)];
+
+        doc.setFontSize(10);
+        doc.text(randomFeedback, 20, doc.lastAutoTable.finalY + 25);
+
+        // Add grade criteria at the bottom of the page
+        doc.setFontSize(10);
+        doc.text("Grade Criteria Used:", 20, doc.lastAutoTable.finalY + 65); // Grade criteria with capitalization
+        doc.text(
+          "A+: 90-100%,     A: 80-89%,     B: 70-79%,     C: 60-69%,     D: 50-59%,     F: Below 50%",
+          20,
+          doc.lastAutoTable.finalY + 75
+        );
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         });
-        rows.forEach((row) => resultTable.appendChild(row)); // Reorder table rows
-      }
+        doc.setFontSize(8);
+        doc.text(
+          `Dated: ${formattedDate}`,
+          37,
+          doc.lastAutoTable.finalY + 105,
+          null,
+          null,
+          "center"
+        );
+      });
 
-      // Get grade based on percentage
-      function getGrade(percentage) {
-        if (percentage >= 90) return "A+";
-        if (percentage >= 80) return "A";
-        if (percentage >= 70) return "B";
-        if (percentage >= 60) return "C";
-        if (percentage >= 50) return "D";
-        return "F";
-      }
+      // Save the generated PDF with the name "result_cards.pdf"
+      doc.save(`${count} result cards for class ${className} - ${term}.pdf`);
+    }
 
-      // Render table from stored data
-      function renderTable(students) {
-        resultTable.innerHTML = ""; // Clear current table content
+    function sortTableByTotalMarks() {
+      const rows = Array.from(resultTable.rows);
+      rows.sort((rowA, rowB) => {
+        const totalA = parseFloat(rowA.cells[subjects.length + 3].innerText);
+        const totalB = parseFloat(rowB.cells[subjects.length + 3].innerText);
+        return totalB - totalA; // Sort descending
+      });
+      rows.forEach((row) => resultTable.appendChild(row)); // Reorder table rows
+    }
 
-        students.forEach((student, index) => {
-          const row = resultTable.insertRow();
-          row.insertCell(0).innerText = index + 1; // Serial
+    // Get grade based on percentage
+    function getGrade(percentage) {
+      if (percentage >= 90) return "A+";
+      if (percentage >= 80) return "A";
+      if (percentage >= 70) return "B";
+      if (percentage >= 60) return "C";
+      if (percentage >= 50) return "D";
+      return "F";
+    }
 
-          // Render Name input
-          const nameCell = row.insertCell(1);
-          const nameInput = document.createElement("input");
-          nameInput.type = "text";
-          nameInput.placeholder = "Name";
-          nameInput.value = student.name;
-          nameInput.onchange = saveData; // Use function reference, not immediate invocation
-          nameCell.appendChild(nameInput);
+    // Render table from stored data
+    function renderTable(students) {
+      resultTable.innerHTML = ""; // Clear current table content
 
-          // Render Father's Name input
-          const fatherNameCell = row.insertCell(2);
-          const fatherNameInput = document.createElement("input");
-          fatherNameInput.type = "text";
-          fatherNameInput.placeholder = "Father's Name";
-          fatherNameInput.value = student.fatherName;
-          fatherNameInput.onchange = saveData; // Use function reference, not immediate invocation
-          fatherNameCell.appendChild(fatherNameInput);
+      students.forEach((student, index) => {
+        const row = resultTable.insertRow();
+        row.insertCell(0).innerText = index + 1; // Serial
 
-          // Render marks inputs dynamically
-          student.marks.forEach((mark, subjectIndex) => {
-            const marksCell = row.insertCell(subjectIndex + 3);
-            const marksInput = document.createElement("input");
-            marksInput.type = "number";
-            marksInput.value = mark;
-            marksInput.placeholder = subjects[subjectIndex];
-            marksInput.onchange = saveData; // Use function reference, not immediate invocation
+        // Render Name input
+        const nameCell = row.insertCell(1);
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Name";
+        nameInput.value = student.name;
+        nameInput.onchange = saveData; // Use function reference, not immediate invocation
+        nameCell.appendChild(nameInput);
 
-            // Set tooltip for mark input: Display student name and subject name
-            marksInput.title = `${student.name} - ${subjects[subjectIndex]}`;
+        // Render Father's Name input
+        const fatherNameCell = row.insertCell(2);
+        const fatherNameInput = document.createElement("input");
+        fatherNameInput.type = "text";
+        fatherNameInput.placeholder = "Father's Name";
+        fatherNameInput.value = student.fatherName;
+        fatherNameInput.onchange = saveData; // Use function reference, not immediate invocation
+        fatherNameCell.appendChild(fatherNameInput);
 
-            marksCell.appendChild(marksInput);
-          });
+        // Render marks inputs dynamically
+        student.marks.forEach((mark, subjectIndex) => {
+          const marksCell = row.insertCell(subjectIndex + 3);
+          const marksInput = document.createElement("input");
+          marksInput.type = "number";
+          marksInput.value = mark;
+          marksInput.placeholder = subjects[subjectIndex];
+          marksInput.onchange = saveData; // Use function reference, not immediate invocation
 
-          row.insertCell(subjects.length + 3).innerText = student.totalMarks;
-          row.insertCell(subjects.length + 4).innerText =
-            student.percentage + "%";
-          row.insertCell(subjects.length + 5).innerText = student.grade;
+          // Set tooltip for mark input: Display student name and subject name
+          marksInput.title = `${student.name} - ${subjects[subjectIndex]}`;
 
-          // Add delete icon to the row
-          const deleteCell = row.insertCell(subjects.length + 6);
+          marksCell.appendChild(marksInput);
+        });
 
-          // Create an image element for the delete icon (SVG icon)
-          const deleteIcon = document.createElement("img");
-          deleteIcon.src =
-            "data:image/svg+xml;charset=UTF-8," +
-            encodeURIComponent(`
+        row.insertCell(subjects.length + 3).innerText = student.totalMarks;
+        row.insertCell(subjects.length + 4).innerText =
+          student.percentage + "%";
+        row.insertCell(subjects.length + 5).innerText = student.grade;
+
+        // Add delete icon to the row
+        const deleteCell = row.insertCell(subjects.length + 6);
+
+        // Create an image element for the delete icon (SVG icon)
+        const deleteIcon = document.createElement("img");
+        deleteIcon.src =
+          "data:image/svg+xml;charset=UTF-8," +
+          encodeURIComponent(`
                           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
                             <linearGradient id="nyvBozV7VK1PdF3LtMmOna_pre7LivdxKxJ_gr1" x1="18.405" x2="33.814" y1="10.91" y2="43.484" gradientUnits="userSpaceOnUse">
                               <stop offset="0" stop-color="#32bdef"></stop>
@@ -1208,312 +1225,312 @@
                             <path fill="#007ad9" d="M7,9.886L7,9.886C7,9.363,7.358,8.912,7.868,8.8C10.173,8.293,16.763,7,24,7s13.827,1.293,16.132,1.8	C40.642,8.912,41,9.363,41,9.886v0C41,10.501,40.501,11,39.886,11H8.114C7.499,11,7,10.501,7,9.886z"></path>
                           </svg>`); // Encode SVG as data URI
 
-          deleteIcon.alt = "Delete Row";
-          deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
-          // Onclick handler for delete icon
-          deleteIcon.onclick = () => {
-            row.remove(); // Remove the row
-            saveData(); // Save after deletion
-          };
+        deleteIcon.alt = "Delete Row";
+        deleteIcon.style.cursor = "pointer"; // Ensure the cursor is a pointer when hovering
+        // Onclick handler for delete icon
+        deleteIcon.onclick = () => {
+          row.remove(); // Remove the row
+          saveData(); // Save after deletion
+        };
 
-          // Append the delete icon to the delete cell
-          deleteCell.appendChild(deleteIcon);
-        });
-      }
+        // Append the delete icon to the delete cell
+        deleteCell.appendChild(deleteIcon);
+      });
+    }
 
-      // Save data to localStorage
-      function saveData() {
-        const students = Array.from(resultTable.rows)
-          .map((row) => {
-            const cells = row.cells;
-            if (cells.length > 8) {
-              // Skip header row
-              const name = cells[1].getElementsByTagName("input")[0].value;
-              const fatherName =
-                cells[2].getElementsByTagName("input")[0].value;
-              const marks = [];
-              for (let i = 3; i < subjects.length + 3; i++) {
-                marks.push(cells[i].getElementsByTagName("input")[0].value);
-              }
-              const totalMarks = parseFloat(
-                cells[subjects.length + 3].innerText
-              );
-              const percentage = parseFloat(
-                cells[subjects.length + 4].innerText
-              );
-              const grade = cells[subjects.length + 5].innerText;
-              return { name, fatherName, marks, totalMarks, percentage, grade };
+    // Save data to localStorage
+    function saveData() {
+      const students = Array.from(resultTable.rows)
+        .map((row) => {
+          const cells = row.cells;
+          if (cells.length > 8) {
+            // Skip header row
+            const name = cells[1].getElementsByTagName("input")[0].value;
+            const fatherName =
+              cells[2].getElementsByTagName("input")[0].value;
+            const marks = [];
+            for (let i = 3; i < subjects.length + 3; i++) {
+              marks.push(cells[i].getElementsByTagName("input")[0].value);
             }
-          })
-          .filter(Boolean); // Filter out undefined rows
-
-        const data = { students, subjects };
-        localStorage.setItem("results", JSON.stringify(data));
-      }
-
-      // Generate table header
-      function generateTableHeader() {
-        const headerRow = resultTable
-          .closest("table")
-          .querySelector("thead tr");
-        headerRow.innerHTML = ""; // Clear header
-        headerRow.insertCell(0).innerText = "S. No";
-        headerRow.insertCell(1).innerText = "Name";
-        headerRow.insertCell(2).innerText = "Father's Name";
-
-        subjects.forEach((subject) => {
-          const cell = document.createElement("th");
-          cell.innerText = subject;
-          headerRow.appendChild(cell);
-        });
-
-        headerRow.insertCell().innerText = "T. obt Marks";
-        headerRow.insertCell().innerText = "Percentage";
-        headerRow.insertCell().innerText = "Grade";
-        headerRow.insertCell().innerText = "Action";
-      }
-
-      // Load data on page load
-      window.onload = () => {
-        const storedData = JSON.parse(localStorage.getItem("results"));
-        if (storedData) {
-          subjects = storedData.subjects || ["English", "English B/R", "Urdu"];
-          generateTableHeader();
-          renderTable(storedData.students);
-        } else {
-          generateTableHeader();
-        }
-      };
-
-      function deleteData() {
-        const confirmDelete = confirm(
-          "Are you sure you want to delete all data? This action cannot be undone."
-        );
-
-        if (confirmDelete) {
-          // Clear the table body
-          resultTable.innerHTML = "";
-
-          // Reset subjects array to default subjects if you want to reset the subjects as well
-          subjects = ["English", "English B/R", "Urdu"]; // Default subjects
-
-          // Clear data from localStorage
-          localStorage.removeItem("results");
-
-          // Generate the table header again after clearing
-          generateTableHeader();
-        }
-      }
-      // Optional: Delete all data button
-
-      function getMainHeading() {
-        let mainHeading = prompt(
-          "Enter the main heading for the PDF:",
-          "Result Report"
-        );
-
-        // If input is empty or null, set default value
-        if (!mainHeading || mainHeading.trim() === "") {
-          mainHeading = "Result Report";
-        }
-
-        let isConfirmed = false;
-
-        // Loop to allow the user to go back and edit the heading
-        while (!isConfirmed) {
-          isConfirmed = confirm(
-            `You entered: "${mainHeading}". Do you want to proceed with this heading?`
-          );
-
-          if (!isConfirmed) {
-            // Allow user to edit the heading
-            mainHeading = prompt(
-              "Edit the main heading for the PDF:",
-              mainHeading
+            const totalMarks = parseFloat(
+              cells[subjects.length + 3].innerText
             );
-            if (!mainHeading || mainHeading.trim() === "") {
-              mainHeading = "Result Report"; // Reset to default if input is empty or null
-            }
+            const percentage = parseFloat(
+              cells[subjects.length + 4].innerText
+            );
+            const grade = cells[subjects.length + 5].innerText;
+            return { name, fatherName, marks, totalMarks, percentage, grade };
+          }
+        })
+        .filter(Boolean); // Filter out undefined rows
+
+      const data = { students, subjects };
+      localStorage.setItem("results", JSON.stringify(data));
+    }
+
+    // Generate table header
+    function generateTableHeader() {
+      const headerRow = resultTable
+        .closest("table")
+        .querySelector("thead tr");
+      headerRow.innerHTML = ""; // Clear header
+      headerRow.insertCell(0).innerText = "S. No";
+      headerRow.insertCell(1).innerText = "Name";
+      headerRow.insertCell(2).innerText = "Father's Name";
+
+      subjects.forEach((subject) => {
+        const cell = document.createElement("th");
+        cell.innerText = subject;
+        headerRow.appendChild(cell);
+      });
+
+      headerRow.insertCell().innerText = "T. obt Marks";
+      headerRow.insertCell().innerText = "Percentage";
+      headerRow.insertCell().innerText = "Grade";
+      headerRow.insertCell().innerText = "Action";
+    }
+
+    // Load data on page load
+    window.onload = () => {
+      const storedData = JSON.parse(localStorage.getItem("results"));
+      if (storedData) {
+        subjects = storedData.subjects || ["English", "English B/R", "Urdu"];
+        generateTableHeader();
+        renderTable(storedData.students);
+      } else {
+        generateTableHeader();
+      }
+    };
+
+    function deleteData() {
+      const confirmDelete = confirm(
+        "Are you sure you want to delete all data? This action cannot be undone."
+      );
+
+      if (confirmDelete) {
+        // Clear the table body
+        resultTable.innerHTML = "";
+
+        // Reset subjects array to default subjects if you want to reset the subjects as well
+        subjects = ["English", "English B/R", "Urdu"]; // Default subjects
+
+        // Clear data from localStorage
+        localStorage.removeItem("results");
+
+        // Generate the table header again after clearing
+        generateTableHeader();
+      }
+    }
+    // Optional: Delete all data button
+
+    function getMainHeading() {
+      let mainHeading = prompt(
+        "Enter the main heading for the PDF:",
+        "Result Report"
+      );
+
+      // If input is empty or null, set default value
+      if (!mainHeading || mainHeading.trim() === "") {
+        mainHeading = "Result Report";
+      }
+
+      let isConfirmed = false;
+
+      // Loop to allow the user to go back and edit the heading
+      while (!isConfirmed) {
+        isConfirmed = confirm(
+          `You entered: "${mainHeading}". Do you want to proceed with this heading?`
+        );
+
+        if (!isConfirmed) {
+          // Allow user to edit the heading
+          mainHeading = prompt(
+            "Edit the main heading for the PDF:",
+            mainHeading
+          );
+          if (!mainHeading || mainHeading.trim() === "") {
+            mainHeading = "Result Report"; // Reset to default if input is empty or null
           }
         }
-
-        return mainHeading;
       }
 
-      // Check if "Don't show again" flag is set in localStorage
-      if (localStorage.getItem("dontShowAgain") !== "1") {
-        // Show the modal if the flag is not set
-        document.getElementById("warningModal").style.display = "flex";
+      return mainHeading;
+    }
+
+    // Check if "Don't show again" flag is set in localStorage
+    if (localStorage.getItem("dontShowAgain") !== "1") {
+      // Show the modal if the flag is not set
+      document.getElementById("warningModal").style.display = "flex";
+    }
+
+    // Handle the "Don't show again" checkbox
+    document
+      .getElementById("dontShowAgainCheckbox")
+      .addEventListener("change", function () {
+        if (this.checked) {
+          localStorage.setItem("dontShowAgain", "1");
+        } else {
+          localStorage.setItem("dontShowAgain", "0");
+        }
+      });
+
+    // Close the modal when the "Close" button is clicked
+    document
+      .getElementById("closeModalButton")
+      .addEventListener("click", function () {
+        document.getElementById("warningModal").style.display = "none";
+      });
+
+    const downloadPdfButton = document.getElementById("download-pdf-btn");
+
+    // Function to generate PDF
+    downloadPdfButton.addEventListener("click", () => {
+      // Check if there are any rows in the result table
+      if (resultTable.rows.length == 0) {
+        alert("No data is available to download");
+        return; // Prevent PDF download if no data is available
       }
 
-      // Handle the "Don't show again" checkbox
-      document
-        .getElementById("dontShowAgainCheckbox")
-        .addEventListener("change", function () {
-          if (this.checked) {
-            localStorage.setItem("dontShowAgain", "1");
+      const mainHeading = getMainHeading();
+
+      // Calculate total students, pass students, and fail students
+      const rows = Array.from(resultTable.rows);
+      const totalStudents = rows.length;
+      let passStudents = 0;
+      let failStudents = 0;
+
+      rows.forEach((row) => {
+        const gradeCell = row.cells[subjects.length + 5]; // Adjusted index for "Grade"
+        if (gradeCell && gradeCell.innerText !== "") {
+          const grade = gradeCell.innerText;
+          if (grade !== "F") {
+            passStudents++;
           } else {
-            localStorage.setItem("dontShowAgain", "0");
+            failStudents++;
           }
-        });
-
-      // Close the modal when the "Close" button is clicked
-      document
-        .getElementById("closeModalButton")
-        .addEventListener("click", function () {
-          document.getElementById("warningModal").style.display = "none";
-        });
-
-      const downloadPdfButton = document.getElementById("download-pdf-btn");
-
-      // Function to generate PDF
-      downloadPdfButton.addEventListener("click", () => {
-        // Check if there are any rows in the result table
-        if (resultTable.rows.length == 0) {
-          alert("No data is available to download");
-          return; // Prevent PDF download if no data is available
         }
+      });
 
-        const mainHeading = getMainHeading();
+      // Generate PDF in landscape orientation
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: "landscape" }); // Landscape mode
 
-        // Calculate total students, pass students, and fail students
-        const rows = Array.from(resultTable.rows);
-        const totalStudents = rows.length;
-        let passStudents = 0;
-        let failStudents = 0;
+      // Title
+      pdf.setFontSize(16);
+      pdf.text(mainHeading, 140, 15, { align: "center" });
 
-        rows.forEach((row) => {
-          const gradeCell = row.cells[subjects.length + 5]; // Adjusted index for "Grade"
-          if (gradeCell && gradeCell.innerText !== "") {
-            const grade = gradeCell.innerText;
-            if (grade !== "F") {
-              passStudents++;
-            } else {
-              failStudents++;
-            }
-          }
-        });
+      // Statistics
+      pdf.setFontSize(10);
+      pdf.text(`Total Students: ${totalStudents}`, 14, 25);
+      pdf.text(`Pass Students: ${passStudents}`, 55, 25);
+      pdf.text(`Fail Students: ${failStudents}`, 95, 25);
 
-        // Generate PDF in landscape orientation
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: "landscape" }); // Landscape mode
+      // Table Data Preparation
+      const tableHeaders = [
+        "Position",
+        "Name",
+        "Father's Name",
+        ...subjects,
+        "T. obt Marks",
+        "Percentage",
+        "Grade",
+        "Action"
+      ];
 
-        // Title
-        pdf.setFontSize(16);
-        pdf.text(mainHeading, 140, 15, { align: "center" });
+      // Make all table headers uppercase
+      const uppercaseTableHeaders = tableHeaders.map((header) =>
+        header.toUpperCase()
+      );
 
-        // Statistics
-        pdf.setFontSize(10);
-        pdf.text(`Total Students: ${totalStudents}`, 14, 25);
-        pdf.text(`Pass Students: ${passStudents}`, 55, 25);
-        pdf.text(`Fail Students: ${failStudents}`, 95, 25);
-
-        // Table Data Preparation
-        const tableHeaders = [
-          "Position",
-          "Name",
-          "Father's Name",
-          ...subjects,
-          "T. obt Marks",
-          "Percentage",
-          "Grade",
-          "Action"
+      const tableBody = rows.map((row, rowIndex) => {
+        const rowData = [
+          rowIndex + 1, // Position
+          row.cells[1]?.getElementsByTagName("input")[0]?.value || "", // Name
+          row.cells[2]?.getElementsByTagName("input")[0]?.value || "", // Father's Name
         ];
 
-        // Make all table headers uppercase
-        const uppercaseTableHeaders = tableHeaders.map((header) =>
-          header.toUpperCase()
-        );
-
-        const tableBody = rows.map((row, rowIndex) => {
-          const rowData = [
-            rowIndex + 1, // Position
-            row.cells[1]?.getElementsByTagName("input")[0]?.value || "", // Name
-            row.cells[2]?.getElementsByTagName("input")[0]?.value || "", // Father's Name
-          ];
-
-          // Add marks for each subject
-          subjects.forEach((_, index) => {
-            rowData.push(
-              row.cells[index + 3]?.getElementsByTagName("input")[0]?.value ||
-                ""
-            );
-          });
-
-          // Add Total Marks, Percentage, and Grade
+        // Add marks for each subject
+        subjects.forEach((_, index) => {
           rowData.push(
-            row.cells[subjects.length + 3]?.innerText || "", // Total Marks
-            row.cells[subjects.length + 4]?.innerText || "", // Percentage
-            row.cells[subjects.length + 5]?.innerText || "" // Grade
+            row.cells[index + 3]?.getElementsByTagName("input")[0]?.value ||
+            ""
           );
-
-          return rowData;
         });
 
-        // Add Table to PDF using autoTable
-        pdf.autoTable({
-          startY: 35,
-          head: [uppercaseTableHeaders], // Use uppercase headers
-          body: tableBody,
-          theme: "grid",
-          styles: {
-            fontSize: 10,
-            halign: "center", // Center-aligns the text
-          },
-          headStyles: {
-            fillColor: [144, 238, 144],
-            textColor: [80, 80, 80],
-            halign: "center", // Center-aligns header text
-          },
-          alternateRowStyles: {
-            fillColor: [240, 240, 240],
-          },
-          margin: { top: 10, left: 14, right: 14 },
-        });
-
-        // Add teacher's signature line
-        const finalY = pdf.lastAutoTable.finalY || 35;
-        pdf.text("Teacher's Signature: ____________________", 14, finalY + 15);
-
-        // Get today's date for the PDF
-        var options = {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        };
-        var today = new Date();
-        pdf.text(
-          `Dated: ${today.toLocaleDateString("en-US", options)}`,
-          240,
-          finalY + 15
+        // Add Total Marks, Percentage, and Grade
+        rowData.push(
+          row.cells[subjects.length + 3]?.innerText || "", // Total Marks
+          row.cells[subjects.length + 4]?.innerText || "", // Percentage
+          row.cells[subjects.length + 5]?.innerText || "" // Grade
         );
 
-        // Save the PDF
-        pdf.save("Result_Report.pdf");
+        return rowData;
       });
-    </script>
-    <script>
-      const faqs = [
-        {
-          q: "How do I add a new student?",
-          a: `Click the <strong>"+ Student" button</strong> and enter the name of the student and hit enter, it will create a new row for the student you entered.`,
+
+      // Add Table to PDF using autoTable
+      pdf.autoTable({
+        startY: 35,
+        head: [uppercaseTableHeaders], // Use uppercase headers
+        body: tableBody,
+        theme: "grid",
+        styles: {
+          fontSize: 10,
+          halign: "center", // Center-aligns the text
         },
-        {
-          q: "Can I add multiple students at once?",
-          a: `Yes. When prompted, enter more names <strong>"(separated by comma), eg: name1,name2,name3,....."</strong> Each valid name will create a new row with inputs for subject marks. Invalid names (empty or starting with a number) will be skipped.`,
+        headStyles: {
+          fillColor: [144, 238, 144],
+          textColor: [80, 80, 80],
+          halign: "center", // Center-aligns header text
         },
-        {
-          q: "How do I remove a student?",
-          a: `Click the <strong>"trash icon"</strong> at the end of the row to remove that student. Serial numbers will automatically update. if not will update on page reload`,
+        alternateRowStyles: {
+          fillColor: [240, 240, 240],
         },
-        {
-          q: "How do I remove a subject?",
-          a: `Click the <strong>"Delete Subject" button</strong> and enter the name of the subject or its index and hit enter. after confirmation, it will delete the whole column of the entered subject.`,
-        },
-        {
-          q: "Can I delete multiple subjects at once?",
-          a: `Yes. When prompted, you can enter multiple subject names separated by commas, like <strong>"name1, name2, name3"</strong>. Each valid name will create a new row with input fields for subject marks.
+        margin: { top: 10, left: 14, right: 14 },
+      });
+
+      // Add teacher's signature line
+      const finalY = pdf.lastAutoTable.finalY || 35;
+      pdf.text("Teacher's Signature: ____________________", 14, finalY + 15);
+
+      // Get today's date for the PDF
+      var options = {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      };
+      var today = new Date();
+      pdf.text(
+        `Dated: ${today.toLocaleDateString("en-US", options)}`,
+        240,
+        finalY + 15
+      );
+
+      // Save the PDF
+      pdf.save("Result_Report.pdf");
+    });
+  </script>
+  <script>
+    const faqs = [
+      {
+        q: "How do I add a new student?",
+        a: `Click the <strong>"+ Student" button</strong> and enter the name of the student and hit enter, it will create a new row for the student you entered.`,
+      },
+      {
+        q: "Can I add multiple students at once?",
+        a: `Yes. When prompted, enter more names <strong>"(separated by comma), eg: name1,name2,name3,....."</strong> Each valid name will create a new row with inputs for subject marks. Invalid names (empty or starting with a number) will be skipped.`,
+      },
+      {
+        q: "How do I remove a student?",
+        a: `Click the <strong>"trash icon"</strong> at the end of the row to remove that student. Serial numbers will automatically update. if not will update on page reload`,
+      },
+      {
+        q: "How do I remove a subject?",
+        a: `Click the <strong>"Delete Subject" button</strong> and enter the name of the subject or its index and hit enter. after confirmation, it will delete the whole column of the entered subject.`,
+      },
+      {
+        q: "Can I delete multiple subjects at once?",
+        a: `Yes. When prompted, you can enter multiple subject names separated by commas, like <strong>"name1, name2, name3"</strong>. Each valid name will create a new row with input fields for subject marks.
 
 Subject names must not be empty or start with a number — such entries will be skipped automatically.
 
@@ -1525,186 +1542,63 @@ For example:
 </ul>
 
 You can also delete multiple subjects by entering the same combinations — any valid subject name will be removed, and invalid ones will be ignored.`,
-        },
-        {
-          q: "How is the grade calculated?",
-          a: "Grades are assigned based on percentage: A+ for ≥ 90%, A for ≥ 80%, B for ≥ 70%, and so on.",
-        },
-        {
-          q: "Can I download the result card?",
-          a: `Yes! After generating a result, click the <strong>"Generate Result Cards"</strong> button to save it as an pdf file.`,
-        },
-        {
-          q: "How do I reset the Student Table?",
-          a: `Click the <strong>"delete data" button</strong> to clear all data and start fresh table.`,
-        },
-        {
-          q: "Does this save student data?",
-          a: "Yes. Your entries are saved in your browser's local storage, so they’ll still be there if you reload the page. but remember that this data is not saved on the server, so it will be lost if you clear your browser's local storage or switch browsers.",
-        },
-      ];
+      },
+      {
+        q: "How is the grade calculated?",
+        a: "Grades are assigned based on percentage: A+ for ≥ 90%, A for ≥ 80%, B for ≥ 70%, and so on.",
+      },
+      {
+        q: "Can I download the result card?",
+        a: `Yes! After generating a result, click the <strong>"Generate Result Cards"</strong> button to save it as an pdf file.`,
+      },
+      {
+        q: "How do I reset the Student Table?",
+        a: `Click the <strong>"delete data" button</strong> to clear all data and start fresh table.`,
+      },
+      {
+        q: "Does this save student data?",
+        a: "Yes. Your entries are saved in your browser's local storage, so they’ll still be there if you reload the page. but remember that this data is not saved on the server, so it will be lost if you clear your browser's local storage or switch browsers.",
+      },
+    ];
 
-      const faqList = document.getElementById("faqList");
-      const faqSearch = document.getElementById("faqSearch");
+    const faqList = document.getElementById("faqList");
+    const faqSearch = document.getElementById("faqSearch");
 
-      function renderFAQs(filter = "") {
-        const lowerFilter = filter.toLowerCase();
-        faqList.innerHTML = "";
+    function renderFAQs(filter = "") {
+      const lowerFilter = filter.toLowerCase();
+      faqList.innerHTML = "";
 
-        faqs
-          .filter(
-            (f) =>
-              f.q.toLowerCase().includes(lowerFilter) ||
-              f.a.toLowerCase().includes(lowerFilter)
-          )
+      faqs
+        .filter(
+          (f) =>
+            f.q.toLowerCase().includes(lowerFilter) ||
+            f.a.toLowerCase().includes(lowerFilter)
+        )
         .forEach((f) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<strong>Q: ${f.q}</strong><span>A: ${f.a}</span>`;
-            faqList.appendChild(li);
-          });
-      }
-
-      faqSearch.addEventListener("input", (e) => {
-        renderFAQs(e.target.value);
-      });
-
-      renderFAQs(); // initial load
- async function exportResults() {
-  const data = localStorage.getItem("results");
-  if (!data) return alert("⚠️ No data found to export!");
-
-  const choice = confirm("Press OK to share online via link (expires in 7 days), or Cancel to export manually.");
-
-  // ------------------------------
-  // OPTION 1: Online share via tmpfiles.org
-  // ------------------------------
-  if (choice) {
-    try {
-      const blob = new Blob([data], { type: "application/json" });
-      const formData = new FormData();
-      formData.append("file", blob, "results.json");
-
-      const response = await fetch("https://tmpfiles.org/api/v1/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (result.data && result.data.url) {
-        const shareLink = result.data.url.replace("/v1/", "/"); // clean link
-        await navigator.clipboard.writeText(shareLink);
-
-        alert(`✅ File uploaded successfully!\n\nLink copied to clipboard:\n${shareLink}\n\n(Expires in 7 days)`);
-      } else {
-        throw new Error("Upload failed or link not generated.");
-      }
-
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to share via link. Try again or use manual export instead.");
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>Q: ${f.q}</strong><span>A: ${f.a}</span>`;
+          faqList.appendChild(li);
+        });
     }
 
-  } 
-  // ------------------------------
-  // OPTION 2: Manual download with timestamp
-  // ------------------------------
-  else {
-    const now = new Date();
-    const timestamp = now.toISOString().replace(/[:.]/g, "-");
-    const fileName = `results_backup_${timestamp}.json`;
-
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    await navigator.clipboard.writeText(fileName);
-
-    alert(`✅ File downloaded successfully as "${fileName}".\n\nFilename copied to clipboard — you can paste it in your file manager search.`);
-  }
- }   
-
-      
-      //Import Function
-      async function importResults() {
-  const choice = confirm(
-    "Press OK to import from a link, or Cancel to import from a file manually."
-  );
-
-  if (choice) {
-    // ---- Import from LINK ----
-    const link = prompt("Paste the file.io (or JSON) link below:");
-    if (!link) return alert("No link provided.");
-
-    try {
-      const response = await fetch(link);
-      if (!response.ok) throw new Error("Failed to fetch file.");
-
-      const importedData = await response.json();
-
-      if (!importedData.students || !importedData.subjects) {
-        alert("Invalid JSON file format.");
-        return;
-      }
-
-      localStorage.setItem("results", JSON.stringify(importedData));
-      alert("Data imported successfully from link!");
-      location.reload();
-    } catch (err) {
-      alert("Failed to import from link. Make sure the link is valid and accessible.");
-    }
-
-  } else {
-    // ---- Import from FILE ----
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-
-    input.addEventListener("change", function (event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        try {
-          const importedData = JSON.parse(e.target.result);
-          if (!importedData.students || !importedData.subjects) {
-            alert("Invalid JSON file format.");
-            return;
-          }
-          localStorage.setItem("results", JSON.stringify(importedData));
-          alert("Data imported successfully!");
-          location.reload();
-        } catch (error) {
-          alert("Failed to import file. Make sure it's a valid export file.");
-        }
-      };
-
-      reader.readAsText(file);
+    faqSearch.addEventListener("input", (e) => {
+      renderFAQs(e.target.value);
     });
 
-    input.click();
-  }
+    renderFAQs(); // initial load
+
+    // --- PAGE LOAD LOGIC (your existing part) ---
+    window.onload = () => {
+      const storedData = JSON.parse(localStorage.getItem("results"));
+      if (storedData) {
+        subjects = storedData.subjects || ["English", "English B/R", "Urdu"];
+        generateTableHeader();
+        renderTable(storedData.students);
+      } else {
+        generateTableHeader();
       }
-      
-// --- PAGE LOAD LOGIC (your existing part) ---
-window.onload = () => {
-  const storedData = JSON.parse(localStorage.getItem("results"));
-  if (storedData) {
-    subjects = storedData.subjects || ["English", "English B/R", "Urdu"];
-    generateTableHeader();
-    renderTable(storedData.students);
-  } else {
-    generateTableHeader();
-  }
-};
-    </script>
-  </body>
+    };
+  </script>
+</body>
+
 </html>
