@@ -500,6 +500,10 @@
         </div>
       </div>
     </div>
+    <!-- Buttons -->
+<button onclick="exportResults()">Export JSON</button>
+<button onclick="document.getElementById('importFile').click()">Import JSON</button>
+<input type="file" id="importFile" accept="application/json" style="display: none;">
 
     <section id="faq-section">
       <h2>📘 Help & FAQ</h2>
@@ -1522,6 +1526,64 @@ You can also delete multiple subjects by entering the same combinations — any 
       });
 
       renderFAQs(); // initial load
+      // --- EXPORT FUNCTION ---
+function exportResults() {
+  const data = localStorage.getItem("results");
+  if (!data) {
+    alert("No data found to export!");
+    return;
+  }
+
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "results_backup.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// --- IMPORT FUNCTION ---
+document.getElementById('importFile').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+
+      if (!importedData.students || !importedData.subjects) {
+        alert("Invalid JSON file format.");
+        return;
+      }
+
+      localStorage.setItem("results", JSON.stringify(importedData));
+      alert("Data imported successfully!");
+
+      // Reload so your onload() re-renders the table
+      location.reload();
+    } catch (error) {
+      alert("Failed to import file. Make sure it's a valid export file.");
+    }
+  };
+
+  reader.readAsText(file);
+});
+
+// --- PAGE LOAD LOGIC (your existing part) ---
+window.onload = () => {
+  const storedData = JSON.parse(localStorage.getItem("results"));
+  if (storedData) {
+    subjects = storedData.subjects || ["English", "English B/R", "Urdu"];
+    generateTableHeader();
+    renderTable(storedData.students);
+  } else {
+    generateTableHeader();
+  }
+};
     </script>
   </body>
 </html>
