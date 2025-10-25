@@ -501,8 +501,8 @@
       </div>
     </div>
     <!-- Buttons -->
-<button onclick="exportResults()">Export JSON</button>
-<button onclick="document.getElementById('importFile').click()">Import JSON</button>
+<button onclick="exportResults()">⬆️Export JSON</button>
+<button onclick="document.getElementById('importFile').click()">⬇️Import JSON</button>
 <input type="file" id="importFile" accept="application/json" style="display: none;">
 
     <section id="faq-section">
@@ -1534,12 +1534,17 @@ function exportResults() {
     return;
   }
 
+  // Create a readable timestamp (e.g., 2025-10-25_14-37-52)
+  const now = new Date();
+  const timestamp = now.toISOString().replace(/[:.]/g, "-");
+  const fileName = `results_backup_${timestamp}.json`;
+
   const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "results_backup.json";
+  a.download = fileName;
   a.click();
 
   URL.revokeObjectURL(url);
