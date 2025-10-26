@@ -1512,7 +1512,18 @@ You can also delete multiple subjects by entering the same combinations — any 
               f.q.toLowerCase().includes(lowerFilter) ||
               f.a.toLowerCase().includes(lowerFilter)
           )
-        renderFAQs();
+        .forEach((f) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>Q: ${f.q}</strong><span>A: ${f.a}</span>`;
+            faqList.appendChild(li);
+          });
+      }
+
+      faqSearch.addEventListener("input", (e) => {
+        renderFAQs(e.target.value);
+      });
+
+      renderFAQs(); // initial load
  async function exportResults() {
   const data = localStorage.getItem("results");
   if (!data) return alert("⚠️ No data found to export!");
@@ -1573,18 +1584,7 @@ You can also delete multiple subjects by entering the same combinations — any 
 
     alert(`✅ File downloaded successfully as "${fileName}".\n\nFilename copied to clipboard — you can paste it in your file manager search.`);
   }
- }         .forEach((f) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<strong>Q: ${f.q}</strong><span>A: ${f.a}</span>`;
-            faqList.appendChild(li);
-          });
-      }
-
-      faqSearch.addEventListener("input", (e) => {
-        renderFAQs(e.target.value);
-      });
-
-      renderFAQs(); // initial load
+ }   
 
       
       //Import Function
