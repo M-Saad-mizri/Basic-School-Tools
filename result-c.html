@@ -1533,20 +1533,31 @@ function exportResults() {
     return;
   }
 
-  // Create a readable timestamp (e.g., 2025-10-25_14-37-52)
   const now = new Date();
   const timestamp = now.toISOString().replace(/[:.]/g, "-");
   const fileName = `results_backup_${timestamp}.json`;
 
   const blob = new Blob([data], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
+  const file = new File([blob], fileName, { type: "application/json" });
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-  a.click();
-
-  URL.revokeObjectURL(url);
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({
+      title: "Results Backup",
+      text: "Here’s my exported results file.",
+      files: [file],
+    })
+    .then(() => console.log("Shared successfully"))
+    .catch(err => console.error("Share failed:", err));
+  } else {
+    // fallback: download file if sharing not supported
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("Sharing not supported on this device. File downloaded instead.");
+  }
 }
 
 // --- IMPORT FUNCTION ---
