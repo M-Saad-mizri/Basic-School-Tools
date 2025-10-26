@@ -1512,7 +1512,67 @@ You can also delete multiple subjects by entering the same combinations — any 
               f.q.toLowerCase().includes(lowerFilter) ||
               f.a.toLowerCase().includes(lowerFilter)
           )
-          .forEach((f) => {
+ async function exportResults() {
+  const data = localStorage.getItem("results");
+  if (!data) return alert("⚠️ No data found to export!");
+
+  const choice = confirm("Press OK to share online via link (expires in 7 days), or Cancel to export manually.");
+
+  // ------------------------------
+  // OPTION 1: Online share via tmpfiles.org
+  // ------------------------------
+  if (choice) {
+    try {
+      const blob = new Blob([data], { type: "application/json" });
+      const formData = new FormData();
+      formData.append("file", blob, "results.json");
+
+      const response = await fetch("https://tmpfiles.org/api/v1/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.data && result.data.url) {
+        const shareLink = result.data.url.replace("/v1/", "/"); // clean link
+        await navigator.clipboard.writeText(shareLink);
+
+        alert(`✅ File uploaded successfully!\n\nLink copied to clipboard:\n${shareLink}\n\n(Expires in 7 days)`);
+      } else {
+        throw new Error("Upload failed or link not generated.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to share via link. Try again or use manual export instead.");
+    }
+
+  } 
+  // ------------------------------
+  // OPTION 2: Manual download with timestamp
+  // ------------------------------
+  else {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, "-");
+    const fileName = `results_backup_${timestamp}.json`;
+
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    await navigator.clipboard.writeText(fileName);
+
+    alert(`✅ File downloaded successfully as "${fileName}".\n\nFilename copied to clipboard — you can paste it in your file manager search.`);
+  }
+ }         .forEach((f) => {
             const li = document.createElement("li");
             li.innerHTML = `<strong>Q: ${f.q}</strong><span>A: ${f.a}</span>`;
             faqList.appendChild(li);
@@ -1524,76 +1584,6 @@ You can also delete multiple subjects by entering the same combinations — any 
       });
 
       renderFAQs(); // initial load
-async function exportResults() {
-  const data = localStorage.getItem("results");
-  if (!data) return alert("No data to export.");
-
-  const choice = confirm("Press OK to share online (via link) or Cancel to export manually.");
-
-  // ------------------------------
-  // OPTION 1: Online share via link
-  // ------------------------------
-  if (choice) {
-    try {
-      const blob = new Blob([data], { type: "application/json" });
-      const formData = new FormData();
-      formData.append("file", blob, "results.json");
-
-      const uploadURL = "https://file.io/?expires=1w";
-      const proxyURL = "https://api.allorigins.win/raw?url=" + encodeURIComponent(uploadURL);
-
-      // Try direct upload first
-      let response = await fetch(uploadURL, {
-        method: "POST",
-        body: formData,
-      });
-
-      // If failed, retry with proxy
-      if (!response.ok) {
-        response = await fetch(proxyURL, {
-          method: "POST",
-          body: formData,
-        });
-      }
-
-      const result = await response.json();
-
-      if (result.success && result.link) {
-        const shareLink = result.link;
-        navigator.clipboard.writeText(shareLink);
-        alert("✅ Share link copied to clipboard:\n" + shareLink);
-      } else {
-        throw new Error("Upload failed.");
-      }
-
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to share via link. Try again or use manual export instead.");
-    }
-
-  } 
-  // ------------------------------
-  // OPTION 2: Manual share (download JSON)
-  // ------------------------------
-  else {
-    const now = new Date();
-    const timestamp = now.toISOString().replace(/[:.]/g, "-");
-    const fileName = `results_${timestamp}.json`;
-
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    alert("✅ File downloaded successfully with timestamp in name.");
-  }
-}      // Export function
-
 
       
       //Import Function
