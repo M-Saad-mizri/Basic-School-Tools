@@ -1526,7 +1526,6 @@ You can also delete multiple subjects by entering the same combinations — any 
 
       renderFAQs(); // initial load
       // --- EXPORT FUNCTION ---
-// call as: exportResults().catch(console.error);
 async function exportResults() {
   const data = localStorage.getItem("results");
   if (!data) {
@@ -1539,99 +1538,34 @@ async function exportResults() {
   const fileName = `results_backup_${timestamp}.json`;
 
   const blob = new Blob([data], { type: "application/json" });
+  const file = new File([blob], fileName, { type: "application/json" });
 
-  // Some environments may not have File; guard against it
-  let file;
-  try {
-    file = new File([blob], fileName, { type: "application/json" });
-  } catch (e) {
-    // Fallback: old browsers — use the blob and fallback to download later
-    file = null;
-  }
-
-  // Try Web Share API with files when available
-  if (navigator.share) {
+  // ✅ Try to share directly
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
-      // If canShare exists, use it as a guard
-      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "Results Backup",
-          text: "Here’s my exported results file.",
-          files: [file],
-        });
-        console.log("Shared successfully (via canShare).");
-        return;
-      }
-
-      // Some browsers accept files even if canShare is missing/false.
-      // Try sharing files directly inside try/catch.
-      if (file) {
-        await navigator.share({
-          title: "Results Backup",
-          text: "Here’s my exported results file.",
-          files: [file],
-        });
-        console.log("Shared successfully (via share).");
-        return;
-      }
-
-      // If we reach here we can still try sharing text + URL (no file)
       await navigator.share({
         title: "Results Backup",
-        text: `Results backup created: ${fileName}\n\n(Attachment not supported on this browser.)`,
+        text: "Here’s my exported results file.",
+        files: [file],
       });
-      console.log("Shared text fallback successfully.");
       return;
     } catch (err) {
-      // Share failed for some reason (user cancelled, or browser rejected). Fall back to download.
-      console.warn("Web Share failed or was cancelled. Falling back to download.", err);
+      console.warn("Share cancelled or failed, falling back to download.", err);
     }
   }
 
-  // Fallback: trigger a download
+  // ⬇️ Fallback: download file normally
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = fileName;
-
-  // Append to DOM to make click work reliably in some browsers, then remove it
   document.body.appendChild(a);
   a.click();
   a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 500);
 
-  // Revoke after a short delay to ensure download has started
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-  alert("File downloaded. If you want to share directly, try using the Share button in Chrome on Android (HTTPS required).");
-}
-
-// --- IMPORT FUNCTION ---
-document.getElementById('importFile').addEventListener('change', function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const importedData = JSON.parse(e.target.result);
-
-      if (!importedData.students || !importedData.subjects) {
-        alert("Invalid JSON file format.");
-        return;
-      }
-
-      localStorage.setItem("results", JSON.stringify(importedData));
-      alert("Data imported successfully!");
-
-      // Reload so your onload() re-renders the table
-      location.reload();
-    } catch (error) {
-      alert("Failed to import file. Make sure it's a valid export file.");
-    }
-  };
-
-  reader.readAsText(file);
-});
+  alert("File downloaded. To share directly, try installing this web app or opening in Chrome on Android.");
+};
 
 // --- PAGE LOAD LOGIC (your existing part) ---
 window.onload = () => {
