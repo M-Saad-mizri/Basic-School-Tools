@@ -580,6 +580,7 @@
           row.insertCell(subjects.length + 3);
           row.insertCell(subjects.length + 4);
           row.insertCell(subjects.length + 5);
+          row.insertCell(subjects.length + 6);
 
           // Add Delete Button
           const deleteCell = row.insertCell(subjects.length + 6);
@@ -803,6 +804,7 @@
             cells[subjects.length + 3].innerText = totalMarks;
             cells[subjects.length + 4].innerText = percentage.toFixed(2) + "%";
             cells[subjects.length + 5].innerText = grade;
+            cells[subjects.length + 6].innerText = Action;
           }
         });
 
