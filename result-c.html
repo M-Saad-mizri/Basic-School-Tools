@@ -499,9 +499,52 @@
         </div>
       </div>
     </div>
-    <!-- Buttons -->
-<button onclick="exportResults()">⬆️ Export JSON</button>
-<button onclick="importResults()">⬇️ Import JSON</button>
+<section id="data-transfer" 
+  style="text-align:center; margin: 40px auto; padding: 20px; 
+         border: 2px solid #ccc; border-radius: 15px; width: 95%; max-width: 500px; 
+         background: #fafafa; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+
+  <h2 style="margin-bottom: 10px; color: #333;">Export / Import Results</h2>
+  <p style="font-size: 14px; color: #555; margin-bottom: 25px;">
+    Use this section to <strong>backup</strong> or <strong>share</strong> your data between devices.
+  </p>
+
+  <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+
+    <!-- Export Section -->
+    <div style="background: #fdfdfd; padding: 15px; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #ddd;">
+      <h3 style="margin: 0 0 8px; color: #222;">⬆️ Export Data</h3>
+      <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
+        Create a backup or share your data with another device.
+      </p>
+      <button onclick="exportResults()" 
+              style="padding: 10px 20px; border: none; border-radius: 6px; 
+                     background-color: #2b7cff; color: white; cursor: pointer; font-size: 14px;">
+        Export / Share Data
+      </button>
+    </div>
+
+    <!-- Import Section -->
+    <div style="background: #fdfdfd; padding: 15px; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid #ddd;">
+      <h3 style="margin: 0 0 8px; color: #222;">⬇️ Import Data</h3>
+      <p style="font-size: 13px; color: #444; margin: 0 0 10px;">
+        Select the exported file or paste a shared link to restore your data.
+      </p>
+      <button onclick="importResults()" 
+              style="padding: 10px 20px; border: none; border-radius: 6px; 
+                     background-color: #28a745; color: white; cursor: pointer; font-size: 14px;">
+        Import Data
+      </button>
+    </div>
+
+  </div>
+
+  <p style="font-size: 12px; color: #777; margin-top: 25px;">
+    💡 <strong>Tip:</strong> After exporting, you can share the file or link via 
+    <em>WhatsApp</em>, <em>Bluetooth</em>, or any sharing app to move data to another device.
+  </p>
+
+</section>
     
     <section id="faq-section">
       <h2>📘 Help & FAQ</h2>
