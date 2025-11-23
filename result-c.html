@@ -1587,6 +1587,132 @@ You can also delete multiple subjects by entering the same combinations — any 
 
     renderFAQs(); // initial load
 
+    // export function
+    async function exportResults() {
+  const data = localStorage.getItem("results");
+  if (!data) return alert("⚠️ No data found to export!");
+
+  const choice = confirm("Press OK to share online via link (expires in 7 days), or Cancel to export manually.");
+
+  // ------------------------------
+  // OPTION 1: Online share via tmpfiles.org
+  // ------------------------------
+  if (choice) {
+    try {
+      const blob = new Blob([data], { type: "application/json" });
+      const formData = new FormData();
+      formData.append("file", blob, "results.json");
+
+      const response = await fetch("https://tmpfiles.org/api/v1/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.data && result.data.url) {
+        const shareLink = result.data.url.replace("/v1/", "/"); // clean link
+        await navigator.clipboard.writeText(shareLink);
+
+        alert(`✅ File uploaded successfully!\n\nLink copied to clipboard:\n${shareLink}\n\n(Expires in 7 days)`);
+      } else {
+        throw new Error("Upload failed or link not generated.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to share via link. Try again or use manual export instead.");
+    }
+
+  } 
+  // ------------------------------
+  // OPTION 2: Manual download with timestamp
+  // ------------------------------
+  else {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, "-");
+    const fileName = `results_backup_${timestamp}.json`;
+
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    await navigator.clipboard.writeText(fileName);
+
+    alert(`✅ File downloaded successfully as "${fileName}".\n\nFilename copied to clipboard — you can paste it in your file manager search.`);
+  }
+ }   
+
+      
+      //Import Function
+      async function importResults() {
+  const choice = confirm(
+    "Press OK to import from a link, or Cancel to import from a file manually."
+  );
+
+  if (choice) {
+    // ---- Import from LINK ----
+    const link = prompt("Paste the file.io (or JSON) link below:");
+    if (!link) return alert("No link provided.");
+
+    try {
+      const response = await fetch(link);
+      if (!response.ok) throw new Error("Failed to fetch file.");
+
+      const importedData = await response.json();
+
+      if (!importedData.students || !importedData.subjects) {
+        alert("Invalid JSON file format.");
+        return;
+      }
+
+      localStorage.setItem("results", JSON.stringify(importedData));
+      alert("Data imported successfully from link!");
+      location.reload();
+    } catch (err) {
+      alert("Failed to import from link. Make sure the link is valid and accessible.");
+    }
+
+  } else {
+    // ---- Import from FILE ----
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+
+    input.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          if (!importedData.students || !importedData.subjects) {
+            alert("Invalid JSON file format.");
+            return;
+          }
+          localStorage.setItem("results", JSON.stringify(importedData));
+          alert("Data imported successfully!");
+          location.reload();
+        } catch (error) {
+          alert("Failed to import file. Make sure it's a valid export file.");
+        }
+      };
+
+      reader.readAsText(file);
+    });
+
+    input.click();
+  }
+    }
+
     // --- PAGE LOAD LOGIC (your existing part) ---
     window.onload = () => {
       const storedData = JSON.parse(localStorage.getItem("results"));
